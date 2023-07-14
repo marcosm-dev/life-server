@@ -32,9 +32,8 @@ function signup(req, res) {
     .catch((err) => res.status(403).json({ error: err.message }));
 }
 
-function login(req, res) {
-  console.log(req.body.email)
-  UserModel.findOne({ where: { email: req.body.email } })
+async function login(req, res) {
+  await UserModel.findOne({ where: { email: req.body.email } })
     .then((user) => {
       if (!user) return res.status(401).json({ error: "Email o contraseña incorrecto" });
       if (user.access === false)

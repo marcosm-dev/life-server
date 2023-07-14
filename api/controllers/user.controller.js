@@ -25,7 +25,7 @@ async function createUser(req, res) {
       access: req.body.access,
       address: req.body.address
     });
-    return res.status(200).json({ message: "User created", user: user });
+    return res.status(200).json({ message: "User created", user });
   } catch (error) {
     res.status(500).send(error.message);
   }
