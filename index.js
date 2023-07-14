@@ -26,6 +26,7 @@ const shouldCompress = (req, res) => {
 };
 
 function initializeAndListenWithExpress() {
+
   const app = express();
 
   app.use(compression({
