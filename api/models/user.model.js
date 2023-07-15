@@ -1,50 +1,52 @@
 const { sequelize } = require('../../database')
-const { DataTypes } = require('sequelize')
+const { DataTypes, Sequelize } = require('sequelize')
+
+const { STRING, INTEGER, BOOLEAN } = DataTypes
 
 const User = sequelize.define(
   'users',
   {
     userName: {
-      type: DataTypes.STRING,
+      type: STRING,
       allowNull: false
     },
     lastName: {
-      type: DataTypes.STRING,
+      type: STRING,
       allowNull: false
     },
     cifDni: {
-      type: DataTypes.STRING,
+      type: STRING,
       allowNull: false
     },
     phone: {
-      type: DataTypes.INTEGER,
+      type: INTEGER,
       allowNull: false,
       unique: true,
     },
     address: {
-      type: DataTypes.STRING,
+      type: STRING,
       allowNull: false,
     },
     email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-          is: {
-            args: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            msg: "Error: Wrong email format."
-          }
-        }
-      },
+      type: STRING,
+      allowNull: false,
+      unique: true,
+      required: true
+    },
+    role: {
+      type: Sequelize.ENUM("admin", "instalador"),
+      defaultValue: "instalador"
+    },
     password: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: STRING,
+      allowNull: false,
+      required: true,
     },
     access: {
-      type: DataTypes.BOOLEAN,
+      type: BOOLEAN,
       defaultValue: false
     },
-    
+
   },
   { timestamps: false } //para que se pongan los campos de createdAt y updatedAt//
 )

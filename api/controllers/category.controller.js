@@ -14,5 +14,5 @@ async function getAllCategories(req, res) {
 }
 
 module.exports = {
-    getAllCategories
+  getAllCategories
 };
