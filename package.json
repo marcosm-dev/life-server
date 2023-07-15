@@ -2,6 +2,7 @@
   "scripts": {
     "start": "nodemon index.js"
   },
+  "type": "module",
   "dependencies": {
     "@admin-bro/express": "^3.1.0",
     "@admin-bro/sequelize": "^1.2.1",

@@ -1,5 +1,5 @@
-const { sequelize } = require('../../database')
-const { DataTypes } = require('sequelize')
+import { sequelize } from '../../database/index.js';
+import { DataTypes } from 'sequelize';
 
 const Category = sequelize.define(
   'categories',
@@ -17,4 +17,4 @@ const Category = sequelize.define(
   { timestamps: false } //para que se pongan los campos de createdAt y updatedAt//
 )
 
-module.exports = Category
+export default Category

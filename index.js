@@ -1,37 +1,45 @@
 // process.stdout.write('\x1B[2J\x1B[0f') // Clear terminal screen
-require('dotenv').config()
+import dotenv from 'dotenv';
+import path from 'path';
 
-const morgan = require('morgan')
-const bcrypt = require('bcrypt')
+dotenv.config();
 
-const compression = require('compression');
-const cors = require('cors')
+import morgan from 'morgan';
+import compression from 'compression';
+import bcrypt from 'bcrypt';
+import cors from 'cors'
 
-const User = require('./api/models/user.model')
-const Category = require('./api/models/category.model')
-const Product = require('./api/models/product.model')
+import User from './api/models/user.model.js';
+import Category from './api/models/category.model.js';
+import Product from './api/models/product.model.js';
 
-const express = require('express');
-const AdminBro = require('admin-bro');
-const { Router } = require('admin-bro');
-const AdminBroSequelize = require('admin-bro-sequelizejs');
-const AdminBroExpress = require('@admin-bro/express');
+import express from 'express';
+import AdminBro from 'admin-bro';
+import AdminBroSequelize from 'admin-bro-sequelizejs';
+import AdminBroExpress from '@admin-bro/express';
+import router from './api/routes/index.js'
 
 
 const app = express();
 const port = 3000;
 
-const db = require('./models')
+import db from './models/index.js'
 
-const shouldCompress = (req, res) => {
-  if (req.headers['x-no-compression']) {
-    // No comprimira las respuestas, si este encabezado 
-    // está presente.
-    return false;
-  }
-  // Recurrir a la compresión estándar
-  return compression.filter(req, res);
-};
+import * as url from 'url'
+// other imports
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+
+// Filtrar header par servir archivos sin compresio
+// const shouldCompress = (req, res) => {
+//   if (req.headers['x-no-compression']) {
+//     // No comprimira las respuestas, si este encabezado 
+//     // está presente.
+//     return false;
+//   }
+//   // Recurrir a la compresión estándar
+//   return compression.filter(req, res);
+// };
 
 // Configuración de Sequelize y conexión a la base de datos
 
@@ -45,8 +53,7 @@ const adminBro = new AdminBro({
   loginPath: '/admin/sign-in',
   branding: {
     companyName: 'Life Serpica',
-    logo: '/assets/logo.jpg',
-    favicon: '/assets/logo.jpg'
+    logo: '/static/logo.svg'
   },
 
   resources: [
@@ -100,7 +107,7 @@ const adminBro = new AdminBro({
 });
 
 // Build and use a router which will handle all AdminBro routes
-const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
+const adminRouter = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
   authenticate: async (email, encryptedPassword) => {
     const user = await User.findOne({
       where: {
@@ -119,19 +126,20 @@ const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
   cookiePassword: 'superfacil',
 })
 
-async function checkAndSyncPostgreSQL() {
-  await checkConnection()
-  addRelationsToModels()
-  await syncModels('alter')
-}
-
+// async function checkAndSyncPostgreSQL() {
+//   await checkConnection()
+//   addRelationsToModels()
+//   await syncModels('alter')
+// }
 app
-  .use(adminBro.options.rootPath, router)
+  .use(adminBro.options.rootPath, adminRouter)
   .use(cors())
   .use(morgan('dev'))
   .use(compression())
   .use(express.json())
-  .use('/api', require('./api/routes'))
+  .use('/static', express.static(path.join(__dirname, 'public')))
+  .use(express.static('files'))
+  .use('/api', router)
   .listen(port, () => {
     console.log(`Servidor Express corriendo en http://localhost:${port}`);
   });

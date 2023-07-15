@@ -1,5 +1,5 @@
-const Product = require("../models/product.model");
-const Category = require("../models/category.model");
+import Product from "../models/product.model.js";
+import Category from "../models/category.model.js";
 
 async function getAllProducts(req, res) {
   try {
@@ -31,8 +31,7 @@ async function getProductsByCategoryId(req, res) {
     return res.status(500).send(error.message);
   }
 }
-
-module.exports = {
+export {
   getAllProducts,
   getProductsByCategoryId,
 };

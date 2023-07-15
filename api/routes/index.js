@@ -1,13 +1,15 @@
-const router = require('express').Router()
+import express from 'express';
 
-const usersRouter = require('./user.router')
-const productsRouter = require('./product.router')
-const categoriesRouter = require('./category.router')
-const authRouter = require('./auth.router')
+import userRouter from './user.router.js';
+import productRouter from './product.router.js';
+import categoryRouter from './category.router.js';
+import authRouter from './auth.router.js';
 
-router.use('/users', usersRouter)
-router.use('/products', productsRouter)
-router.use('/categories', categoriesRouter)
-router.use('/auth', authRouter)
+const router = express.Router();
 
-module.exports = router
+router.use('/users', userRouter);
+router.use('/products', productRouter);
+router.use('/categories', categoryRouter);
+router.use('/auth', authRouter);
+
+export default router;

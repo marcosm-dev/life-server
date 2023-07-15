@@ -1,5 +1,5 @@
-const { sequelize } = require('../../database')
-const { DataTypes } = require('sequelize')
+import { sequelize } from '../../database/index.js';
+import { DataTypes } from 'sequelize';
 
 const Product = sequelize.define(
   'products',
@@ -21,8 +21,8 @@ const Product = sequelize.define(
       type: DataTypes.STRING
     },
     urlMoreInfo: {
-        type: DataTypes.STRING
-      },
+      type: DataTypes.STRING
+    },
     stock: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -31,9 +31,8 @@ const Product = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false
     },
-    
+
   },
   { timestamps: false } //para que se ponga en automatico los campos//
 )
-
-module.exports = Product
+export default Product
