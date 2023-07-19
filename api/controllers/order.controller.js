@@ -1,31 +1,31 @@
 import Order from '../models/order.model.js'
 import Product from '../models/product.model.js'
-import User from '../models/user.model.js';
+import User from '../models/user.model.js'
 
 // Función para agregar productos a una orden
 async function addProductsToOrder(orderId, productIds) {
   try {
     // Buscar la orden en la base de datos
-    const order = await Order.findByPk(orderId);
+    const order = await Order.findByPk(orderId)
 
     // Si no se encuentra la orden, devuelve un error
     if (!order) {
-      throw new Error('No se encontró la orden');
+      throw new Error('No se encontró la orden')
     }
 
     // Buscar los productos en la base de datos utilizando los IDs recibidos
     const products = await Product.findAll({
       where: { id: productIds },
-    });
+    })
 
     // Asociar los productos a la orden utilizando el método addProducts
-    await order.addProducts(products);
+    await order.addProducts(products)
 
     // Devolver la orden con los productos asociados
-    return order;
+    return order
   } catch (error) {
-    console.error('Error al agregar productos a la orden:', error);
-    throw error;
+    console.error('Error al agregar productos a la orden:', error)
+    throw error
   }
 }
 
@@ -41,12 +41,8 @@ async function createOrder(req, res) {
 
     const products = req.body.products.map(el => el.id)
 
-    console.log(products)
-
     addProductsToOrder(createdOrder.id, products)
 
-    // Asociar los productos a la orden
-    // Recuperar la orden con los productos asociados desde la base de datos
     const populatedOrder = await Order.findOne({
       where: { id: createdOrder.id },
     })
@@ -72,18 +68,18 @@ async function getOrderWithProductsById(req, res) {
           attributes: ['name', 'phone']
         }
       ], // Carga ansiosa de los productos asociados a la orden
-    });
+    })
 
     // Si no se encuentra la orden, devuelve un error
     if (!order) {
-      throw new Error('No se encontró la orden');
+      throw new Error('No se encontró la orden')
     }
 
     // Devolver la orden con los productos asociados
-    return res.status(200).json(order);
+    return res.status(200).json(order)
   } catch (error) {
-    console.error('Error al obtener la orden:', error);
-    throw error;
+    console.error('Error al obtener la orden:', error)
+    throw error
   }
 }
 

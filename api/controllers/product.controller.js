@@ -23,7 +23,7 @@ async function getProductsByCategoryId(req, res) {
     if (!category) {
       return res.status(404).send("Category not found");
     }
-    const products = await Product.findAll({ where: { id: categoryId } })
+    const products = await Product.findAll({ where: { categoryId } })
 
     return res.status(200).json(products);
   } catch (error) {
