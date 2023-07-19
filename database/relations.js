@@ -1,6 +1,6 @@
-const User = require('../api/models/user.model')
-const Product = require('../api/models/product.model')
-const Category = require('../api/models/category.model')
+import User from '../api/models/user.model.js';
+import Product from '../api/models/product.model.js';
+import Category from '../api/models/category.model.js';
 
 function addRelationsToModels() {
   try {
@@ -17,4 +17,4 @@ function addRelationsToModels() {
   }
 }
 
-module.exports = addRelationsToModels
+export { addRelationsToModels }

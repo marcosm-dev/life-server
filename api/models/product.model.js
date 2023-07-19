@@ -1,34 +1,34 @@
 import { sequelize } from '../../database/index.js';
-import { DataTypes } from 'sequelize';
+import { STRING, INTEGER } from 'sequelize';
 
 const Product = sequelize.define(
   'products',
   {
     name: {
-      type: DataTypes.STRING,
+      type: STRING,
       allowNull: false,
       unique: true
     },
     description: {
-      type: DataTypes.STRING,
+      type: STRING,
       allowNull: true
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: INTEGER,
       allowNull: true
     },
     accesories: {
-      type: DataTypes.STRING
+      type: STRING
     },
     urlMoreInfo: {
-      type: DataTypes.STRING
+      type: STRING
     },
     stock: {
-      type: DataTypes.INTEGER,
+      type: INTEGER,
       allowNull: false
     },
     urlImage: {
-      type: DataTypes.STRING,
+      type: STRING,
       allowNull: false
     },
 

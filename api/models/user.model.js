@@ -6,7 +6,7 @@ const { STRING, INTEGER, BOOLEAN, ENUM } = DataTypes
 const User = sequelize.define(
   'users',
   {
-    userName: {
+    name: {
       type: STRING,
       allowNull: false
     },
@@ -14,7 +14,7 @@ const User = sequelize.define(
       type: STRING,
       allowNull: false
     },
-    cifDni: {
+    VATIN: {
       type: STRING,
       allowNull: false
     },
@@ -34,8 +34,8 @@ const User = sequelize.define(
       required: true
     },
     role: {
-      type: ENUM("admin", "instalador"),
-      defaultValue: "instalador"
+      type: ENUM('ADMIN', 'INSTALADOR'),
+      allowNull: false,
     },
     password: {
       type: STRING,

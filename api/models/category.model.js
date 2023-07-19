@@ -1,16 +1,16 @@
 import { sequelize } from '../../database/index.js';
-import { DataTypes } from 'sequelize';
+import { STRING } from 'sequelize';
 
 const Category = sequelize.define(
   'categories',
   {
     name: {
-      type: DataTypes.STRING,
+      type: STRING,
       allowNull: false,
       unique: true
     },
     urlImage: {
-      type: DataTypes.STRING,
+      type: STRING,
       allowNull: true
     }
   },

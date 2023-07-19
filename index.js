@@ -1,4 +1,4 @@
-// process.stdout.write('\x1B[2J\x1B[0f') // Clear terminal screen
+process.stdout.write('\x1B[2J\x1B[0f') // Clear terminal screen
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -19,6 +19,8 @@ import AdminBroSequelize from 'admin-bro-sequelizejs';
 import AdminBroExpress from '@admin-bro/express';
 import router from './api/routes/index.js'
 
+import { checkConnection, syncModels } from './database/index.js';
+import { addRelationsToModels } from './database/relations.js';
 
 const app = express();
 const port = 3000;
@@ -109,6 +111,7 @@ const adminBro = new AdminBro({
 // Build and use a router which will handle all AdminBro routes
 const adminRouter = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
   authenticate: async (email, encryptedPassword) => {
+
     const user = await User.findOne({
       where: {
         email
@@ -117,7 +120,7 @@ const adminRouter = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
 
     if (user) {
       const matched = await bcrypt.compare(encryptedPassword, user.password)
-      if (matched && user?.role === 'admin') {
+      if (matched && user?.role === 'ADMIN') {
         return user
       }
     }
@@ -131,6 +134,9 @@ const adminRouter = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
 //   addRelationsToModels()
 //   await syncModels('alter')
 // }
+
+// checkAndSyncPostgreSQL();
+
 app
   .use(adminBro.options.rootPath, adminRouter)
   .use(cors())
