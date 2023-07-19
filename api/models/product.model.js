@@ -1,5 +1,7 @@
 import { sequelize } from '../../database/index.js';
 import { STRING, INTEGER } from 'sequelize';
+import OrderItem from './order-item.model.js';
+import Order from './order.model.js';
 
 const Product = sequelize.define(
   'products',
@@ -31,8 +33,13 @@ const Product = sequelize.define(
       type: STRING,
       allowNull: false
     },
-
   },
   { timestamps: false } //para que se ponga en automatico los campos//
 )
+
+// Definir la relación de muchos a muchos(Many - to - Many) entre Product y Order a través de OrderItem
+Product.belongsToMany(Order, {
+  through: OrderItem,
+});
+
 export default Product

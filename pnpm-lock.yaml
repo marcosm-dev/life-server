@@ -76,6 +76,9 @@ dependencies:
     version: 2.6.0
 
 devDependencies:
+  prettier:
+    specifier: ^3.0.0
+    version: 3.0.0
   sequelize-cli:
     specifier: ^6.6.1
     version: 6.6.1
@@ -3987,6 +3990,12 @@ packages:
     dependencies:
       xtend: 4.0.2
     dev: false
+
+  /prettier@3.0.0:
+    resolution: {integrity: sha512-zBf5eHpwHOGPC47h0zrPyNn+eAEIdEzfywMoYn2XPi0P44Zp0tSq64rq0xAREh4auw2cJZHo9QUob+NqCQky4g==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
 
   /prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}

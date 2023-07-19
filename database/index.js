@@ -21,7 +21,7 @@ async function checkConnection() {
 async function syncModels(value) {
 	const state = {
 		alter: { alter: true },
-		force: { force: true },
+		force: { force: false },
 	}
 
 	try {
@@ -31,5 +31,15 @@ async function syncModels(value) {
 		throw error
 	}
 }
+
+// Sincronizar el modelo con la base de datos
+// (async () => {
+// 	try {
+// 		await sequelize.sync({ alter: true }); // Esto creará la tabla en la base de datos
+// 		console.log('Modelo sincronizado correctamente.');
+// 	} catch (error) {
+// 		console.error('Error al sincronizar el modelo:', error);
+// 	}
+// })();
 
 export { sequelize, checkConnection, syncModels }

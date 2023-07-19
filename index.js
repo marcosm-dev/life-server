@@ -12,6 +12,7 @@ import cors from 'cors'
 import User from './api/models/user.model.js';
 import Category from './api/models/category.model.js';
 import Product from './api/models/product.model.js';
+import Order from './api/models/order.model.js';
 
 import express from 'express';
 import AdminBro from 'admin-bro';
@@ -55,7 +56,9 @@ const adminBro = new AdminBro({
   loginPath: '/admin/sign-in',
   branding: {
     companyName: 'Life Serpica',
-    logo: '/static/logo.svg'
+    logo: '/static/logo.svg',
+    softwareBrothers: false,
+    favicon: '/static/life-logo-color.png'
   },
 
   resources: [
@@ -104,6 +107,14 @@ const adminBro = new AdminBro({
           encryptedPassword: { isVisible: false },
         },
       },
+    },
+    {
+      resource: Order,
+      options: {
+        properties: {
+          encryptedPassword: { isVisible: false },
+        },
+      },
     }
   ],
 });
@@ -129,13 +140,13 @@ const adminRouter = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
   cookiePassword: 'superfacil',
 })
 
-// async function checkAndSyncPostgreSQL() {
-//   await checkConnection()
-//   addRelationsToModels()
-//   await syncModels('alter')
-// }
+async function checkAndSyncPostgreSQL() {
+  await checkConnection()
+  addRelationsToModels()
+  await syncModels('alter')
+}
 
-// checkAndSyncPostgreSQL();
+checkAndSyncPostgreSQL();
 
 app
   .use(adminBro.options.rootPath, adminRouter)

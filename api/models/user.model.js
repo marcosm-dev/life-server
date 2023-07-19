@@ -1,7 +1,5 @@
 import { sequelize } from '../../database/index.js';
-import { DataTypes } from 'sequelize';
-
-const { STRING, INTEGER, BOOLEAN, ENUM } = DataTypes
+import { STRING, INTEGER, BOOLEAN, ENUM } from 'sequelize';
 
 const User = sequelize.define(
   'users',
@@ -35,7 +33,7 @@ const User = sequelize.define(
     },
     role: {
       type: ENUM('ADMIN', 'INSTALADOR'),
-      allowNull: false,
+      allowNull: true,
     },
     password: {
       type: STRING,
@@ -47,7 +45,7 @@ const User = sequelize.define(
       defaultValue: false
     },
   },
-  { timestamps: false } //para que se pongan los campos de createdAt y updatedAt//
+  { timestamps: true } //para que se pongan los campos de createdAt y updatedAt//
 )
 
 export default User

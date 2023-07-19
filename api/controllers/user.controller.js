@@ -16,9 +16,9 @@ async function getAllUsers(req, res) {
 async function createUser(req, res) {
   try {
     const user = await User.create({
-      userName: req.body.userName,
+      name: req.body.name,
       lastName: req.body.lastName,
-      cifDni: req.body.cifDni,
+      VATIN: req.body.VATIN,
       phone: req.body.phone,
       email: req.body.email,
       password: req.body.password,

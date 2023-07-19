@@ -18,13 +18,13 @@ async function getProductsByCategoryId(req, res) {
   const { categoryId } = req.params;
 
   try {
-
     const category = await Category.findByPk(categoryId);
 
     if (!category) {
       return res.status(404).send("Category not found");
     }
-    const products = await Product.findAll({ where: { categoryId: categoryId } })
+    const products = await Product.findAll({ where: { id: categoryId } })
+
     return res.status(200).json(products);
   } catch (error) {
     console.log(error)
