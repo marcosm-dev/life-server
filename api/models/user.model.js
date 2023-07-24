@@ -1,51 +1,46 @@
-import { sequelize } from '../../database/index.js';
-import { STRING, INTEGER, BOOLEAN, ENUM } from 'sequelize';
+import mongoose from 'mongoose'
 
-const User = sequelize.define(
-  'users',
-  {
-    name: {
-      type: STRING,
-      allowNull: false
-    },
-    lastName: {
-      type: STRING,
-      allowNull: false
-    },
-    VATIN: {
-      type: STRING,
-      allowNull: false
-    },
-    phone: {
-      type: INTEGER,
-      allowNull: false,
-      unique: true,
-    },
-    address: {
-      type: STRING,
-      allowNull: false,
-    },
-    email: {
-      type: STRING,
-      allowNull: false,
-      unique: true,
-      required: true
-    },
-    role: {
-      type: ENUM('ADMIN', 'INSTALADOR'),
-      allowNull: true,
-    },
-    password: {
-      type: STRING,
-      allowNull: false,
-      required: true,
-    },
-    access: {
-      type: BOOLEAN,
-      defaultValue: false
-    },
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
   },
-  { timestamps: true } //para que se pongan los campos de createdAt y updatedAt//
-)
+  lastName: {
+    type: String,
+    required: true,
+  },
+  VATIN: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  role: {
+    type: String,
+    enum: ['ADMIN', 'INSTALADOR'],
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  access: {
+    type: Boolean,
+    default: false,
+  },
+}, { timestamps: true });
+
+const User = mongoose.model('User', userSchema);
 
 export default User

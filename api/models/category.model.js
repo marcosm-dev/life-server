@@ -1,20 +1,11 @@
-import { sequelize } from '../../database/index.js';
-import { STRING } from 'sequelize';
+import mongoose from 'mongoose'
+const { Schema } = mongoose
 
-const Category = sequelize.define(
-  'categories',
-  {
-    name: {
-      type: STRING,
-      allowNull: false,
-      unique: true
-    },
-    urlImage: {
-      type: STRING,
-      allowNull: true
-    }
-  },
-  { timestamps: false } //para que se pongan los campos de createdAt y updatedAt//
-)
+const categorySchema = new Schema({
+  name: String,
+  urlImage: String,
+})
+
+const Category = mongoose.model('Category', categorySchema)
 
 export default Category
