@@ -4,5 +4,5 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["**/*.js"]
+  "include": ["**/*.js", "api/graphql/context.js"]
 }

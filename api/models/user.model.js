@@ -5,6 +5,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  token: {
+    type: String,
+    required: false
+  },
   lastName: {
     type: String,
     required: true,
@@ -14,7 +18,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   phone: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },

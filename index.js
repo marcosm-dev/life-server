@@ -1,59 +1,91 @@
-process.stdout.write('\x1B[2J\x1B[0f') // Clear terminal screen
 import dotenv from 'dotenv'
 import path from 'path'
-// tl8D4DwUy6vdMST3 MONGO
 
-// iASw13EVo4Qmlh5h
+process.stdout.write('\x1B[2J\x1B[0f') // Clear terminal screen
 dotenv.config()
 
 import morgan from 'morgan'
 import compression from 'compression'
-import bcrypt from 'bcrypt'
-import cors from 'cors'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 import helmet from 'helmet'
-import session from 'express-session'
 
 // AdminBro
-
 import AdminBro from 'admin-bro'
 import AdminBroMongoose from '@admin-bro/mongoose'
 import AdminBroExpress from '@admin-bro/express'
-import mongoose from 'mongoose'
+import mongoose, { trusted } from 'mongoose'
 import resources from './admin/resources.js'
 
 import express from 'express'
+import session from 'express-session'
 import { createYoga } from 'graphql-yoga'
-import { schema } from './graphql/schema.js'
-
-// import router from './api/routes/index.js'
+import { graphqlHTTP } from 'express-graphql'
+import { schema } from './api/graphql/schema.js'
+import { logger } from './api/graphql/logger.js'
+import { createContext } from './api/graphql/context.js'
 
 // Otros imports
 import * as url from 'url'
+import User from './api/models/user.model.js'
+import { APP_SECRET } from './api/graphql/auth.js'
 
-export const app = express()
-const yoga = createYoga({ schema })
-const yogaRouter = express.Router()
+const allowedOrigins = ['http://localhost:9000', 'http://localhost:4000', 'http://192.168.1.34:9000', 'http://192.168.1.33:9000']
+
 const PORT = process.env.PORT || 4000
 
 const sessionOptions = {
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
-};
+}
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+
+const app = express()
+const yoga = createYoga({ 
+  async context({ request }) {
+    return await createContext(request)
+  },
+  schema,
+  graphiql: {
+    defaultQuery: /* GraphQL */ `
+        query {
+          me {
+            id
+            name
+          }
+        }
+      `,
+  },
+  logging: {
+    debug(...args) {
+      console.log(args)
+      logger.debug(...args)
+    },
+    info(...args) {
+      logger.info(...args)
+    },
+    warn(...args) {
+      logger.warn(...args)
+    },
+    error(...args) {
+      logger.error(...args)
+    },
+  },
+ })
 
 // Registramos el adapter con AdminBro Mongoose
 AdminBro.registerAdapter(AdminBroMongoose)
 
 // Conexion base de datos
-mongoose.connect('mongodb+srv://admin:039TO8HUz2eVkC6N@life.91cdamb.mongodb.net/life', {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
-  console.log('Connected to MongoDB');
+  console.log('Connected to MongoDB')
 }).catch((err) => {
-  console.error('Error connecting to MongoDB:', err);
-});
+  console.error('Error connecting to MongoDB:', err)
+})
 
 const adminBro = new AdminBro({
   databases: [mongoose],
@@ -69,59 +101,27 @@ const adminBro = new AdminBro({
   },
 })
 
-// GraphiQL specefic CSP configuration
-yogaRouter.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        'style-src': ["'self'", 'unpkg.com'],
-        'script-src': ["'self'", 'unpkg.com', "'unsafe-inline'"],
-        'img-src': ["'self'", 'raw.githubusercontent.com']
+// Construye el enrutador de AdminBro
+const adminRouter = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
+  authenticate: async (email, encryptedPassword) => {
+    const user = await User.findOne({ email })  
+    if (user) {
+      const matched = await bcrypt.compare(encryptedPassword, user.password)
+      if (matched && user?.role === 'ADMIN') {
+        return user
       }
     }
-  })
-  )
-  yogaRouter.use(yoga)
-  
-  // Construye el enrutador de AdminBro
-  const adminRouter = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
-    authenticate: async (email, encryptedPassword) => {
-        const user = {
-            "id" : 1,
-            "name" : "Marcos",
-            "lastName" : "Marrero Miranda",
-            "VATIN" : "44722126Y",
-            "phone" : 607283571,
-            "address" : "Hoya del enamorado, 24",
-            "email" : "marcosa.mm@icloud.com",
-            "role" : "ADMIN",
-            "password" : "$2b$10$32GVxWq4IzXOuOKYhjaFee9guuwt3dtqyK5r0npVpQ\/Fq3b4Yj4n6",
-            "access" : true,
-            "createdAt" : "2023-07-19T16:11:18.477Z",
-            "updatedAt" : "2023-07-19T16:11:18.477Z"
-          }
-
-    if (user) {
-        const matched = await bcrypt.compare(encryptedPassword, user.password)
-        if (matched && user?.role === 'ADMIN') {
-            return user
-          }
-        }
-        return false
-      },
-      cookiePassword: process.env.SECRET,
-  })
-      
-
-// Usa el enrutador de AdminBro en tu aplicación Express
-app.use(adminBro.options.rootPath, adminRouter);
+    return false
+  },
+  cookiePassword: process.env.SECRET,
+})
 
 // Continúa con el resto de la configuración de Express y el servidor GraphQL Yoga
 app
-  .use(session(sessionOptions))
   .use(yoga.graphqlEndpoint, yoga)
+  .use(adminBro.options.rootPath, adminRouter)
+  .use(session(sessionOptions))
   .use(helmet())
-  .use(cors())
   .use(morgan('dev'))
   .use(compression())
   .use(express.json())
@@ -131,4 +131,4 @@ app
   .listen(PORT, () => {
     console.info(`\nYogaGraphQL Express corriendo en:\nhttp://localhost:${PORT}/graphql\n`)
     console.info(`Admin corriendo en:\nhttp://localhost:${PORT}/admin`)
-  });
+  })

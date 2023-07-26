@@ -25,7 +25,7 @@ export const schema = createSchema({
       name: String!
       lastName: String!
       VATIN: String!
-      phone: Int!
+      phone: String!
       address: String!
       email: String!
       role: UserRole
@@ -35,40 +35,45 @@ export const schema = createSchema({
       updatedAt: String!
     }
 
+    type UserAuthResponse {
+      user: User
+      error: String
+      token: String
+    }
+
+
     enum UserRole {
       ADMIN
       INSTALADOR
     }
 
     type Query {
+      me: User
       getUser(id: ID!): User
       getAllUsers: [User!]!
+      getAllCategories(limit: Int, skip: Int): [Category!]!
     }
 
     type Mutation {
       createUser(input: UserInput!): User!
       updateUser(id: ID!, input: UserInput!): User!
       deleteUser(id: ID!): User!
+      loginUser(email: String!, password: String!): UserAuthResponse!
+      signUp(input: UserInput!): UserAuthResponse!
     }
 
     input UserInput {
       name: String!
       lastName: String!
       VATIN: String!
-      phone: Int!
+      phone: String!
       address: String!
       email: String!
       role: UserRole
       password: String!
       access: Boolean
     }
-    type Query {
-      hello: String
-    }
-
-    type Mutation {
-      createProductsFromJson: [Category!]!
-    }
+    
   `,
   resolvers
 })

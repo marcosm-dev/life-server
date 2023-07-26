@@ -6,7 +6,7 @@ export default {
     // ... otros plugins ...
     replace({
       // Otras opciones del plugin...
-      preventAssignment: true,
+      preventAssignment: false,
     }),
   ],
 };
