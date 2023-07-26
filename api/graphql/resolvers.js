@@ -4,6 +4,7 @@ import User from '../models/user.model.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { APP_SECRET } from './auth.js'
+import { GraphQLError } from 'graphql'
 
 const resolvers = {
   Query: {
@@ -30,7 +31,7 @@ const resolvers = {
         throw new Error('No se pudieron obtener los usuarios')
       }
     },
-    getAllCategories: async (_, { limit = 4, skip = 4 }) => {
+    getAllCategories: async (_, { limit, skip }) => {
       try {
         const categories = await Category.find().limit(limit).skip(skip)
         if (!categories || categories.length === 0) {
@@ -47,22 +48,21 @@ const resolvers = {
     loginUser: async (_, { email, password }) => {
       const user = await User.findOne({ email })
       if (!user) {
-        throw new Error('No such user found')
+        throw new GraphQLError('No such user found')
       }
  
       const valid = await bcrypt.compare(password, user.password)
       if (!valid) {
-        throw new Error('Invalid password')
+        throw new GraphQLError('La contraseña es incorrecta')
       }
       const token = jwt.sign({ userId: user.id }, APP_SECRET)
       return { token, user }
     },
     signUp: async (_, { input }) => {
+      console.log(input)
       const hashedPassword = await bcrypt.hash(input.password, 10)
       const user = await User.findOne({ email: input.email })
-      if (user) {
-        return { error: `El correo electrónico ${email} ya está registrado` }
-      }
+      if (user) new GraphQLError(`El correo electrónico ${email} ya está registrado`)
       
       const newUser = new User({
         ...input,

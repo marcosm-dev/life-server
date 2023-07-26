@@ -41,7 +41,6 @@ export const schema = createSchema({
       token: String
     }
 
-
     enum UserRole {
       ADMIN
       INSTALADOR

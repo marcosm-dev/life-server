@@ -5,8 +5,6 @@ export const APP_SECRET = 'uM3Vyz4DUIDQky-NrTBx3Xqa_xsSF-EU'
  
 export async function authenticateUser(request) {
   const headers = request.headers
-
-  console.log(headers)
   const token = headers.get('authorization')?.split(' ')[1]
 
   if (!token) return null
