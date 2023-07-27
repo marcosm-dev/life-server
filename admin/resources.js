@@ -1,7 +1,7 @@
 import User from '../api/models/user.model.js'
 import Category from '../api/models/category.model.js'
 import Product from '../api/models/product.model.js'
-// import Order from '../api/models/order.model.js'
+import Order from '../api/models/order.model.js'
 
 const resources = [
   {
@@ -50,14 +50,14 @@ const resources = [
       },
     },
   },
-  // {
-  //   resource: Order,
-  //   options: {
-  //     properties: {
-  //       encryptedPassword: { isVisible: false },
-  //     },
-  //   },
-  // }
+  {
+    resource: Order,
+    options: {
+      properties: {
+        encryptedPassword: { isVisible: false },
+      },
+    },
+  }
 ]
 
 export default { resources }

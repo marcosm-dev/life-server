@@ -1,17 +1,18 @@
-// import { sequelize } from '../../database/index.js';
-// import { INTEGER } from 'sequelize';
+import mongoose from 'mongoose'
+import { productSchema } from './product.model.js'
 
-// // Definir el modelo Order
-// const Order = sequelize.define(
-//   'order',
-//   {
-//     amount: INTEGER,
-//     // Campo 'products' que es un array de productos
-//   }, {
-//   // Opciones del modelo
-//   timestamps: true, // Activa los campos createdAt y updatedAt
-// });
+export const orderSchema = new mongoose.Schema({
+  amount: {
+    type: Number,
+    required: true,
+  },
+  ownerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  products: [productSchema],
+}, { timestamps: true })
 
-// // Exportar el modelo Order
-// export default Order
+const Order = mongoose.model('Order', orderSchema)
 
+export default Order

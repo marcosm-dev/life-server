@@ -1,36 +1,48 @@
 import { createSchema } from 'graphql-yoga'
 import { resolvers } from './resolvers.js'
- 
+
 export const schema = createSchema({
   typeDefs: /* GraphQL */ `
+
+    type Order {
+      id: ID!            
+      amount: Int!
+      owner: ID!
+      products: [Product!]!
+      createdAt: String!
+      updatedAt: String!
+    }
+
     type Category {
-      id: ID!
+      id: ID!             
       name: String!
       urlImage: String
     }
 
     type Product {
-      id: ID!
+      id: ID!                
       name: String!
       description: String
       price: Float
       accessories: String
       urlMoreInfo: String
       stock: Int!
-      urlImage: String!
+      urlImage: String
+      categoryId: ID!
     }
 
     type User {
-      id: ID!
+      id: ID!              
       name: String!
       lastName: String!
       VATIN: String!
-      phone: String!
-      address: String!
-      email: String!
+      phone: String!       
+      address: String!     
+      email: String!       
       role: UserRole
       password: String!
       access: Boolean!
+      orders: [Order]
       createdAt: String!
       updatedAt: String!
     }
@@ -51,9 +63,12 @@ export const schema = createSchema({
       getUser(id: ID!): User
       getAllUsers: [User!]!
       getAllCategories(limit: Int, skip: Int): [Category!]!
+      getProductsByCategory(categoryId: ID!): [Product!]!
+      getAllProducts: [Product!]!
     }
 
     type Mutation {
+      createOrder(userId: ID!, amount: Float!, products: [ID!]!): Order!
       createUser(input: UserInput!): User!
       updateUser(id: ID!, input: UserInput!): User!
       deleteUser(id: ID!): User!

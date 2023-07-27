@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { orderSchema } from './order.model.js';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -17,6 +18,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  orders: [orderSchema],
   phone: {
     type: String,
     required: true,
