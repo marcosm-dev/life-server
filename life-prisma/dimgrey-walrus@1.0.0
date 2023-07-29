@@ -1,0 +1,7 @@
+
+> life-prisma@1.0.0 dev /Users/marcosmarrero/code/life-prisma
+> npx tsc && node --watch ./dist/src/index.js "/Users/marcosmarrero/code/sanity"
+
+[31mFailed running './dist/src/index.js /Users/marcosmarrero/code/sanity'[39m
+c[32mRestarting './dist/src/index.js /Users/marcosmarrero/code/sanity'[39m
+[31mFailed running './dist/src/index.js /Users/marcosmarrero/code/sanity'[39m

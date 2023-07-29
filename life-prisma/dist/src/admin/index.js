@@ -1,13 +1,8 @@
-import { Database as PrismaDatabase, Resource as PrismaResource } from '@adminjs/prisma';
+import { Database, Resource, getModelByName } from '@adminjs/prisma';
 import { dark, light, noSidebar } from '@adminjs/themes';
 import AdminJS from 'adminjs';
-import './components.bundler.js';
-import { componentLoader } from './components.bundler.js';
-import { locale } from './locale/index.js';
-import pages from './pages/index.js';
-import { customTheme } from '../themes/index.js';
-import { CreateUserResource } from '../../prisma/resources/user.resource.js';
-AdminJS.registerAdapter({ Database: PrismaDatabase, Resource: PrismaResource });
+import { prisma } from '../../prisma/config.js';
+AdminJS.registerAdapter({ Database, Resource });
 export const menu = {
     prisma: { name: 'Prisma', icon: 'Folder' },
     rest: { name: 'REST', icon: 'Link' },
@@ -15,20 +10,36 @@ export const menu = {
 export const generateAdminJSConfig = () => ({
     version: { admin: true, app: '1.0.0' },
     rootPath: '/admin',
-    locale,
-    assets: {},
+    logoutPath: '/admin/exit',
+    loginPath: '/admin/sign-in',
     branding: {
         companyName: 'Life Serpica',
-        theme: {
-            colors: { primary100: '#4D70EB' },
-        },
+        logo: '/static/logo.svg',
+        favicon: '/static/life-logo-color.png',
     },
     defaultTheme: 'light',
-    availableThemes: [light, dark, noSidebar, customTheme],
-    componentLoader,
-    pages,
+    availableThemes: [light, dark, noSidebar],
     env: {},
     resources: [
-        CreateUserResource(),
+        {
+            resource: { model: getModelByName('User'), client: prisma },
+            options: {},
+        },
+        {
+            resource: { model: getModelByName('Product'), client: prisma },
+            options: {},
+        },
+        {
+            resource: { model: getModelByName('CartItem'), client: prisma },
+            options: {},
+        },
+        {
+            resource: { model: getModelByName('Category'), client: prisma },
+            options: {},
+        },
+        {
+            resource: { model: getModelByName('Order'), client: prisma },
+            options: {},
+        }
     ],
 });
