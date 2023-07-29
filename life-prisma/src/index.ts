@@ -1,44 +1,43 @@
-import mongoose from 'mongoose'
-import AdminJSMongoose from '@adminjs/mongoose'
-import AdminJS from 'adminjs'
-import AdminJSExpress from '@adminjs/express'
-import express from 'express'
-
 import dotenv from 'dotenv'
+import AdminJS from 'adminjs'
+import express from 'express'
+import cors from 'cors'
+import morgan from 'morgan'
+import { Express } from 'express'
+import { expressAuthenticatedRouter } from './admin/router.js'
+import { generateAdminJSConfig } from './admin/index.js'
 
-dotenv.config()
+const PORT = process.env.PORT || 4000
 
-import User from './entities/user.entity'
+const attachAdminJS = async (app: Express) => {
+  const config = generateAdminJSConfig()
+  const adminJS = new AdminJS(config)
 
-const PORT = 3000
+  if (process.env.NODE_ENV !== 'production') await adminJS.initialize()
+  else adminJS.watch()
 
-AdminJS.registerAdapter(AdminJSMongoose)
+  const adminRouter = expressAuthenticatedRouter(adminJS)
 
-const DEFAULT_ADMIN = {
-  email: 'admin@example.com',
-  password: 'password',
+  app.use(adminJS.options.rootPath, adminRouter)
+  // app.use(express.static(path.join(__dirname, '../../../public')))
 }
 
-// ... other imports
-
-// import { Category } from './category.entity.js'
-
-// AdminJS.registerAdapter({
-//   // Resource: AdminJSMongoose.Resource,
-//   // Database: AdminJSMongoose.Database,
-// })
-
-// ... other code
 const start = async () => {
-  await mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://admin:039TO8HUz2eVkC6N@life.91cdamb.mongodb.net/life')
-  const adminOptions = {
-    resources: [User],
+  const app = express()
+  await attachAdminJS(app)
+
+  app
+    .use(cors({ credentials: true, origin: true }))
+    .use(morgan('dev'))
+    .get('/', (req, res) => res.send('Hello Life'))
+    .listen(PORT, () => {
+      console.info(`AdminJS is under http://localhost:${PORT ||  4000}/admin`)
+    })
   }
-  // Please note that some plugins don't need you to create AdminJS instance manually,
-  // instead you would just pass `adminOptions` into the plugin directly,
-  // an example would be "@adminjs/hapi"
-  const admin = new AdminJS(adminOptions)
-  // ... other code
-}
+
+dotenv.config({
+  path: `${process.cwd()}/.env`,
+})
 
 start()
+
