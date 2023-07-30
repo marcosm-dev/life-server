@@ -1,7 +1,7 @@
 import { Database, Resource, getModelByName } from '@adminjs/prisma';
 import { dark, light, noSidebar } from '@adminjs/themes';
 import AdminJS from 'adminjs';
-import { prisma } from '../../prisma/config.js';
+import { prisma } from '../prisma/config.js';
 AdminJS.registerAdapter({ Database, Resource });
 export const menu = {
     prisma: { name: 'Prisma', icon: 'Folder' },

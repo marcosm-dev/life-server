@@ -1,7 +1,7 @@
 import { Box, Header, Link, Placeholder, Text } from '@adminjs/design-system';
 import React, { FC, lazy, Suspense } from 'react';
 
-const BlogPage = lazy(() => import('./blog-page.js'));
+// const BlogPage = lazy(() => import('./blog-page.js'));
 const ButtonsPage = lazy(() => import('./buttons-page.js'));
 const FormPage = lazy(() => import('./form-page.js'));
 const IconsPage = lazy(() => import('./icons-page.js'));
@@ -37,7 +37,7 @@ const DesignSystemPage: FC = () => {
         <IllustrationPage />
         <IconsPage />
         <FormPage />
-        <BlogPage />
+        {/* <BlogPage /> */}
       </Suspense>
     </>
   );

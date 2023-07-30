@@ -1,6 +1,5 @@
 import { Box, Header, Link, Placeholder, Text } from '@adminjs/design-system';
 import React, { lazy, Suspense } from 'react';
-const BlogPage = lazy(() => import('./blog-page.js'));
 const ButtonsPage = lazy(() => import('./buttons-page.js'));
 const FormPage = lazy(() => import('./form-page.js'));
 const IconsPage = lazy(() => import('./icons-page.js'));
@@ -26,8 +25,7 @@ const DesignSystemPage = () => {
             React.createElement(MessagesPage, null),
             React.createElement(IllustrationPage, null),
             React.createElement(IconsPage, null),
-            React.createElement(FormPage, null),
-            React.createElement(BlogPage, null))));
+            React.createElement(FormPage, null))));
 };
 const DesignSytemPagePlaceholder = () => (React.createElement(React.Fragment, null, Array.from({ length: 3 }).map((_, index) => (React.createElement(Box, { variant: "grey", key: index },
     React.createElement(Placeholder, { height: 33, width: 240 }),

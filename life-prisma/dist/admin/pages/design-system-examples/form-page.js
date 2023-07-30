@@ -1,4 +1,4 @@
-import { Box, CheckBox, CurrencyInput, DatePicker, DropZone, Header, Input, Label, PhoneInput, Select, TextArea, } from '@adminjs/design-system';
+import { Box, CheckBox, CurrencyInput, DropZone, Header, Input, Label, PhoneInput, Select, TextArea, } from '@adminjs/design-system';
 import { useTranslation } from 'adminjs';
 import React, { useState } from 'react';
 const FormPage = () => {
@@ -27,8 +27,7 @@ const FormPage = () => {
                     React.createElement(Label, null, "Select"),
                     React.createElement(Select, { value: value, onChange: (selected) => setValue(selected), options: options })),
                 React.createElement(Box, { width: "100%" },
-                    React.createElement(Label, null, "Date of birth"),
-                    React.createElement(DatePicker, { propertyType: "date", onChange: setDate, value: date })),
+                    React.createElement(Label, null, "Date of birth")),
                 React.createElement(Box, { width: "100%" },
                     React.createElement(Label, { htmlFor: "currency" }, "Salary"),
                     React.createElement(CurrencyInput, { id: "currency", intlConfig: { locale: 'en-US', currency: 'GBP' } }))),

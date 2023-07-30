@@ -4,7 +4,7 @@ import argon2 from 'argon2'
 import { Router } from 'express'
 
 
-const authenticateUser = async (email, password) => {
+const authenticateUser = async (email: string, password: string) => {
       // const user = await User.findOne({ email })
       // if (user && (await argon2.verify(user.password, password))) {
       //   const matched: boolean = await argon2.verify(

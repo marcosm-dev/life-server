@@ -52,7 +52,7 @@ const FormPage = () => {
           </Box>
           <Box width="100%">
             <Label>Date of birth</Label>
-            <DatePicker propertyType="date" onChange={setDate} value={date} />
+            {/* <DatePicker propertyType="date" onChange={setDate} value={date} /> */}
           </Box>
           <Box width="100%">
             <Label htmlFor="currency">Salary</Label>

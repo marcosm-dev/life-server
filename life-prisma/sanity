@@ -2,5 +2,5 @@
 > life-prisma@1.0.0 dev /Users/marcosmarrero/code/life-prisma
 > npx tsc && node --watch ./dist/src/index.js
 
-src/index.ts(53,10): error TS2304: Cannot find name 'compression'.
- ELIFECYCLE  Command failed with exit code 2.
+src/index.ts(53,10): error TS2304: Cannot find  ELIFECYCLE  Command failed.
+  Command failed with exit code 2.

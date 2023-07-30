@@ -1,16 +1,15 @@
-// Adapters
 import { Database, Resource, getModelByName } from '@adminjs/prisma'
 import { dark, light, noSidebar } from '@adminjs/themes'
 
 import AdminJS, { AdminJSOptions, ResourceOptions } from 'adminjs'
 import argon2 from 'argon2'
-import { prisma } from '../../prisma/config.js'
+import { prisma } from '../prisma/config.js'
 
 // import { CreateManagerResource, CreateOfficeResource } from '../sources/objectionjs/resources/index.js'
 
 // import './components.bundler.js'
 // import { componentLoader } from './components.bundler.js'
-import { customTheme } from '../themes/index.js'
+// import { customTheme } from '../themes/index.js'
 // import { CreateUserResource } from '../../prisma/resources/user.resource.js'
 
 AdminJS.registerAdapter({ Database, Resource })
@@ -25,7 +24,6 @@ export const generateAdminJSConfig: () => AdminJSOptions = () => ({
   rootPath: '/admin',
   logoutPath: '/admin/exit',
   loginPath: '/admin/sign-in',
-  // resources: [] as Resource[], // Fill this with appropriate resource definitions
   branding: {
       companyName: 'Life Serpica',
       logo: '/static/logo.svg',
@@ -38,7 +36,10 @@ export const generateAdminJSConfig: () => AdminJSOptions = () => ({
   env: {},
   resources: [
     {
-      resource: { model: getModelByName('User'), client: prisma },
+      resource: { 
+        model: getModelByName('User'), 
+        client: prisma 
+      },
       options: {},
     }, 
     {
