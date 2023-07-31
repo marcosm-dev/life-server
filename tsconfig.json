@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["./src/*"],
+    },
     // "strict": true,
     "jsx": "react",
     "module": "nodenext",
@@ -13,12 +17,11 @@
     "target": "ESNext",
     "sourceMap": false,
     "outDir": "./dist",
-    "baseUrl": ".",
     "incremental": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
   "exclude": ["node_modules", "src/**/theme.bundle.js"],
-  "include": ["src"]
+  "include": ["src/**/*.*", "src/**/*.js", "src/**/*.ts", "src/prisma/*.*"]
 }

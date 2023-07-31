@@ -90,7 +90,7 @@ export const Login: React.FC<LoginProps> = (props) => {
             <H5 marginBottom="xxl">
               {branding.logo ? <StyledLogo src={branding.logo} alt={branding.companyName} /> : branding.companyName}
             </H5>
-            <MessageBox my="lg" message="Prueba" variant="info" style={{ whiteSpace: 'pre-wrap' }} />
+            <MessageBox my="lg" message={'ADMIN LOGIN'} variant="info" style={{ whiteSpace: 'pre-wrap' }} />
             {errorMessage && (
               <MessageBox
                 my="lg"

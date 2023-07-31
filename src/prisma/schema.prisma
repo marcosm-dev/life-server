@@ -1,8 +1,8 @@
 // schema.prisma
 
 datasource db {
-  provider     = "mongodb"
-  url          = env("MONGO_URI")
+  provider = "mongodb"
+  url      = env("MONGO_URI")
 }
 
 generator client {

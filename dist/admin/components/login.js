@@ -45,7 +45,7 @@ export const Login = (props) => {
                             React.createElement(Illustration, { variant: "FlagInCog", width: 82, height: 91 })))),
                 React.createElement(Box, { as: "form", action: action, method: "POST", p: "x3", flexGrow: 1, width: ['100%', '100%', '480px'] },
                     React.createElement(H5, { marginBottom: "xxl" }, branding.logo ? React.createElement(StyledLogo, { src: branding.logo, alt: branding.companyName }) : branding.companyName),
-                    React.createElement(MessageBox, { my: "lg", message: "Prueba", variant: "info", style: { whiteSpace: 'pre-wrap' } }),
+                    React.createElement(MessageBox, { my: "lg", message: 'ADMIN LOGIN', variant: "info", style: { whiteSpace: 'pre-wrap' } }),
                     errorMessage && (React.createElement(MessageBox, { my: "lg", message: errorMessage.split(' ').length > 1 ? errorMessage : errorMessage, variant: "danger" })),
                     React.createElement(FormGroup, null,
                         React.createElement(Label, { required: true }, translateComponent('Login.properties.email')),

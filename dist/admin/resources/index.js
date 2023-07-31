@@ -1,39 +1,15 @@
 import { getModelByName } from "@adminjs/prisma";
-import { prisma } from "src/prisma/config.js";
-export default [
+import { prisma } from '../../prisma/config.js';
+import Category from "./category.js";
+import Product from "./product.js";
+const resource = [
+    Category,
+    Product,
     {
         resource: {
             model: getModelByName('User'),
-            client: prisma
-        },
-        options: {},
-    },
-    {
-        resource: {
-            model: getModelByName('Product'),
-            client: prisma
-        },
-        options: {
-            properties: {
-                categoryId: {
-                    type: 'string',
-                    reference: 'Category',
-                },
-            },
+            client: prisma,
         },
     },
-    {
-        resource: {
-            model: getModelByName('Category'),
-            client: prisma
-        },
-        options: {},
-    },
-    {
-        resource: {
-            model: getModelByName('Order'),
-            client: prisma
-        },
-        options: {},
-    }
 ];
+export default resource;

@@ -5,10 +5,14 @@ import morgan from 'morgan'
 import express, { Express } from 'express'
 import { expressAuthenticatedRouter } from './admin/router.js'
 import { generateAdminJSConfig } from './admin/index.js'
-import path from 'path'
 import AdminJS from 'adminjs'
 
-import * as url from 'url'
+import {  createYoga } from 'graphql-yoga'
+import { logger } from './graphql/logger.js'
+import { createContext } from './graphql/context.js'
+
+// import * as url from 'url'
+import { schema } from './graphql/schema.js';
 // const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 interface SessionOptions {
@@ -42,5 +46,39 @@ export const attachExpressJS = async (app: Express) => {
       // .use(express.static(path.join(__dirname, '../../../public')))
       .use(express.static('files'))
       .use('/static', express.static('public'))
-      .get('/', (req, res) => res.send('Hello Life'))
+      .get('/', (_, res) => res.send('Hello Life'))
+}
+
+
+export const attachGraphQLYoga = async (app: Express) => {
+  const graphQLServer = createYoga({
+    schema,
+    context: createContext,
+    graphiql: {
+      defaultQuery: /* Query por defecto en el playground */ `
+            query {
+              me {
+                id
+                name
+              }
+            }
+          `,
+    },
+    logging: {
+      debug(...args) {
+        console.log(args)
+        logger.debug([...args])
+      },
+      info(...args) {
+        logger.info([...args])
+      },
+      warn(...args) {
+        logger.warn([...args])
+      },
+      error(...args) {
+        logger.error([...args])
+      },
+    },
+  })
+  app.use(graphQLServer)
 }

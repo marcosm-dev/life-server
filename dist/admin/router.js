@@ -1,6 +1,15 @@
 import AdminJSExpress from '@adminjs/express';
+import argon2 from 'argon2';
+import { prisma } from '../prisma/config.js';
 const authenticateUser = async (email, password) => {
-    return true;
+    const user = await prisma.user.findFirst({ where: { email } });
+    if (user && (await argon2.verify(user.password, password))) {
+        const matched = await argon2.verify(user.password, password);
+        if (matched && user?.role === 'ADMIN') {
+            return user;
+        }
+    }
+    return false;
 };
 export const expressAuthenticatedRouter = (adminJs, router = null) => {
     return AdminJSExpress.buildAuthenticatedRouter(adminJs, {

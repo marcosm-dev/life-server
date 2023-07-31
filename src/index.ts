@@ -2,12 +2,15 @@ import dotenv from 'dotenv'
 import express from 'express'
 
 const PORT = process.env.PORT || 4000
-import { attachAdminJS, attachExpressJS } from './app.js'
+import { attachAdminJS, attachExpressJS, attachGraphQLYoga } from './app.js'
+import { prisma } from './prisma/config.js'
 
 const start = async () => {
   const app = express()
-  await attachAdminJS(app)
   await attachExpressJS(app)
+  await attachAdminJS(app)
+  await attachGraphQLYoga(app)
+
   app
     .listen(PORT, () => {
       console.info(`\nYogaGraphQL Express corriendo en:\nhttp://localhost:${PORT}/graphql`)
@@ -20,4 +23,7 @@ dotenv.config({
 })
 
 start()
+  .finally(async () => {
+      await prisma.$disconnect()
+  })
 

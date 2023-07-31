@@ -6,6 +6,10 @@ import express from 'express';
 import { expressAuthenticatedRouter } from './admin/router.js';
 import { generateAdminJSConfig } from './admin/index.js';
 import AdminJS from 'adminjs';
+import { createYoga } from 'graphql-yoga';
+import { logger } from './graphql/logger.js';
+import { createContext } from './graphql/context.js';
+import { schema } from './graphql/schema.js';
 const sessionOptions = {
     secret: process.env.SECRET || 'secreto',
     resave: false,
@@ -29,5 +33,37 @@ export const attachExpressJS = async (app) => {
         .use(compression())
         .use(express.static('files'))
         .use('/static', express.static('public'))
-        .get('/', (req, res) => res.send('Hello Life'));
+        .get('/', (_, res) => res.send('Hello Life'));
+};
+export const attachGraphQLYoga = async (app) => {
+    const graphQLServer = createYoga({
+        schema,
+        context: createContext,
+        graphiql: {
+            defaultQuery: `
+            query {
+              me {
+                id
+                name
+              }
+            }
+          `,
+        },
+        logging: {
+            debug(...args) {
+                console.log(args);
+                logger.debug([...args]);
+            },
+            info(...args) {
+                logger.info([...args]);
+            },
+            warn(...args) {
+                logger.warn([...args]);
+            },
+            error(...args) {
+                logger.error([...args]);
+            },
+        },
+    });
+    app.use(graphQLServer);
 };

@@ -1,17 +1,14 @@
-import { Database, Resource } from '@adminjs/prisma'
+import { Database, Resource, getModelByName } from '@adminjs/prisma'
 import { dark, light, noSidebar } from '@adminjs/themes'
 import resources from './resources/index.js'
-
+import { prisma } from '../prisma/config.js'
 import AdminJS, { AdminJSOptions, ResourceOptions } from 'adminjs'
-
 
 // import { CreateManagerResource, CreateOfficeResource } from '../sources/objectionjs/resources/index.js'
 
 // import './components.bundler.js'
-// import { componentLoader } from './components.bundler.js'
+import {  DASHBOARD, componentLoader } from './components.bundler.js'
 // import { customTheme } from '../themes/index.js'
-// import { CreateUserResource } from '../../prisma/resources/user.resource.js'
-
 AdminJS.registerAdapter({ Database, Resource })
 
 export const menu: Record<string, ResourceOptions['navigation']> = {
@@ -25,14 +22,18 @@ export const generateAdminJSConfig: () => AdminJSOptions = () => ({
   logoutPath: '/admin/exit',
   loginPath: '/admin/sign-in',
   branding: {
+      message: 'Logeate con tu admin:',
       companyName: 'Life Serpica',
       logo: '/static/logo.svg',
       favicon: '/static/life-logo-color.png',
   },
   defaultTheme: 'light',
   availableThemes: [light, dark, noSidebar],
-  // componentLoader,
+  componentLoader,
+  dashboard: {
+    component: DASHBOARD
+  },
   // pages,
   env: {},
-  resources
+  resources,
 })
