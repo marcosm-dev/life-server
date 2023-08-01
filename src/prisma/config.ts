@@ -2,12 +2,10 @@
 import { PrismaClient } from '@prisma/client'
 const xprisma = new PrismaClient()
 
-const prisma = xprisma.$extends({
+const prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs> = xprisma.$extends({
   query: {
     $allModels: {
       async update({ model, operation, args, query }) {
-        // set `take` and fill with the rest of `args`
-        
         args = { ...args }
 
         const data = { ...args.data }

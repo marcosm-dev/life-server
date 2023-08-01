@@ -7,7 +7,7 @@ const Product = {
     },
     options: {
         properties: {
-            id: { isVisible: { edit: false } },
+            id: { isVisible: { edit: true } },
             categoryId: {
                 type: 'ID',
                 isVisible: {

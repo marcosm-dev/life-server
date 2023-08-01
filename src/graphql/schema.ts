@@ -72,6 +72,7 @@ export const typeDefs = /* GraphQL */ `
       getAllCategories(limit: Int, skip: Int): [Category!]!
       getProductsByCategory(categoryId: ID!): [Product!]!
       getAllProducts: [Product!]!
+      getAllOrders: [Order!]
     }
 
     type Mutation {
@@ -102,6 +103,7 @@ export const typeDefs = /* GraphQL */ `
       password: String!
       access: Boolean
     }
+    
     input ProductInput {
       name: String!
       description: String
@@ -113,7 +115,6 @@ export const typeDefs = /* GraphQL */ `
       categoryId: ID!
     }
 `
-
 
 export const schema = makeExecutableSchema({
   resolvers: [resolvers],

@@ -1,5 +1,4 @@
 import { getModelByName } from '@adminjs/prisma'
-import { add } from '../components.bundler.js'
 import { prisma } from '../../prisma/config.js'
 
 const Category = {

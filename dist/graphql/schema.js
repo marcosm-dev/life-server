@@ -71,6 +71,7 @@ export const typeDefs = `
       getAllCategories(limit: Int, skip: Int): [Category!]!
       getProductsByCategory(categoryId: ID!): [Product!]!
       getAllProducts: [Product!]!
+      getAllOrders: [Order!]
     }
 
     type Mutation {
@@ -101,6 +102,7 @@ export const typeDefs = `
       password: String!
       access: Boolean
     }
+    
     input ProductInput {
       name: String!
       description: String

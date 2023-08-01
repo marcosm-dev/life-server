@@ -1,5 +1,4 @@
 import { getModelByName } from '@adminjs/prisma'
-import { add } from '../components.bundler.js'
 import { prisma } from '../../prisma/config.js'
 
 const Product = {
@@ -9,7 +8,7 @@ const Product = {
   },
   options: {
       properties: {
-        id: { isVisible: { edit: false } }, 
+        id: { isVisible: { edit: true } }, 
         categoryId: {
           type: 'ID',
           isVisible: {

@@ -2,6 +2,7 @@ import session from 'express-session'
 import compression from 'compression'
 import cors from 'cors'
 import morgan from 'morgan'
+
 import express, { Express } from 'express'
 import { expressAuthenticatedRouter } from './admin/router.js'
 import { generateAdminJSConfig } from './admin/index.js'

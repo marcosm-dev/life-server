@@ -1,9 +1,41 @@
-import bcrypt from 'bcryptjs';
+import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import { APP_SECRET } from './auth.js';
 import { GraphQLError } from 'graphql';
 export const resolvers = {
-    User: {},
+    Order: {
+        products: async (parent, args, { prisma }) => {
+            try {
+                const orderId = parent.id;
+                const orderProducts = await prisma.cartItem.findMany({
+                    where: { orderId },
+                    include: {
+                        product: true,
+                    },
+                });
+                return orderProducts.map((cartItem) => ({ ...cartItem }));
+            }
+            catch (error) {
+                throw new GraphQLError('Error al obtener los productos de la orden');
+            }
+        }
+    },
+    User: {
+        orders: async (parent, args, { prisma }) => {
+            try {
+                const userId = parent.id;
+                const userOrders = await prisma.user.findUnique({ where: { id: userId } }).orders({
+                    include: {
+                        products: true,
+                    },
+                });
+                return userOrders;
+            }
+            catch (error) {
+                throw new GraphQLError('Error al obtener las órdenes del usuario');
+            }
+        },
+    },
     Query: {
         me: (parent, args, context) => {
             if (!context.currentUser)
@@ -64,6 +96,15 @@ export const resolvers = {
                 throw new GraphQLError(`Error al obtener categorías: ${error.message}`);
             }
         },
+        getAllOrders: async (_, {}, { prisma }) => {
+            try {
+                const orders = await prisma.order.findMany();
+                return orders;
+            }
+            catch (error) {
+                return new GraphQLError('Error al encontrar las orders');
+            }
+        }
     },
     Mutation: {
         createProduct: async (_, { input }, { prisma }) => {
@@ -79,48 +120,43 @@ export const resolvers = {
         },
         createOrder: async (_, { userId, amount, products }, { prisma }) => {
             try {
-                const userExist = await prisma.user.findFirst({ where: { id: userId } });
-                if (!userExist) {
-                    throw new GraphQLError('El usuario no existe');
+                const user = await prisma.user.findUnique({ where: { id: userId } });
+                if (!user) {
+                    throw new GraphQLError('El usuario no existe.');
                 }
-                const productsExist = await prisma.product.findMany({ where: { id: { in: products } } });
-                if (productsExist.length !== products.length) {
-                    throw new GraphQLError('Alguno(s) de los productos no existe(n)');
-                }
-                const newOrder = await prisma.order.create({
+                const orderProducts = await prisma.product.findMany({
+                    where: {
+                        id: {
+                            in: products,
+                        },
+                    },
+                });
+                const totalAmount = orderProducts.reduce((acc, product) => acc + product.price, 0);
+                const order = await prisma.order.create({
                     data: {
+                        amount: totalAmount,
+                        user: { connect: { id: user.id } },
                         products: {
-                            connect: productsExist.map(product => ({ id: product.id })),
-                        },
-                        amount,
-                        owner: userId,
-                    },
-                });
-                const user = await prisma.user.update({
-                    where: { id: userId },
-                    data: {
-                        orders: {
-                            connect: { id: newOrder.id },
+                            create: orderProducts.map((p) => {
+                                console.log(p);
+                                return {
+                                    quantity: 1,
+                                    amount: p.price,
+                                    product: { connect: { id: p.id } },
+                                };
+                            }),
                         },
                     },
+                    include: {
+                        user: true,
+                        products: true,
+                    },
                 });
-                return newOrder;
+                return order;
             }
             catch (error) {
-                throw new GraphQLError('Error al crear la orden: ' + error.message);
+                throw new GraphQLError(`Error al crear la orden: ${error.message}`);
             }
-        },
-        loginUser: async (_, { email, password }, { prisma }) => {
-            const user = await prisma.user.findFirst({ where: { email } });
-            if (!user) {
-                throw new GraphQLError('No such user found');
-            }
-            const valid = await bcrypt.compare(password, user.password);
-            if (!valid) {
-                throw new GraphQLError('La contraseña es incorrecta');
-            }
-            const token = jwt.sign({ userId: user.id }, APP_SECRET);
-            return { token, user };
         },
         signUp: async (_, { input }, { prisma }) => {
             try {
@@ -130,7 +166,7 @@ export const resolvers = {
                 if (existingUser) {
                     throw new GraphQLError(`El correo electrónico ${input.email} ya está registrado`);
                 }
-                const hashedPassword = await bcrypt.hash(input.password, 10);
+                const hashedPassword = await argon2.hash(input.password);
                 const newUser = await prisma.user.create({
                     data: {
                         ...input,
@@ -141,7 +177,7 @@ export const resolvers = {
                 return { token, user: newUser };
             }
             catch (error) {
-                console.error('Error al crear el usuario:', error);
+                throw new GraphQLError('Error al crear el usuario:', error);
                 throw error;
             }
         },

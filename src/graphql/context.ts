@@ -1,9 +1,7 @@
 import { YogaInitialContext } from 'graphql-yoga'
-import { Prisma, PrismaClient, User } from '@prisma/client'
+import { PrismaClient, User } from '@prisma/client'
 import { authenticateUser } from './auth.js'
-import { DefaultArgs } from '@prisma/client/runtime/library.js'
- 
-const prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs> = new PrismaClient()
+ import { prisma } from '../prisma/config.js' 
  
 export type GraphQLContext = {
   prisma: PrismaClient

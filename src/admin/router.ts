@@ -3,7 +3,6 @@ import AdminJS from 'adminjs'
 import argon2 from 'argon2'
 import { Router } from 'express'
 import { prisma } from '../prisma/config.js'
-import express from 'express'
 
 const authenticateUser = async (email: string, password: string) => {
       const user = await prisma.user.findFirst({ where: { email } })

@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { authenticateUser } from './auth.js';
-const prisma = new PrismaClient();
+import { prisma } from '../prisma/config.js';
 export async function createContext(initialContext) {
     return {
         prisma,
