@@ -1,27 +1,25 @@
 // Importar el modelo de Mongoose para User
-import bcrypt from 'bcryptjs'
+import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
 import { APP_SECRET } from './auth.js'
 import { GraphQLError } from 'graphql'
 
 export const resolvers = {
   User: {
-    // orders: async (parent) => {
-    //   try {
-    //     // Aquí parent se refiere al objeto User que está siendo resuelto.
-    //     // Puedes acceder a su ID (parent.id) y usarlo para buscar las órdenes asociadas.
-
-    //     const userId = parent.id
-
-    //     // Buscar las órdenes asociadas al usuario en la base de datos
-    //     const userOrders = await prisma.order.findMany({ where: { ownerId: userId }})
-
-    //     return userOrders
-    //   } catch (error) {
-    //     throw new Error('Error al obtener las órdenes del usuario')
-    //   }
-    // },
-  },
+    orders: async (parent, args, { prisma }) => {
+        try {
+          // Aquí parent se refiere al objeto User que está siendo resuelto.
+          // Puedes acceder a su ID (parent.id) y usarlo para buscar las órdenes asociadas.
+          const userId = parent.id;
+          // Utiliza la relación definida en el modelo User para obtener las órdenes asociadas al usuario.
+          const userOrders = await prisma.user.findUnique({ where: { id: userId } }).orders();
+          return userOrders;
+        } catch (error) {
+          throw new GraphQLError('Error al obtener las órdenes del usuario');
+        }
+      },
+    },
+  // Otros resolvers para otros tipos, si los tienes.
   Query: {
     me: (parent, args, context) => {
       if (!context.currentUser) throw new GraphQLError('Unauthenticated!')
@@ -104,6 +102,7 @@ export const resolvers = {
         
         const productsExist = await prisma.product.findMany({ where: { id: { in: products } }})
         // Comprueba que todos los productos existan en la base de datos
+
         if (productsExist.length !== products.length) {
           throw new GraphQLError('Alguno(s) de los productos no existe(n)')
         }
@@ -112,10 +111,10 @@ export const resolvers = {
         const newOrder = await prisma.order.create({
           data: {
             products: {
-              connect: productsExist.map(product => ({ id: product.id })),
+              connect: products,
             },
             amount,
-            owner: userId,
+            ownerId: userId,
           },
         })
 
@@ -137,10 +136,13 @@ export const resolvers = {
     loginUser: async (_, { email, password }, { prisma }) => {
       const user = await prisma.user.findFirst({ where: { email }})
       if (!user) {
-        throw new GraphQLError('No such user found')
+        throw new GraphQLError('No hay ningún usuario con ese email')
       }
 
-      const valid = await bcrypt.compare(password, user.password)
+      console.log(password)
+      console.log(user.password)
+      const valid = await argon2.verify(user.password, password)
+      console.log(valid)
       if (!valid) {
         throw new GraphQLError('La contraseña es incorrecta')
       }
@@ -159,7 +161,7 @@ export const resolvers = {
           }
 
           // 2. Hashear la contraseña
-          const hashedPassword = await bcrypt.hash(input.password, 10);
+          const hashedPassword = await argon2.hash(input.password);
 
           // 3. Crear un nuevo usuario en la base de datos
           const newUser = await prisma.user.create({

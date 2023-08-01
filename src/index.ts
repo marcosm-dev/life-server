@@ -10,7 +10,7 @@ const start = async () => {
   await attachExpressJS(app)
   await attachAdminJS(app)
   await attachGraphQLYoga(app)
-
+  
   app
     .listen(PORT, () => {
       console.info(`\nYogaGraphQL Express corriendo en:\nhttp://localhost:${PORT}/graphql`)
