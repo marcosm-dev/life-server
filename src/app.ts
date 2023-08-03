@@ -4,7 +4,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 
 import express, { Express } from 'express'
-import { expressAuthenticatedRouter } from './admin/router.js'
+import { buildAdminRouter } from './admin/router.js'
 import { generateAdminJSConfig } from './admin/index.js'
 import AdminJS from 'adminjs'
 
@@ -34,7 +34,7 @@ export const attachAdminJS = async (app: Express) => {
 
   if (process.env.NODE_ENV !== 'production') await adminJS.initialize()
   else adminJS.watch()
-  const adminRouter = expressAuthenticatedRouter(adminJS)
+  const adminRouter = buildAdminRouter(adminJS)
   app.use(adminJS.options.rootPath, adminRouter)
 }
 

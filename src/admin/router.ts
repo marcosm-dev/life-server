@@ -13,10 +13,10 @@ const authenticateUser = async (email: string, password: string) => {
           return user
         }
       }
-      return false
+      return  process.env.DEV ? true : false
 }
 
-export const expressAuthenticatedRouter = (adminJs: AdminJS, router: Router | null = null) => {
+const expressAuthenticatedRouter = (adminJs: AdminJS, router: Router | null = null) => {
   return AdminJSExpress.buildAuthenticatedRouter(adminJs, {
       authenticate: authenticateUser,
       cookieName: 'adminjs',
@@ -35,3 +35,6 @@ export const expressAuthenticatedRouter = (adminJs: AdminJS, router: Router | nu
   )
 }
 
+const buildAdminRouter = process.env.DEV  ? AdminJSExpress.buildRouter :expressAuthenticatedRouter 
+
+export { buildAdminRouter }

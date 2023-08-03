@@ -2,6 +2,7 @@ import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
 import { APP_SECRET } from './auth.js'
 import { GraphQLError } from 'graphql'
+import { Product } from '@prisma/client'
 
 export const resolvers = {
   Order: {
@@ -110,26 +111,16 @@ export const resolvers = {
     }
   },
   Mutation: {
-    createProduct: async(_, { input }, { prisma }) => {
-      try {
-          const productCreated = await prisma.product.create({ data: {
-            ...input
-          }})
-          return productCreated
-      } catch (error) {
-        new GraphQLError(`Error al crear producto: ${error.message}`)
-      }
-    },
-    createOrder: async (_, { userId, amount, products }, { prisma }) => {
+    createOrder: async (_, { input }, { prisma }) => {
+    const resume = {}
+      const { userId, products } = input
+
       try {
         // Verificar si el usuario existe
         const user = await prisma.user.findUnique({ where: { id: userId } })
-        if (!user) {
-          throw new GraphQLError('El usuario no existe.')
-        }
+        if (!user) throw new GraphQLError('El usuario no existe.')
 
-        // Obtener los productos asociados a los IDs proporcionados
-        const orderProducts = await prisma.product.findMany({
+        const productsInStock = await prisma.product.findMany({
           where: {
             id: {
               in: products,
@@ -137,24 +128,33 @@ export const resolvers = {
           },
         })
 
-        // Calcular el monto total de la orden
-        const totalAmount = orderProducts.reduce((acc, product) => acc + product.price, 0)
+        const productObject = {}
+        products.forEach((p) => {
+          productObject[p] = (productObject[p] || 0) + 1
+        })
+
+        const generateItemsWithProducts = productsInStock.map((pro) => {
+          if (!resume[pro.id]) {
+            const quantity = productObject[pro.id] || 0
+            const amount = quantity * pro.price
+            resume[pro.id] = true
+            return {
+              quantity,
+              amount,
+              product: { connect: { id: pro.id } },
+            }
+          }
+        }).filter((item) => item)
+
+        const amount = generateItemsWithProducts.reduce((acc, crr) => acc + crr.amount, 0)
 
         // Crear la orden en la base de datos
         const order = await prisma.order.create({
           data: {
-            amount: totalAmount,
-            // owner: user.id,
+            amount,
             user: { connect: { id: user.id } },
             products: {
-              create: orderProducts.map((p) => {
-                console.log(p)
-                return {
-                quantity: 1, // Puedes ajustar la cantidad según tus necesidades
-                amount: p.price,
-                product: { connect: { id: p.id } },
-              }
-              }),
+              create: generateItemsWithProducts,
             },
           },
           include: {
@@ -165,6 +165,7 @@ export const resolvers = {
 
         return order
       } catch (error) {
+        console.log(error)
         throw new GraphQLError(`Error al crear la orden: ${error.message}`)
       }
     },

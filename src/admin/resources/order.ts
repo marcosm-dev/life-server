@@ -6,13 +6,16 @@ const Order = {
     model: getModelByName('Order'),
     client: prisma,
     options: {
+      actions: {
+        delete: async(request) => {
+          console.log(request)
+          return request
+        }
+      },
       parent: {
         name: 'Order',
       },
     },
-  },
-  options: {
-    properties: {},
   },
 }
 

@@ -3,7 +3,7 @@ import compression from 'compression';
 import cors from 'cors';
 import morgan from 'morgan';
 import express from 'express';
-import { expressAuthenticatedRouter } from './admin/router.js';
+import { buildAdminRouter } from './admin/router.js';
 import { generateAdminJSConfig } from './admin/index.js';
 import AdminJS from 'adminjs';
 import { createYoga } from 'graphql-yoga';
@@ -22,7 +22,7 @@ export const attachAdminJS = async (app) => {
         await adminJS.initialize();
     else
         adminJS.watch();
-    const adminRouter = expressAuthenticatedRouter(adminJS);
+    const adminRouter = buildAdminRouter(adminJS);
     app.use(adminJS.options.rootPath, adminRouter);
 };
 export const attachExpressJS = async (app) => {

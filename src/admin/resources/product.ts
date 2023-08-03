@@ -8,7 +8,9 @@ const Product = {
   },
   options: {
       properties: {
-        id: { isVisible: { edit: true } }, 
+        id: { 
+          isVisible: { list: true, filter: true, show: true, edit: false },
+        },
         categoryId: {
           type: 'ID',
           isVisible: {

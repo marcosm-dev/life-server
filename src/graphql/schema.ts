@@ -1,11 +1,12 @@
 import { resolvers } from './resolvers.js'
-import { makeExecutableSchema } from '@graphql-tools/schema';
+import { makeExecutableSchema } from '@graphql-tools/schema'
 
 export const typeDefs = /* GraphQL */ `
     type Order {
       id: ID!
       amount: Int!
       owner: ID!
+      status: OrderStatus
       user: User!
       products: [CartItem!]!
       createdAt: String!
@@ -50,7 +51,7 @@ export const typeDefs = /* GraphQL */ `
     type CartItem {
       quantity: Int!
       amount: Int!
-      product: Product!
+      product: Product
       orderId: ID!
     }
 
@@ -65,6 +66,14 @@ export const typeDefs = /* GraphQL */ `
       INSTALADOR
     }
 
+    enum OrderStatus {
+      PENDING
+      SUCCESS
+      AUTHORIZED
+      CANCELED
+      FAILURE
+    }
+
     type Query {
       me: User
       getUser(id: ID!): User
@@ -77,12 +86,19 @@ export const typeDefs = /* GraphQL */ `
 
     type Mutation {
       createProduct(input: ProductInput!): Product
-      createOrder(userId: ID!, amount: Float!, products: [ID!]!): Order!
+      createOrder(input: OrderInput!): Order!
       createUser(input: UserInput!): User!
       updateUser(id: ID!, input: UserInput!): User!
       deleteUser(id: ID!): User!
       loginUser(email: String!, password: String!): UserAuthResponse!
       signUp(input: UserInput!): UserAuthResponse!
+    }
+
+    input OrderInput {
+      userId: ID!
+      amount: Int!
+      status: OrderStatus
+      products: [ID!]!
     }
 
     input CartItemInput {
