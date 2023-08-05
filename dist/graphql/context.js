@@ -1,8 +1,8 @@
 import { authenticateUser } from './auth.js';
-import { prisma } from '../prisma/config.js';
+import mongoose from 'mongoose';
 export async function createContext(initialContext) {
     return {
-        prisma,
-        currentUser: await authenticateUser(prisma, initialContext.request)
+        mongoose,
+        currentUser: await authenticateUser(initialContext.request)
     };
 }

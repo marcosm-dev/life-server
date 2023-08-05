@@ -1,25 +1,15 @@
-import { getModelByName } from '@adminjs/prisma'
-import { prisma } from '../../prisma/config.js'
+import ProductModel from '../../entities/product.entity.js'
 
 const Product = {
-  resource: {
-    model: getModelByName('Product'),
-    client: prisma,
-  },
+  resource: ProductModel,
   options: {
-      properties: {
-        id: { 
-          isVisible: { list: true, filter: true, show: true, edit: false },
-        },
-        categoryId: {
-          type: 'ID',
-          isVisible: {
-            list: true, edit: true, filter: true, show: true,
-          },
-          reference: 'Category'
-        }
-      },
-    },
+    properties: {
+      categoryId: {
+        type: 'ID',
+        reference: 'Category'
+      }
+    }
+  },
 }
 
 export default Product

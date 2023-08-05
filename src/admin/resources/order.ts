@@ -1,22 +1,7 @@
-import { getModelByName } from '@adminjs/prisma'
-import { prisma } from '../../prisma/config.js'
+import OrderModel from '../../entities/order.entity.js'
 
 const Order = {
-  resource: {
-    model: getModelByName('Order'),
-    client: prisma,
-    options: {
-      actions: {
-        delete: async(request) => {
-          console.log(request)
-          return request
-        }
-      },
-      parent: {
-        name: 'Order',
-      },
-    },
-  },
+  resource: OrderModel,
 }
 
 export default Order

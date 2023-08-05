@@ -5,9 +5,8 @@ export const typeDefs = /* GraphQL */ `
     type Order {
       id: ID!
       amount: Int!
-      owner: ID!
+      owner: User!
       status: OrderStatus
-      user: User!
       products: [CartItem!]!
       createdAt: String!
       updatedAt: String!
@@ -29,7 +28,6 @@ export const typeDefs = /* GraphQL */ `
       stock: Int!
       urlImage: String
       categoryId: ID!
-      CartItem: [CartItem!]!
     }
 
     type User {
@@ -82,6 +80,7 @@ export const typeDefs = /* GraphQL */ `
       getProductsByCategory(categoryId: ID!): [Product!]!
       getAllProducts: [Product!]!
       getAllOrders: [Order!]
+      getOrderById(id: ID!): Order!
     }
 
     type Mutation {

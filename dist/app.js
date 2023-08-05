@@ -10,13 +10,15 @@ import { createYoga } from 'graphql-yoga';
 import { logger } from './graphql/logger.js';
 import { createContext } from './graphql/context.js';
 import { schema } from './graphql/schema.js';
+import * as AdminJSMongoose from '@adminjs/mongoose';
 const sessionOptions = {
     secret: process.env.SECRET || 'secreto',
     resave: false,
     saveUninitialized: false,
 };
+AdminJS.registerAdapter(AdminJSMongoose);
 export const attachAdminJS = async (app) => {
-    const config = generateAdminJSConfig();
+    const config = await generateAdminJSConfig();
     const adminJS = new AdminJS(config);
     if (process.env.NODE_ENV !== 'production')
         await adminJS.initialize();

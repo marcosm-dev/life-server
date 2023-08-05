@@ -1,20 +1,15 @@
-import { getModelByName } from "@adminjs/prisma"
-import { prisma } from '../../prisma/config.js'
-import Category from "./category.js"
-import Product from "./product.js"
 import { AdminJSOptions } from 'adminjs'
+
+import Category from './category.js'
+import Product from './product.js'
 import Order from './order.js'
+import User from './user.js'
 
 const resource: AdminJSOptions['resources'] = [
   Category,
   Product,
   Order,
-  {
-    resource: { 
-      model: getModelByName('User'), 
-      client: prisma,
-    },
-  },
+  User,
 ]
 
 export default resource

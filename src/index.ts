@@ -3,7 +3,6 @@ import express from 'express'
 
 const PORT = process.env.PORT || 4000
 import { attachAdminJS, attachExpressJS, attachGraphQLYoga } from './app.js'
-import { prisma } from './prisma/config.js'
 
 const start = async () => {
   const app = express()
@@ -23,7 +22,3 @@ dotenv.config({
 })
 
 start()
-  .finally(async () => {
-      await prisma.$disconnect()
-  })
-

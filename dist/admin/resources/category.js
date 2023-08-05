@@ -1,15 +1,6 @@
-import { getModelByName } from '@adminjs/prisma';
-import { prisma } from '../../prisma/config.js';
+import CategoryModel from '../../entities/category.entity.js';
 const Category = {
-    resource: {
-        model: getModelByName('Category'),
-        client: prisma,
-        options: {
-            parent: {
-                name: 'Category',
-            },
-        },
-    },
+    resource: CategoryModel,
     options: {
         properties: {},
     },

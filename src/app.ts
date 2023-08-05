@@ -13,7 +13,8 @@ import { logger } from './graphql/logger.js'
 import { createContext } from './graphql/context.js'
 
 // import * as url from 'url'
-import { schema } from './graphql/schema.js';
+import { schema } from './graphql/schema.js'
+import * as AdminJSMongoose from '@adminjs/mongoose'
 // const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 interface SessionOptions {
@@ -28,8 +29,10 @@ const sessionOptions: SessionOptions = {
   saveUninitialized: false,
 }
 
+AdminJS.registerAdapter(AdminJSMongoose)
+
 export const attachAdminJS = async (app: Express) => {
-  const config = generateAdminJSConfig()
+  const config = await generateAdminJSConfig()
   const adminJS = new AdminJS(config)
 
   if (process.env.NODE_ENV !== 'production') await adminJS.initialize()

@@ -1,8 +1,8 @@
 import AdminJSExpress from '@adminjs/express';
 import argon2 from 'argon2';
-import { prisma } from '../prisma/config.js';
+import User from '../entities/user.entity.js';
 const authenticateUser = async (email, password) => {
-    const user = await prisma.user.findFirst({ where: { email } });
+    const user = await User.findOne({ email });
     if (user && (await argon2.verify(user.password, password))) {
         const matched = await argon2.verify(user.password, password);
         if (matched && user?.role === 'ADMIN') {

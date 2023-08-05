@@ -1,4 +1,4 @@
-import { prisma } from "./config.js";
+import { prisma } from './config.js';
 export default {
     query: {
         $allModels: {
@@ -36,6 +36,6 @@ export default {
                     throw new Error('Error al eliminar el producto');
                 }
             }
-        }
+        },
     }
 };

@@ -1,56 +1,50 @@
+import mongoose from 'mongoose'
 import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
 import { APP_SECRET } from './auth.js'
 import { GraphQLError } from 'graphql'
-import { Product } from '@prisma/client'
+import { IUser } from '../entities/user.entity.js' // Importar la interfaz IUser
+import Order from '../entities/order.entity.js'
+import User from '../entities/user.entity.js'
+import Product from '../entities/product.entity.js'
 
 export const resolvers = {
-  Order: {
-    products: async (parent, args, { prisma }) => {
-        try {
-          const orderId = parent.id
-          // Utiliza la relación definida en el modelo Order para obtener los productos asociados a la orden.
-          const orderProducts = await prisma.cartItem.findMany({
-            where: { orderId },
-            include: {
-              product: true,
-            },
-          })
+  User: {
+    orders: async (parent) => {
+      try {
+        // Assuming that the 'orders' field in the User model holds an array of ObjectIds
+        // You can use the populate() method to fetch the detailed order data
+        const populatedOrders = await User.populate(parent, { path: 'orders' });
 
-          return orderProducts.map((cartItem) => ({... cartItem}))
-        } catch (error) {
-          throw new GraphQLError('Error al obtener los productos de la orden')
-        }
+        // Return the populated orders array
+        return populatedOrders.orders;
+      } catch (error) {
+        console.error('Error populating orders:', error);
+        throw new Error('Failed to populate orders');
+      }
+    },
+  },
+  CartItem: {
+    product: async (parent) => {
+      const product = await Product.findById(parent.productId)
+      return product
     }
   },
-  User: {
-    orders: async (parent, args, { prisma }) => {
-        try {
-          // Aquí parent se refiere al objeto User que está siendo resuelto.
-          // Puedes acceder a su ID (parent.id) y usarlo para buscar las órdenes asociadas.
-          const userId = parent.id
-          // Utiliza la relación definida en el modelo User para obtener las órdenes asociadas al usuario.
-          const userOrders = await prisma.user.findUnique({ where: { id: userId } }).orders({
-            include: {
-              products: true, // Incluir los productos asociados a cada orden
-            },
-          })
-          return userOrders
-        } catch (error) {
-          throw new GraphQLError('Error al obtener las órdenes del usuario')
-        }
-      },
+  Order: {
+    owner: async (parent: any, args: any, context: any) => {
+      const owner = await User.findById(parent.owner) 
+      return owner
     },
-  // Otros resolvers para otros tipos, si los tienes.
+  },
   Query: {
-    me: (parent, args, context) => {
+    me: (parent: any, args: any, context: any) => {
       if (!context.currentUser) throw new GraphQLError('Unauthenticated!')
       return context.currentUser
     },
     // Resolver para obtener un usuario por su id
-    getUser: async (_, { id }, { prisma }) => {
+    getUser: async (_: any, { id }: { id: string }) => {
       try {
-        const user = await prisma.user.findFirst({ where: { id }})
+        const user = await User.findById(id)
         return user
       } catch (error) {
         throw new GraphQLError('No se pudo obtener el usuario')
@@ -58,20 +52,17 @@ export const resolvers = {
     },
 
     // Resolver para obtener todos los usuarios
-    getAllUsers: async (_, {}, { prisma }) => {
+    getAllUsers: async () => {
       try {
-        const users = await prisma.user.findMany()
+        const users = await User.find()
         return users
       } catch (error) {
         throw new GraphQLError('No se pudieron obtener los usuarios')
       }
     },
-    getAllCategories: async (_, { limit, skip }, { prisma }) => {
+    getAllCategories: async (_: any, { limit, skip }: { limit: number, skip: number }) => {
       try {
-        const categories = await prisma.category.findMany({
-          take: limit,
-          skip,
-        })
+        const categories = await mongoose.model('Category').find().limit(limit).skip(skip)
         if (!categories || categories.length === 0) {
           return []
         }
@@ -81,9 +72,9 @@ export const resolvers = {
         throw new GraphQLError(`Error al obtener categorías: ${error.message}`)
       }
     },
-    getAllProducts: async (_, {}, { prisma }) => {
+    getAllProducts: async () => {
       try {
-        const products = await prisma.product.findMany()
+        const products = await Product.find()
         if (!products || products.length === 0) {
           return []
         }
@@ -93,47 +84,54 @@ export const resolvers = {
         throw new GraphQLError(`Error al obtener productos: ${error.message}`)
       }
     },
-    getProductsByCategory: async (_, { categoryId }, { prisma }) => {
+    getProductsByCategory: async (_: any, { categoryId }: { categoryId: string }) => {
       try {
-        const products = await prisma.product.findFirst({ where: { categoryId }})
+        const products = await Product.find({ categoryId })
         return products
       } catch (error) {
-        throw new GraphQLError(`Error al obtener categorías: ${error.message}`)
+        throw new GraphQLError(`Error al obtener productos por categoría: ${error.message}`)
       }
     },
-    getAllOrders: async (_, {}, { prisma }) => {
+    getAllOrders: async () => {
       try {
-        const orders = await prisma.order.findMany()
+        const orders = await Order.find()
         return orders
       } catch (error) {
-        return new GraphQLError('Error al encontrar las orders')
+        return new GraphQLError('Error al encontrar las órdenes')
       }
-    }
+    },
+    getOrderById: async (_: any, { id }) => {
+      try {
+        const order = await Order.findById(id)
+        console.log(order)
+        return order
+      } catch (error) {
+        return new GraphQLError('Error al encontrar las órdenes')
+      }
+    },
   },
   Mutation: {
-    createOrder: async (_, { input }, { prisma }) => {
-    const resume = {}
+    createOrder: async (_: any, { input }: { input: any }) => {
+      const resume = {}
       const { userId, products } = input
 
       try {
         // Verificar si el usuario existe
-        const user = await prisma.user.findUnique({ where: { id: userId } })
+        const user = await User.findById(userId)
         if (!user) throw new GraphQLError('El usuario no existe.')
+        
 
-        const productsInStock = await prisma.product.findMany({
-          where: {
-            id: {
-              in: products,
-            },
-          },
+        // Verificar stock de productos
+        const productsInStock = await Product.find({
+          _id: { $in: products },
         })
 
-        const productObject = {}
-        products.forEach((p) => {
+        const productObject: { [key: string]: number } = {}
+        products.forEach((p: string) => {
           productObject[p] = (productObject[p] || 0) + 1
         })
 
-        const generateItemsWithProducts = productsInStock.map((pro) => {
+        const generateItemsWithProducts = productsInStock.map((pro: any) => {
           if (!resume[pro.id]) {
             const quantity = productObject[pro.id] || 0
             const amount = quantity * pro.price
@@ -141,27 +139,22 @@ export const resolvers = {
             return {
               quantity,
               amount,
-              product: { connect: { id: pro.id } },
+              productId: pro._id,
             }
           }
-        }).filter((item) => item)
+        })
 
-        const amount = generateItemsWithProducts.reduce((acc, crr) => acc + crr.amount, 0)
+        const amount = generateItemsWithProducts.reduce((acc: number, crr: any) => acc + crr.amount, 0)
 
         // Crear la orden en la base de datos
-        const order = await prisma.order.create({
-          data: {
-            amount,
-            user: { connect: { id: user.id } },
-            products: {
-              create: generateItemsWithProducts,
-            },
-          },
-          include: {
-            user: true,
-            products: true,
-          },
+        const order = await mongoose.model('Order').create({
+          amount,
+          owner: userId,
+          products: generateItemsWithProducts,
         })
+
+        user.orders.push(order._id)
+        user.save()
 
         return order
       } catch (error) {
@@ -169,59 +162,50 @@ export const resolvers = {
         throw new GraphQLError(`Error al crear la orden: ${error.message}`)
       }
     },
-    signUp: async (_, { input }, { prisma }) => {
-        try {
-          // 1. Verificar si el usuario ya está registrado
-          const existingUser = await prisma.user.findFirst({
-            where: { email: input.email },
-          })
-
-          if (existingUser) {
-            throw new GraphQLError(`El correo electrónico ${input.email} ya está registrado`)
-          }
-
-          // 2. Hashear la contraseña
-          const hashedPassword = await argon2.hash(input.password)
-
-          // 3. Crear un nuevo usuario en la base de datos
-          const newUser = await prisma.user.create({
-            data: {
-              ...input,
-              password: hashedPassword,
-            },
-          })
-
-          // 4. Generar el token JWT
-          const token = jwt.sign({ userId: newUser.id }, APP_SECRET, { expiresIn: '7d' })
-
-          return { token, user: newUser }
-        } catch (error) {
-          throw new GraphQLError('Error al crear el usuario:', error)
-          throw error
-        }
-    },
-    updateUser: async (_, { id, input }, { prisma }) => {
+    signUp: async (_: any, { input }: { input: any }) => {
       try {
-        const updatedUser = await prisma.user.update({
-          where: { id },
-          data: input, 
-          select: { id: true, name: true, lastName: true, email: true},
+        // 1. Verificar si el usuario ya está registrado
+        const existingUser = await User.findOne({ email: input.email })
+
+        if (existingUser) {
+          throw new GraphQLError(`El correo electrónico ${input.email} ya está registrado`)
+        }
+
+        // 2. Hashear la contraseña
+        const hashedPassword = await argon2.hash(input.password)
+
+        // 3. Crear un nuevo usuario en la base de datos
+        const newUser = await User.create({
+          ...input,
+          password: hashedPassword,
+        })
+
+        // 4. Generar el token JWT
+        const token = jwt.sign({ userId: newUser._id }, APP_SECRET, { expiresIn: '7d' })
+
+        return { token, user: newUser }
+      } catch (error) {
+        throw new GraphQLError('Error al crear el usuario:' + error.message)
+      }
+    },
+    updateUser: async (_: any, { id, input }: { id: string, input: any }) => {
+      try {
+        const updatedUser = await User.findByIdAndUpdate(id, input, {
+          new: true,
+          fields: { id: true, name: true, lastName: true, email: true },
         })
         return updatedUser
       } catch (error) {
         throw new GraphQLError('No se pudo actualizar el usuario')
       }
     },
-
     // Resolver para eliminar un usuario por su id
-    deleteUser: async (_, { id }, { prisma }) => {
+    deleteUser: async (_: any, { id }: { id: string }) => {
       try {
-        const deletedUser = await prisma.user.delete({ where: { id }})
-        return deletedUser
+        const deletedUser = await User.deleteOne({ id })
       } catch (error) {
-        throw new GraphQLError('No se pudo eliminar el usuario')
+        throw new GraphQLError('Error al elimitar al usuario')
       }
-    },
-  },
+    }
+  }
 }
-
