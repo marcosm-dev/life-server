@@ -6,6 +6,7 @@ import { GraphQLError } from 'graphql';
 import Order from '../entities/order.entity.js';
 import User from '../entities/user.entity.js';
 import Product from '../entities/product.entity.js';
+import { TAX, createInvoice } from '../services/factura-directa.js';
 export const resolvers = {
     User: {
         orders: async (parent) => {
@@ -100,7 +101,6 @@ export const resolvers = {
         getOrderById: async (_, { id }) => {
             try {
                 const order = await Order.findById(id);
-                console.log(order);
                 return order;
             }
             catch (error) {
@@ -135,10 +135,38 @@ export const resolvers = {
                         };
                     }
                 });
+                const getInvoceItems = productsInStock.map((pro) => {
+                    const line = {
+                        account: "700000",
+                        document: "pro_2b30fc2a-5897-420c-b94d-23becd2d09c5",
+                        quantity: productObject[pro.id],
+                        tax: TAX,
+                        text: pro.description,
+                        unitPrice: pro.price
+                    };
+                    return line;
+                });
                 const amount = generateItemsWithProducts.reduce((acc, crr) => acc + crr.amount, 0);
+                const invoice = {
+                    "content": {
+                        "type": "invoice",
+                        "main": {
+                            "docNumber": {
+                                "series": "F"
+                            },
+                            "taxIncludedPrices": true,
+                            "contact": null,
+                            "currency": "EUR",
+                            "lines": getInvoceItems
+                        }
+                    }
+                };
+                const item = await createInvoice(invoice, user.email);
                 const order = await mongoose.model('Order').create({
                     amount,
                     owner: userId,
+                    uuid: item.uuid,
+                    status: 'SUCCESS',
                     products: generateItemsWithProducts,
                 });
                 user.orders.push(order._id);
@@ -146,8 +174,21 @@ export const resolvers = {
                 return order;
             }
             catch (error) {
-                console.log(error);
                 throw new GraphQLError(`Error al crear la orden: ${error.message}`);
+            }
+        },
+        loginUser: async (_, { email, password }) => {
+            try {
+                const users = await User.find({ email });
+                if (users.length === 0)
+                    throw new GraphQLError('No existe ningún usuario con ese correo electrónico');
+                const user = users[0];
+                const isValid = await argon2.verify(user.password, password);
+                const token = jwt.sign({ userId: user.id }, APP_SECRET);
+                return isValid ? { token, user } : new GraphQLError('Contraseña incorrecta');
+            }
+            catch (error) {
+                throw new GraphQLError('No se ha podido encontrar al usuario');
             }
         },
         signUp: async (_, { input }) => {

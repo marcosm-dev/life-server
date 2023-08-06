@@ -6,7 +6,9 @@ import { GraphQLError } from 'graphql'
 import { IUser } from '../entities/user.entity.js' // Importar la interfaz IUser
 import Order from '../entities/order.entity.js'
 import User from '../entities/user.entity.js'
-import Product from '../entities/product.entity.js'
+import Product, { IProduct } from '../entities/product.entity.js'
+import { TAX, createInvoice } from '../services/factura-directa.js'
+import { Invoice } from '../services/factura-directa.d.js'
 
 export const resolvers = {
   User: {
@@ -14,13 +16,13 @@ export const resolvers = {
       try {
         // Assuming that the 'orders' field in the User model holds an array of ObjectIds
         // You can use the populate() method to fetch the detailed order data
-        const populatedOrders = await User.populate(parent, { path: 'orders' });
+        const populatedOrders = await User.populate(parent, { path: 'orders' })
 
         // Return the populated orders array
-        return populatedOrders.orders;
+        return populatedOrders.orders
       } catch (error) {
-        console.error('Error populating orders:', error);
-        throw new Error('Failed to populate orders');
+        console.error('Error populating orders:', error)
+        throw new Error('Failed to populate orders')
       }
     },
   },
@@ -103,7 +105,6 @@ export const resolvers = {
     getOrderById: async (_: any, { id }) => {
       try {
         const order = await Order.findById(id)
-        console.log(order)
         return order
       } catch (error) {
         return new GraphQLError('Error al encontrar las órdenes')
@@ -144,12 +145,45 @@ export const resolvers = {
           }
         })
 
+        const getInvoceItems = productsInStock.map((pro: IProduct) => {
+          const line = {
+              account: "700000",
+              document: "pro_2b30fc2a-5897-420c-b94d-23becd2d09c5", // Sustituir por uuid del pro
+              quantity: productObject[pro.id],
+              tax: TAX,
+              text: pro.description,
+              unitPrice: pro.price
+          }
+          return line
+        })
+
         const amount = generateItemsWithProducts.reduce((acc: number, crr: any) => acc + crr.amount, 0)
+
+        // Crear factura en factura directa
+        const invoice: Invoice = {
+          "content": {
+            "type": "invoice",
+            "main": {
+              "docNumber": {
+                "series": "F"
+              },
+              "taxIncludedPrices": true,
+              "contact": null,
+              "currency": "EUR",
+              "lines": getInvoceItems
+            }
+          }
+        }
+
+        // Crear factura en factura directa
+        const item = await createInvoice(invoice, user.email)
 
         // Crear la orden en la base de datos
         const order = await mongoose.model('Order').create({
           amount,
           owner: userId,
+          uuid: item.uuid,
+          status: 'SUCCESS',
           products: generateItemsWithProducts,
         })
 
@@ -158,9 +192,25 @@ export const resolvers = {
 
         return order
       } catch (error) {
-        console.log(error)
         throw new GraphQLError(`Error al crear la orden: ${error.message}`)
       }
+    },
+    loginUser: async(_: any, { email, password }) => {
+      try {
+        const users: IUser[] | null = await User.find({ email })
+
+        if (users.length === 0) throw new GraphQLError('No existe ningún usuario con ese correo electrónico')
+          
+        const user = users[0]
+        const isValid = await argon2.verify(user.password, password)
+
+        const token = jwt.sign({ userId: user.id }, APP_SECRET)
+        
+        return isValid ? { token, user } : new GraphQLError('Contraseña incorrecta')
+      } catch (error) {
+        throw new GraphQLError('No se ha podido encontrar al usuario')
+      }
+
     },
     signUp: async (_: any, { input }: { input: any }) => {
       try {

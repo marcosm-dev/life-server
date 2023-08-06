@@ -1,6 +1,6 @@
 import mongoose, { Document, Model } from 'mongoose'
 
-interface IProduct extends Document {
+export interface IProduct extends Document {
   accessories: string
   categoryId: mongoose.Schema.Types.ObjectId
   description: string

@@ -19,6 +19,10 @@ const orderSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    uuid: {
+        type: String,
+        required: false
+    },
     products: [cartItemSchema]
 }, { timestamps: true });
 const Order = mongoose.model('Order', orderSchema);

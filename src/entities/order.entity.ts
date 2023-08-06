@@ -6,6 +6,7 @@ interface IOrder extends Document {
   status: 'PENDING' | 'SUCCESS' | 'AUTHORIZED' | 'CANCELED' | 'FAILURE'
   owner: mongoose.Schema.Types.ObjectId
   products: mongoose.Schema.Types.ObjectId[]
+  uuid: string
   createdAt: Date
   updatedAt: Date
 }
@@ -29,6 +30,10 @@ const orderSchema = new mongoose.Schema<IOrder>({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  uuid: {
+    type: String,
+    required: false
   },
   products: [cartItemSchema]
 }, { timestamps: true })

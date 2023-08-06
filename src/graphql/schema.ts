@@ -8,6 +8,7 @@ export const typeDefs = /* GraphQL */ `
       owner: User!
       status: OrderStatus
       products: [CartItem!]!
+      uuid: ID!
       createdAt: String!
       updatedAt: String!
     }

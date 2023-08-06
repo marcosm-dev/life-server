@@ -7,6 +7,7 @@ export const typeDefs = `
       owner: User!
       status: OrderStatus
       products: [CartItem!]!
+      uuid: ID!
       createdAt: String!
       updatedAt: String!
     }
