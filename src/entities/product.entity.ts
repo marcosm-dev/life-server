@@ -9,6 +9,7 @@ export interface IProduct extends Document {
   stock: number
   urlImage: string
   urlMoreInfo: string
+  uuid: string
 }
 
 const productSchema = new mongoose.Schema<IProduct>({
@@ -26,6 +27,7 @@ const productSchema = new mongoose.Schema<IProduct>({
   stock: Number,
   urlImage: String,
   urlMoreInfo: String,
+  uuid: String
 })
 
 const Product: Model<IProduct> = mongoose.model<IProduct>('Product', productSchema)

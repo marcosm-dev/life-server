@@ -9,7 +9,7 @@ import Category from '../entities/category.entity.js'
 import Order from '../entities/order.entity.js'
 import User from '../entities/user.entity.js'
 import Product, { IProduct } from '../entities/product.entity.js'
-import { TAX, createInvoice } from '../services/factura-directa.js'
+import { TAX, createInvoice, createProduct } from '../services/factura-directa.js'
 import { Invoice } from '../services/factura-directa.d.js'
 
 export const resolvers = {
@@ -114,6 +114,46 @@ export const resolvers = {
     },
   },
   Mutation: {
+    createProduct: async () => {
+
+      const newProduct = []
+
+      OLDPRODUCTSARRAY.forEach(async(product, i) => {
+        const skuNumber = (i + 1).toString().padStart(3, '0');
+        const fdProduct = {
+          "content": {
+            "type": "product",
+            "main": {
+              "sku": `PV${skuNumber}`,
+              "name": product.name,
+              "currency": "EUR",
+              "sales": {
+                "price": product.price,
+                "description": product.description,
+                "tax": TAX,
+                "account": "700000"
+              }
+            }
+          }
+        }
+
+        await createProduct(fdProduct)
+      // await Product.create({ product })
+      
+       newProduct.push(fdProduct)
+      })
+
+
+      
+      // try {
+      //   const product = await Product.create(input)
+      //   return product
+      // } catch (error) {
+      //   throw new GraphQLError('Error al crear producto:', error)
+      // }
+
+      return null
+    },
     createOrder: async (_: any, { input }: { input: any }) => {
       const resume = {}
       const { userId, products } = input

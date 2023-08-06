@@ -28,6 +28,7 @@ export const typeDefs = `
       stock: Int!
       urlImage: String
       categoryId: ID!
+      uuid: String
     }
 
     type User {
@@ -84,8 +85,7 @@ export const typeDefs = `
     }
 
     type Mutation {
-      createProductsByArray: [Category!]!
-      createProduct(input: ProductInput!): Product
+      createProduct: Product
       createOrder(input: OrderInput!): Order!
       createUser(input: UserInput!): User!
       updateUser(id: ID!, input: UserInput!): User!

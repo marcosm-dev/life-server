@@ -6,7 +6,7 @@ import { GraphQLError } from 'graphql';
 import Order from '../entities/order.entity.js';
 import User from '../entities/user.entity.js';
 import Product from '../entities/product.entity.js';
-import { TAX, createInvoice } from '../services/factura-directa.js';
+import { TAX, createInvoice, createProduct } from '../services/factura-directa.js';
 export const resolvers = {
     User: {
         orders: async (parent) => {
@@ -109,6 +109,31 @@ export const resolvers = {
         },
     },
     Mutation: {
+        createProduct: async () => {
+            const newProduct = [];
+            OLDPRODUCTSARRAY.forEach(async (product, i) => {
+                const skuNumber = (i + 1).toString().padStart(3, '0');
+                const fdProduct = {
+                    "content": {
+                        "type": "product",
+                        "main": {
+                            "sku": `PV${skuNumber}`,
+                            "name": product.name,
+                            "currency": "EUR",
+                            "sales": {
+                                "price": product.price,
+                                "description": product.description,
+                                "tax": TAX,
+                                "account": "700000"
+                            }
+                        }
+                    }
+                };
+                await createProduct(fdProduct);
+                newProduct.push(fdProduct);
+            });
+            return null;
+        },
         createOrder: async (_, { input }) => {
             const resume = {};
             const { userId, products } = input;

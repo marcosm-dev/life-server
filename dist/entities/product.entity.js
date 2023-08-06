@@ -14,6 +14,7 @@ const productSchema = new mongoose.Schema({
     stock: Number,
     urlImage: String,
     urlMoreInfo: String,
+    uuid: String
 });
 const Product = mongoose.model('Product', productSchema);
 export default Product;

@@ -26,7 +26,7 @@ async function getOrCreateContact(payload) {
         return response.data;
     }
     catch (error) {
-        throw new Error;
+        return error;
     }
 }
 async function createInvoice(payload, email) {
@@ -52,4 +52,13 @@ async function getInvoiceListById(id) {
         throw new Error(`Ha ocurrido algún problema al crear la factura: ${error}`);
     }
 }
-export { getContactById, getOrCreateContact, createInvoice, getInvoiceListById };
+async function createProduct(product) {
+    try {
+        const { data } = await axios.post(URL + '/products', product, { headers });
+        console.log(data);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+export { createProduct, getContactById, getOrCreateContact, createInvoice, getInvoiceListById };

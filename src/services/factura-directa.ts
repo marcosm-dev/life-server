@@ -41,7 +41,7 @@ async function getOrCreateContact(payload: Contact) {
     
 
   } catch (error) {
-    throw new Error
+    return error
   }
 }
 
@@ -71,7 +71,17 @@ async function getInvoiceListById(id: string) {
   }
 }
 
+async function createProduct(product) {
+  try {
+    const { data } = await axios.post(URL + '/products', product, { headers })
+    console.log(data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export {
+  createProduct,
   getContactById,
   getOrCreateContact,
   createInvoice,
