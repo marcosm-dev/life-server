@@ -84,6 +84,7 @@ export const typeDefs = `
     }
 
     type Mutation {
+      createProductsByArray: [Category!]!
       createProduct(input: ProductInput!): Product
       createOrder(input: OrderInput!): Order!
       createUser(input: UserInput!): User!

@@ -3,7 +3,9 @@ import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
 import { APP_SECRET } from './auth.js'
 import { GraphQLError } from 'graphql'
+
 import { IUser } from '../entities/user.entity.js' // Importar la interfaz IUser
+import Category from '../entities/category.entity.js'
 import Order from '../entities/order.entity.js'
 import User from '../entities/user.entity.js'
 import Product, { IProduct } from '../entities/product.entity.js'
