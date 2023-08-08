@@ -86,7 +86,7 @@ export const typeDefs = /* GraphQL */ `
     }
 
     type Mutation {
-      createProduct: Product
+      createProductsFromFacturaDirecta: String!
       createOrder(input: OrderInput!): Order!
       createUser(input: UserInput!): User!
       updateUser(id: ID!, input: UserInput!): User!

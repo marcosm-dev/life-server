@@ -80,7 +80,17 @@ async function createProduct(product) {
   }
 }
 
+async function getAllProducts() {
+  try {
+      const { data } = await axios.get(`${URL}/products?limit=100`, { headers })
+      return data
+  } catch (error) {
+      throw new Error('Error al buscar productoss')
+  }
+}
+
 export {
+  getAllProducts,
   createProduct,
   getContactById,
   getOrCreateContact,
