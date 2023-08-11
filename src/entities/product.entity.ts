@@ -1,4 +1,4 @@
-import mongoose, { Document, Model } from 'mongoose'
+import mongoose, { Decimal128, Document, Model } from 'mongoose'
 
 export interface IProduct extends Document {
   accessories: string

@@ -2,6 +2,7 @@ import { resolvers } from './resolvers.js'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 
 export const typeDefs = /* GraphQL */ `
+
     type Order {
       id: ID!
       amount: Int!
@@ -42,15 +43,19 @@ export const typeDefs = /* GraphQL */ `
       email: String!
       role: Role
       password: String!
+      zipCode: String
+      city: String
       access: Boolean!
       orders: [Order]
       createdAt: String!
       updatedAt: String!
+      uuid: ID
     }
 
     type CartItem {
       quantity: Int!
       amount: Int!
+      TAX: Float
       product: Product
       orderId: ID!
     }
@@ -59,6 +64,11 @@ export const typeDefs = /* GraphQL */ `
       user: User
       error: String
       token: String
+    }
+
+    enum TAX {
+      S_IGIC_7
+      S_IVA_21
     }
 
     enum Role {
@@ -86,6 +96,7 @@ export const typeDefs = /* GraphQL */ `
     }
 
     type Mutation {
+      sendFacturaDirectaOrder(input: FacturaInput!): Order!
       createProductsFromFacturaDirecta: String!
       createOrder(input: OrderInput!): Order!
       createUser(input: UserInput!): User!
@@ -95,10 +106,22 @@ export const typeDefs = /* GraphQL */ `
       signUp(input: UserInput!): UserAuthResponse!
     }
 
+    input OrderLines {
+      account: String
+      document: String
+      quantity: Int
+      tax: [TAX]
+      text: String
+      unitPrice: Int
+    }
+    
+    input FacturaInput {
+      orderId: ID!
+      lines: [OrderLines!]!
+    }
+
     input OrderInput {
       userId: ID!
-      amount: Int!
-      status: OrderStatus
       products: [ID!]!
     }
 
@@ -115,6 +138,8 @@ export const typeDefs = /* GraphQL */ `
       VATIN: String!
       phone: String!
       address: String!
+      zipCode: String!
+      city: String!
       email: String!
       role: Role
       password: String!

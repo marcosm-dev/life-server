@@ -14,6 +14,9 @@ const orderSchema = new mongoose.Schema({
         enum: orderStatusEnum,
         default: 'PENDING',
     },
+    TAX: {
+        type: Number,
+    },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

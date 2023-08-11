@@ -4,6 +4,7 @@ import { cartItemSchema } from './cart-item.entity.js'
 interface IOrder extends Document {
   amount: number
   status: 'PENDING' | 'SUCCESS' | 'AUTHORIZED' | 'CANCELED' | 'FAILURE'
+  TAX: number
   owner: mongoose.Schema.Types.ObjectId
   products: mongoose.Schema.Types.ObjectId[]
   uuid: string
@@ -25,6 +26,9 @@ const orderSchema = new mongoose.Schema<IOrder>({
     type: String,
     enum: orderStatusEnum,
     default: 'PENDING',
+  },
+  TAX: {
+    type: Number,
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

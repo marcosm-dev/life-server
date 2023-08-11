@@ -32,9 +32,13 @@ async function getOrCreateContact(payload: Contact) {
   const { content: { main } } = payload 
 
   try {
-      const { data } = await axios.get(URL + `/contacts?search=${main.email}`, { headers })
 
-      if (data?.items.length) return data.items[0].content.main
+      // Comprobar si existe ya el usuario en Factura Directa
+      const { data } = await axios.get(URL + `/contacts?search=${main.email}`, { headers })
+      console.log(JSON.stringify(data.items, null, 2))
+      if (data?.items.length) {
+        return data.items[0]
+      }
       
       const response = await axios.post(URL + '/contacts', payload, { headers })
       return response.data
@@ -45,24 +49,41 @@ async function getOrCreateContact(payload: Contact) {
   }
 }
 
-async function createInvoice(payload: Invoice, email: string) {
+async function createInvoice(payload: Invoice) {
   try {
-    if (!payload.content.main.contact) {
-      const { data: { items } } = await axios.get(URL + `/contacts?search=${email}`, { headers })
-      payload.content.main.contact = items[0].content.uuid
-    } 
-
-    const { data } = await axios.post(URL + '/invoices', payload, { headers })
-    return data.content
+      const { data } = await axios.post(URL + '/invoices', payload, { headers })
+      return data
 
   } catch (error) {
-    throw new Error(`Error al crear la factura, por favor póngase en contacto con nosotros en el ${config.admin.phone}`)
+    console.log(JSON.stringify(error))
+      throw new Error(`Error al crear la factura, por favor póngase en contacto con nosotros en el ${config.admin.phone}`)
   }
 }
+const invoice: any = {
+  "content": {
+    "type": "invoice",
+    "main": {
+      "docNumber": {
+        "series": "F"
+      },
+      "contact": "con_069692f8-54ad-4af9-ad36-debf3ea2206e",
+      "currency": "EUR",
+      "lines": [
+        {
+          tax: TAX,
+          "quantity": 1,
+          "unitPrice": 100,
+          
+          "text": "Factura de prueba"
+        }
+      ]
+    }
+  }
+};
 
 async function getInvoiceListById(id: string) {
   try {
-    const { data } = await axios.get(URL + '/invoices', { headers })
+    const { data } = await axios(URL + '/invoices', { headers })
     const invoices = data.items.filter(({ content }) => content.main.contact === id)
     
     return invoices
@@ -82,7 +103,18 @@ async function createProduct(product) {
 
 async function getAllProducts() {
   try {
-      const { data } = await axios.get(`${URL}/products?limit=100`, { headers })
+      const { data } = await axios(`${URL}/products?limit=100`, { headers })
+      console.log(JSON.stringify(data, null, 2))
+      return data
+  } catch (error) {
+      throw new Error('Error al buscar productoss')
+  }
+}
+
+async function getAllContacts() {
+  try {
+      const { data } = await axios(`${URL}/contacts`, { headers })
+      console.log(JSON.stringify(data, null, 2))
       return data
   } catch (error) {
       throw new Error('Error al buscar productoss')

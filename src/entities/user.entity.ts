@@ -1,9 +1,12 @@
 import mongoose, { Document, Model } from 'mongoose'
 
-export interface IUser extends Document {
+export interface IUser {
+  id?: mongoose.Schema.Types.ObjectId
   VATIN: string
   access: boolean
   address: string
+  city: string
+  zipCode: string
   email: string
   lastName: string
   name: string
@@ -13,6 +16,7 @@ export interface IUser extends Document {
   role: 'ADMIN' | 'INSTALADOR'
   createdAt: Date
   updatedAt: Date
+  uuid: string
 }
 
 const userSchema = new mongoose.Schema<IUser>(
@@ -25,6 +29,13 @@ const userSchema = new mongoose.Schema<IUser>(
     access: {
       type: Boolean,
       default: false,
+    },
+    zipCode: {
+      type: String,
+    },
+    city: {
+      type: String,
+      required: true
     },
     address: String,
     email: {
@@ -49,6 +60,10 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       enum: ['ADMIN', 'INSTALADOR'],
     },
+    uuid: {
+      type: String,
+      required: false
+    }
   },
   { timestamps: true }
 )

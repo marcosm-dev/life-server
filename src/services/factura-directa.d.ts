@@ -18,6 +18,15 @@ export interface Contact {
   }
 }
 
+export interface Lines {
+    document: string
+    quantity: number
+    tax: string[]
+    text: string
+    unitPrice: number
+    account: string
+}
+
 export interface Invoice {
   content: {
     type: string
@@ -26,15 +35,9 @@ export interface Invoice {
         series: string
       }
       contact: string
-      taxIncludedPrices: boolean
+      taxIncludedPrices?: boolean
       currency: string
-      lines: {
-        document: string
-        quantity: number
-        tax: string[]
-        text: string
-        unitPrice: number
-      }[]
+      lines: Lines[]
     }
   }
 }

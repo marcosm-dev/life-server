@@ -9,6 +9,13 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    zipCode: {
+        type: String,
+    },
+    city: {
+        type: String,
+        required: true
+    },
     address: String,
     email: {
         type: String,
@@ -32,6 +39,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['ADMIN', 'INSTALADOR'],
     },
+    uuid: {
+        type: String,
+        required: false
+    }
 }, { timestamps: true });
 const User = mongoose.model('User', userSchema);
 export default User;

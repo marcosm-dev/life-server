@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import { APP_SECRET } from './auth.js';
 import { GraphQLError } from 'graphql';
+import Category from '../entities/category.entity.js';
 import Order from '../entities/order.entity.js';
 import User from '../entities/user.entity.js';
 import Product from '../entities/product.entity.js';
-import { TAX, createInvoice, getAllProducts } from '../services/factura-directa.js';
+import { createInvoice, getAllProducts, getOrCreateContact } from '../services/factura-directa.js';
 export const resolvers = {
     User: {
         orders: async (parent) => {
@@ -58,7 +58,7 @@ export const resolvers = {
         },
         getAllCategories: async (_, { limit, skip }) => {
             try {
-                const categories = await mongoose.model('Category').find().limit(limit).skip(skip);
+                const categories = await Category.find().limit(limit).skip(skip);
                 if (!categories || categories.length === 0) {
                     return [];
                 }
@@ -1096,14 +1096,17 @@ export const resolvers = {
             return 'DONE';
         },
         createOrder: async (_, { input }) => {
-            const resume = {};
             const { userId, products } = input;
+            const IGIC = 0.07;
+            const resume = {};
+            let totalAmount = 0;
             try {
                 const user = await User.findById(userId);
                 if (!user)
                     throw new GraphQLError('El usuario no existe.');
                 const productsInStock = await Product.find({
                     _id: { $in: products },
+                    stock: { $gt: 0 }
                 });
                 const productObject = {};
                 products.forEach((p) => {
@@ -1111,48 +1114,23 @@ export const resolvers = {
                 });
                 const generateItemsWithProducts = productsInStock.map((pro) => {
                     if (!resume[pro.id]) {
+                        totalAmount += pro.price;
                         const quantity = productObject[pro.id] || 0;
                         const amount = quantity * pro.price;
+                        const TAX = (amount * IGIC).toFixed(2);
                         resume[pro.id] = true;
                         return {
+                            TAX,
                             quantity,
                             amount,
                             productId: pro._id,
                         };
                     }
                 });
-                const getInvoceItems = productsInStock.map((pro) => {
-                    const line = {
-                        account: "700000",
-                        document: "pro_2b30fc2a-5897-420c-b94d-23becd2d09c5",
-                        quantity: productObject[pro.id],
-                        tax: TAX,
-                        text: pro.description,
-                        unitPrice: pro.price
-                    };
-                    return line;
-                });
-                const amount = generateItemsWithProducts.reduce((acc, crr) => acc + crr.amount, 0);
-                const invoice = {
-                    "content": {
-                        "type": "invoice",
-                        "main": {
-                            "docNumber": {
-                                "series": "F"
-                            },
-                            "taxIncludedPrices": true,
-                            "contact": null,
-                            "currency": "EUR",
-                            "lines": getInvoceItems
-                        }
-                    }
-                };
-                const item = await createInvoice(invoice, user.email);
-                const order = await mongoose.model('Order').create({
-                    amount,
+                const order = await Order.create({
+                    amount: totalAmount,
                     owner: userId,
-                    uuid: item.uuid,
-                    status: 'SUCCESS',
+                    status: 'PENDING',
                     products: generateItemsWithProducts,
                 });
                 user.orders.push(order._id);
@@ -1163,12 +1141,66 @@ export const resolvers = {
                 throw new GraphQLError(`Error al crear la orden: ${error.message}`);
             }
         },
+        sendFacturaDirectaOrder: async (_, { input }, ctx) => {
+            const { lines } = input;
+            const { currentUser } = ctx;
+            const contact = {
+                content: {
+                    type: 'contact',
+                    main: {
+                        name: currentUser.name,
+                        fiscalId: currentUser.VATIN,
+                        currency: 'EUR',
+                        country: 'ES',
+                        email: currentUser.email,
+                        address: currentUser.address,
+                        zipcode: currentUser.zipCode,
+                        city: currentUser.city,
+                        accounts: {
+                            client: "430000",
+                        }
+                    }
+                }
+            };
+            try {
+                const { content } = await getOrCreateContact(contact);
+                const { uuid } = content;
+                if (uuid !== currentUser.uuid)
+                    await User.findOneAndUpdate({ _id: currentUser.id }, { uuid });
+                const order = await Order.findById(input.orderId).populate('products');
+                const invoice = {
+                    content: {
+                        type: "invoice",
+                        main: {
+                            docNumber: {
+                                series: "F"
+                            },
+                            contact: uuid,
+                            currency: "EUR",
+                            lines
+                        }
+                    }
+                };
+                const item = await createInvoice(invoice);
+                console.log(JSON.stringify(item, null, 2));
+                if (item) {
+                    order.status = 'SUCCESS';
+                    await order.save();
+                }
+                setTimeout(async () => {
+                    await Order.deleteMany({ _id: { $ne: order.id } });
+                }, 4000);
+                return null;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        },
         loginUser: async (_, { email, password }) => {
             try {
-                const users = await User.find({ email });
-                if (users.length === 0)
+                const user = await User.findOne({ email });
+                if (!user)
                     throw new GraphQLError('No existe ningún usuario con ese correo electrónico');
-                const user = users[0];
                 const isValid = await argon2.verify(user.password, password);
                 const token = jwt.sign({ userId: user.id }, APP_SECRET);
                 return isValid ? { token, user } : new GraphQLError('Contraseña incorrecta');

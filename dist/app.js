@@ -40,6 +40,7 @@ export const attachExpressJS = async (app) => {
 export const attachGraphQLYoga = async (app) => {
     const graphQLServer = createYoga({
         schema,
+        cors: false,
         context: createContext,
         graphiql: {
             defaultQuery: `
@@ -67,5 +68,5 @@ export const attachGraphQLYoga = async (app) => {
             },
         },
     });
-    app.use(graphQLServer);
+    app.use(graphQLServer.graphqlEndpoint, graphQLServer);
 };
