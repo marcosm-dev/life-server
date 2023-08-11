@@ -16,6 +16,10 @@ export const generateAdminJSConfig: () => Promise<AdminJSOptions> = async() => {
 
   return  {
     databases: [connection],
+    locale: {
+      language: 'es',
+      withBackend: false,
+    },
     version: { admin: true, app: '1.0.0' },
     rootPath: '/admin',
     logoutPath: '/admin/exit',
