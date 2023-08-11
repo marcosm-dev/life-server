@@ -63,6 +63,7 @@
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.3",
     "graphql": "^16.7.1",
+    "graphql-type-json": "^0.3.2",
     "graphql-yoga": "^4.0.3",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.2",

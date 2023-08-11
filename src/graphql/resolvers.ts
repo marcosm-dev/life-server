@@ -1247,8 +1247,6 @@ export const resolvers = {
         // Crear factura en factura directa
         const item = await createInvoice(invoice)
 
-				console.log(JSON.stringify(item, null, 2))
-
 				if (item) {
 					order.status = 'SUCCESS'
 					await order.save()
@@ -1256,7 +1254,7 @@ export const resolvers = {
 				setTimeout(async() => {
 					await Order.deleteMany({ _id: { $ne: order.id } });
 				}, 4000)
-					return null
+					return item
 			} catch (error) {
 				console.log(error)
 			}

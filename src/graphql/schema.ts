@@ -1,7 +1,10 @@
+import GraphQLJSON from 'graphql-type-json'
 import { resolvers } from './resolvers.js'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 
 export const typeDefs = /* GraphQL */ `
+
+    scalar JSON
 
     type Order {
       id: ID!
@@ -96,7 +99,7 @@ export const typeDefs = /* GraphQL */ `
     }
 
     type Mutation {
-      sendFacturaDirectaOrder(input: FacturaInput!): Order!
+      sendFacturaDirectaOrder(input: FacturaInput!): JSON!
       createProductsFromFacturaDirecta: String!
       createOrder(input: OrderInput!): Order!
       createUser(input: UserInput!): User!
@@ -158,8 +161,13 @@ export const typeDefs = /* GraphQL */ `
     }
 `
 
+const customResolvers = {
+  JSON: GraphQLJSON,
+};
+
+
 export const schema = makeExecutableSchema({
-  resolvers: [resolvers],
+  resolvers: [resolvers, customResolvers],
   typeDefs: [typeDefs]
 })
 

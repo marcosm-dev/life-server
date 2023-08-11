@@ -50,6 +50,9 @@ dependencies:
   graphql:
     specifier: ^16.7.1
     version: 16.7.1
+  graphql-type-json:
+    specifier: ^0.3.2
+    version: 0.3.2(graphql@16.7.1)
   graphql-yoga:
     specifier: ^4.0.3
     version: 4.0.3(graphql@16.7.1)
@@ -4837,6 +4840,14 @@ packages:
   /graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
+
+  /graphql-type-json@0.3.2(graphql@16.7.1):
+    resolution: {integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==}
+    peerDependencies:
+      graphql: '>=0.8.0'
+    dependencies:
+      graphql: 16.7.1
+    dev: false
 
   /graphql-yoga@4.0.3(graphql@16.7.1):
     resolution: {integrity: sha512-MP+v+yxCqM3lXg95vaA+kXjyRvyRxHUlgZryTecN7ugzEEnyQKKu8JBXA4ziEuLi3liRriyjCAyV4pqFzhHujA==}
