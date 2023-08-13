@@ -95,7 +95,6 @@ export const resolvers = {
         getMyOrders: async (_, {}, { currentUser }) => {
             try {
                 const orders = await Order.find({ owner: currentUser.id });
-                console.log(orders);
                 return orders;
             }
             catch (error) {
@@ -190,7 +189,7 @@ export const resolvers = {
         sendFacturaDirectaOrder: async (_, { input }, ctx) => {
             const { lines } = input;
             const { currentUser } = ctx;
-            const contact = {
+            const newContact = {
                 content: {
                     type: 'contact',
                     main: {
@@ -209,7 +208,7 @@ export const resolvers = {
                 }
             };
             try {
-                const { content } = await getOrCreateContact(contact);
+                const { content } = await getOrCreateContact(newContact);
                 const { uuid } = content;
                 if (uuid !== currentUser.uuid)
                     await User.findOneAndUpdate({ _id: currentUser.id }, { uuid });
@@ -232,9 +231,6 @@ export const resolvers = {
                     order.status = 'SUCCESS';
                     await order.save();
                 }
-                setTimeout(async () => {
-                    await Order.deleteMany({ _id: { $ne: order.id } });
-                }, 4000);
                 const to = {
                     to: [
                         currentUser.email,

@@ -107,7 +107,6 @@ export const resolvers = {
 			try {
 				const orders = await Order.find({ owner: currentUser.id})
 
-				console.log(orders)
 				return orders
 			} catch (error) {
 				throw new GraphQLError(`Error al recuperar los pedidos: s${error.message}`)
@@ -224,7 +223,7 @@ export const resolvers = {
 			const { lines } = input
 			const { currentUser } = ctx
 
-			const contact = {
+			const newContact = {
 				content: {
 					type: 'contact',
 					main: {
@@ -244,7 +243,7 @@ export const resolvers = {
 			}
 
 			try {
-				const { content } = await getOrCreateContact(contact)
+				const { content } = await getOrCreateContact(newContact)
 				const { uuid } = content
 				
 				if (uuid !== currentUser.uuid) await User.findOneAndUpdate({ _id: currentUser.id }, { uuid })
@@ -278,9 +277,9 @@ export const resolvers = {
 					await order.save()
 				}
 
-				setTimeout(async() => {
-					await Order.deleteMany({ _id: { $ne: order.id } });
-				}, 4000)
+				// setTimeout(async() => {
+				// 	await Order.deleteMany({ _id: { $ne: order.id } });
+				// }, 4000)
 
 				const to: InvoiceTo = {
 					to: [

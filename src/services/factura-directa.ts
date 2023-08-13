@@ -63,6 +63,8 @@ async function createInvoice(payload: Invoice) {
 async function sendInvoice(uuid: string, to: InvoiceTo) {
   try {
     const { data } = await axios.put(`${URL}/invoices/${uuid}/send`, to, { headers })
+
+    return data
   } catch (error) {
     throw new Error (`Ha ocurrido algo an enviar la factura email: ${error.message}`)
   }

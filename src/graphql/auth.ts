@@ -14,6 +14,5 @@ export async function authenticateUser(request: Request) {
 
     return user.access && user
   }
- 
   return null
 }
