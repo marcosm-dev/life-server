@@ -95,6 +95,7 @@ export const typeDefs = /* GraphQL */ `
       getProductsByCategory(categoryId: ID!): [Product!]!
       getAllProducts: [Product!]!
       getAllOrders: [Order!]
+      getMyOrders: [Order!]
       getOrderById(id: ID!): Order!
     }
 

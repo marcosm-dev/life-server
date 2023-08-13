@@ -41,26 +41,14 @@ async function createInvoice(payload) {
         throw new Error(`Error al crear la factura, por favor póngase en contacto con nosotros en el ${config.admin.phone}`);
     }
 }
-const invoice = {
-    "content": {
-        "type": "invoice",
-        "main": {
-            "docNumber": {
-                "series": "F"
-            },
-            "contact": "con_069692f8-54ad-4af9-ad36-debf3ea2206e",
-            "currency": "EUR",
-            "lines": [
-                {
-                    tax: TAX,
-                    "quantity": 1,
-                    "unitPrice": 100,
-                    "text": "Factura de prueba"
-                }
-            ]
-        }
+async function sendInvoice(uuid, to) {
+    try {
+        const { data } = await axios.put(`${URL}/invoices/${uuid}/send`, to, { headers });
     }
-};
+    catch (error) {
+        throw new Error(`Ha ocurrido algo an enviar la factura email: ${error.message}`);
+    }
+}
 async function getInvoiceListById(id) {
     try {
         const { data } = await axios(URL + '/invoices', { headers });
@@ -100,4 +88,4 @@ async function getAllContacts() {
         throw new Error('Error al buscar productoss');
     }
 }
-export { getAllProducts, createProduct, getContactById, getOrCreateContact, createInvoice, getInvoiceListById };
+export { sendInvoice, getAllProducts, createProduct, getContactById, getOrCreateContact, createInvoice, getInvoiceListById };

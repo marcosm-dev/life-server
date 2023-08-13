@@ -3,7 +3,7 @@ dotenv.config({ path: `${process.cwd()}/.env`})
 import axios from 'axios'
 
 import config from './config.js'
-import { Contact, Invoice } from './factura-directa.d.js'
+import { Contact, Invoice, InvoiceTo } from './factura-directa.d.js'
 
 const CLIENT_ID = process.env.FACTURA_DIRECTA_CLIENT_ID
 const API_KEY = process.env.FACTURA_DIRECTA_API_KEY
@@ -59,27 +59,14 @@ async function createInvoice(payload: Invoice) {
       throw new Error(`Error al crear la factura, por favor póngase en contacto con nosotros en el ${config.admin.phone}`)
   }
 }
-const invoice: any = {
-  "content": {
-    "type": "invoice",
-    "main": {
-      "docNumber": {
-        "series": "F"
-      },
-      "contact": "con_069692f8-54ad-4af9-ad36-debf3ea2206e",
-      "currency": "EUR",
-      "lines": [
-        {
-          tax: TAX,
-          "quantity": 1,
-          "unitPrice": 100,
-          
-          "text": "Factura de prueba"
-        }
-      ]
-    }
+
+async function sendInvoice(uuid: string, to: InvoiceTo) {
+  try {
+    const { data } = await axios.put(`${URL}/invoices/${uuid}/send`, to, { headers })
+  } catch (error) {
+    throw new Error (`Ha ocurrido algo an enviar la factura email: ${error.message}`)
   }
-};
+}
 
 async function getInvoiceListById(id: string) {
   try {
@@ -122,6 +109,7 @@ async function getAllContacts() {
 }
 
 export {
+  sendInvoice,
   getAllProducts,
   createProduct,
   getContactById,
@@ -129,47 +117,3 @@ export {
   createInvoice,
   getInvoiceListById
 }
-
-
-// const invoice: Invoice = {
-//   "content": {
-//     "type": "invoice",
-//     "main": {
-//       "docNumber": {
-//         "series": "F"
-//       },
-//       "contact": null,
-//       "currency": "EUR",
-//       "lines": [
-//         {
-//           tax: TAX,
-//           "quantity": 1,
-//           "unitPrice": 100,
-          
-//           "text": "Factura de prueba"
-//         }
-//       ]
-//     }
-//   }
-// };
-// createInvoice(invoice, "marcosa.mm@icloud.com")
-
-
-// const contact = {
-//   "content": {
-//     "type": "contact",
-//     "main": {
-//       "name": "Cliente Empresa SL",
-//       "fiscalId": "B12345674",
-//       "currency": "EUR",
-//       "country": "ES",
-//       "email": "marcos@marcos.es",
-//       "address": "Pza Mayor, 4",
-//       "zipcode": "49004",
-//       "city": "Zamora",
-//       "accounts": {
-//         "client": "430000",
-//       }
-//     }
-//   }
-// }

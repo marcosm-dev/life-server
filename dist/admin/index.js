@@ -10,6 +10,10 @@ export const generateAdminJSConfig = async () => {
     const connection = await mongoose.connect(process.env.MONGO_URI);
     return {
         databases: [connection],
+        locale: {
+            language: 'es',
+            withBackend: false,
+        },
         version: { admin: true, app: '1.0.0' },
         rootPath: '/admin',
         logoutPath: '/admin/exit',

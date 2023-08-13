@@ -19,12 +19,12 @@ export interface Contact {
 }
 
 export interface Lines {
-    document: string
-    quantity: number
-    tax: string[]
-    text: string
-    unitPrice: number
-    account: string
+  document: string
+  quantity: number
+  tax: string[]
+  text: string
+  unitPrice: number
+  account: string
 }
 
 export interface Invoice {
@@ -40,4 +40,8 @@ export interface Invoice {
       lines: Lines[]
     }
   }
+}
+
+export interface InvoiceTo {
+  to: [string]!
 }
