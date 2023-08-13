@@ -106,7 +106,7 @@ async function getAllContacts() {
       console.log(JSON.stringify(data, null, 2))
       return data
   } catch (error) {
-      throw new Error('Error al buscar productoss')
+      throw new Error('Error al buscar contactos')
   }
 }
 

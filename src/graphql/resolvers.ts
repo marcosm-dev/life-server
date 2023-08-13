@@ -269,6 +269,8 @@ export const resolvers = {
 				// console.log(JSON.stringify(order, null, 2))
 				// console.log(JSON.stringify(invoice, null, 2))
 
+        console.log(invoice)
+
         // Crear factura en factura directa
         const item = await createInvoice(invoice)
 
