@@ -41,6 +41,7 @@ async function getOrCreateContact(payload: Contact) {
       }
       
       const response = await axios.post(URL + '/contacts', payload, { headers })
+      console.log(response.data)
       return response.data
     
 
