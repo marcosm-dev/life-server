@@ -5,6 +5,7 @@ import { Router } from 'express'
 import User from '../entities/user.entity.js'
 
 const authenticateUser = async (email: string, password: string) => {
+      const isDev = process.env.DEV
       const user = await User.findOne({ email })
       if (user && (await argon2.verify(user.password, password))) {
         const matched: boolean = await argon2.verify(user.password, password)
@@ -12,7 +13,7 @@ const authenticateUser = async (email: string, password: string) => {
           return user
         }
       }
-      return  process.env.DEV ? true : false
+      return user
 }
 
 const expressAuthenticatedRouter = (adminJs: AdminJS, router: Router | null = null) => {

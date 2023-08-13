@@ -2,6 +2,7 @@ import AdminJSExpress from '@adminjs/express';
 import argon2 from 'argon2';
 import User from '../entities/user.entity.js';
 const authenticateUser = async (email, password) => {
+    const isDev = process.env.DEV;
     const user = await User.findOne({ email });
     if (user && (await argon2.verify(user.password, password))) {
         const matched = await argon2.verify(user.password, password);
@@ -9,7 +10,7 @@ const authenticateUser = async (email, password) => {
             return user;
         }
     }
-    return process.env.DEV ? true : false;
+    return user;
 };
 const expressAuthenticatedRouter = (adminJs, router = null) => {
     return AdminJSExpress.buildAuthenticatedRouter(adminJs, {
