@@ -1,7 +1,5 @@
-import mongoose from 'mongoose'
 import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
-import { APP_SECRET } from './auth.js'
 import { GraphQLError } from 'graphql'
 
 import { IUser } from '../entities/user.entity.js' // Importar la interfaz IUser
@@ -304,7 +302,7 @@ export const resolvers = {
           
         const isValid = await argon2.verify(user.password, password)
 
-        const token = jwt.sign({ userId: user.id }, APP_SECRET)
+        const token = jwt.sign({ userId: user.id }, process.env.SECRET)
         
         return isValid ? { token, user } : new GraphQLError('Contraseña incorrecta')
       } catch (error) {
@@ -331,7 +329,7 @@ export const resolvers = {
         })
 
         // 4. Generar el token JWT
-        const token = jwt.sign({ userId: newUser._id }, APP_SECRET, { expiresIn: '7d' })
+        const token = jwt.sign({ userId: newUser._id }, process.env.SECRET, { expiresIn: '7d' })
 
         return { token, user: newUser }
       } catch (error) {
