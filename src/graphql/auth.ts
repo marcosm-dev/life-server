@@ -10,7 +10,9 @@ export async function authenticateUser(request: Request) {
     const tokenPayload = jwt.verify(token, APP_SECRET) as JwtPayload
     const userId = tokenPayload.userId
 
-    return await User.findById(userId)
+    const user = await User.findById(userId)
+
+    return user.access && user
   }
  
   return null
