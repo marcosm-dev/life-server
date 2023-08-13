@@ -86,7 +86,7 @@ async function getAllContacts() {
         return data;
     }
     catch (error) {
-        throw new Error('Error al buscar productoss');
+        throw new Error('Error al buscar contactos');
     }
 }
 export { sendInvoice, getAllProducts, createProduct, getContactById, getOrCreateContact, createInvoice, getInvoiceListById };

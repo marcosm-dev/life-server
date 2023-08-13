@@ -12,7 +12,7 @@ export async function authenticateUser(request: Request) {
 
     const user = await User.findById(userId)
 
-    return user.access && user
+    return user
   }
   return null
 }
