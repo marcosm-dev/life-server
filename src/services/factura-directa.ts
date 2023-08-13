@@ -35,18 +35,16 @@ async function getOrCreateContact(payload: Contact) {
 
       // Comprobar si existe ya el usuario en Factura Directa
       const { data } = await axios.get(URL + `/contacts?search=${main.email}`, { headers })
-      console.log(JSON.stringify(data.items, null, 2))
       if (data?.items.length) {
         return data.items[0]
       }
       
       const response = await axios.post(URL + '/contacts', payload, { headers })
-      console.log(response.data)
       return response.data
     
 
-  } catch (error) {
-    return error
+  } catch (response) {
+      throw new Error(`Error al crear contacto: ${response.message}`)
   }
 }
 
@@ -56,7 +54,6 @@ async function createInvoice(payload: Invoice) {
       return data
 
   } catch (error) {
-    console.log(JSON.stringify(error))
       throw new Error(`Error al crear la factura, por favor póngase en contacto con nosotros en el ${config.admin.phone}`)
   }
 }
