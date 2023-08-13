@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { dark, light, noSidebar } from '@adminjs/themes';
-import { DASHBOARD, componentLoader } from './components.bundler.js';
+import { componentLoader } from './components.bundler.js';
 import resources from './resources/index.js';
 export const menu = {
     prisma: { name: 'Prisma', icon: 'Folder' },
@@ -10,10 +10,6 @@ export const generateAdminJSConfig = async () => {
     const connection = await mongoose.connect(process.env.MONGO_URI);
     return {
         databases: [connection],
-        locale: {
-            language: 'es',
-            withBackend: false,
-        },
         version: { admin: true, app: '1.0.0' },
         rootPath: '/admin',
         logoutPath: '/admin/exit',
@@ -28,9 +24,6 @@ export const generateAdminJSConfig = async () => {
         availableThemes: [light, dark, noSidebar],
         componentLoader,
         resources,
-        dashboard: {
-            component: DASHBOARD
-        },
         env: {},
     };
 };
