@@ -15,6 +15,7 @@ const ADMIN_EMAIL = ''
 const PRINTER_EMAIL = ''
 
 import { postgreeProducts, CATEGORIES } from '../utils/constans.js';
+import { sendEmail } from '../services/nodemailer.js'
 
 export const resolvers = {
   User: {
@@ -330,6 +331,35 @@ export const resolvers = {
 
         // 4. Generar el token JWT
         const token = jwt.sign({ userId: newUser._id }, process.env.SECRET, { expiresIn: '7d' })
+
+        // 5. Enviar email al admin para que te de autorización
+
+        const html = 
+        `<body>
+          <ul>
+            <li>Usuario: ${newUser.name} ${newUser.lastName}</li>
+            <li>Teléfono: ${newUser.phone}</li>
+            <li>Fecha de solicitud: ${new Date().toLocaleString()}</li>
+            <li>Dirección: ${newUser.address}</li>
+            <li>Ciudad: ${newUser.city}</li>
+            <li>DNI: ${newUser.VATIN}</li>
+            <li>Usuario con correo electrónico ${newUser.email}, solicita acceso.</li>
+            <strong>Accede a tu panel de administrador desde el siguiente enlance: </strong>
+            <a target="_blank" href="${process.env.SERVER_URI}" alt="Enlace al administrador">
+              Haz click aqui para acceder.
+            </a>
+          </ul>
+        </body>
+        `
+
+        const mailOptions = {
+          to: process.env.ADMIN_EMAIL,
+          subject: 'Nuevo usuario registrado',
+          text: 'Solicito autorización como instalador para comprar material en su aplicación',
+          html
+        }
+
+        sendEmail(mailOptions)
 
         return { token, user: newUser }
       } catch (error) {

@@ -4,6 +4,7 @@ import express from 'express';
 const PORT = process.env.PORT || 4000;
 import { attachAdminJS, attachExpressJS, attachGraphQLYoga } from './app.js';
 import './services/factura-directa.js';
+import './services/nodemailer.js';
 const start = async () => {
     const app = express();
     await attachExpressJS(app);
