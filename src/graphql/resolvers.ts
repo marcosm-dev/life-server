@@ -55,11 +55,10 @@ export const resolvers = {
     },
   },
   Query: {
-    me: (parent: any, args: any, context: any) => {
+    me: async (parent: any, args: any, { currentUser }) => {
 
-      if (!context.currentUser) return new GraphQLError('No estas autenticado!')
-
-      return context.currentUser
+      if (!currentUser) return new GraphQLError('No estas autenticado!')
+      return currentUser
     },
     // Resolver para obtener un usuario por su id
     getUser: async (_: any, { id }: { id: string }) => {
@@ -313,7 +312,7 @@ export const resolvers = {
     },
     loginUser: async(_: any, { email, password }) => {
       try {
-        const user: IUser = await User.findOne({ email })
+        const user = await User.findOne({ email })
 
         if (!user) return new GraphQLError('No existe ningún usuario con ese correo electrónico')
         

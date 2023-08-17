@@ -9,8 +9,9 @@ export async function authenticateUser(request: Request) {
     const userId = tokenPayload.userId
 
     const user = await User.findById(userId)
+    user.token = token
 
-    return user.access ? { ...user, token } : null
+    return user?.access ? user : null
   }
   return null
 }

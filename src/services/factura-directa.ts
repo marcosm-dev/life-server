@@ -35,6 +35,9 @@ async function getContactById(contactId: string) {
 async function getOrCreateContact(payload: Contact) {
   const { content: { main } } = payload 
 
+  console.log(payload)
+  console.log(main)
+
   try {
 
       // Comprobar si existe ya el usuario en Factura Directa

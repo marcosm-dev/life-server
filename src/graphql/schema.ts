@@ -18,7 +18,7 @@ export const typeDefs = /* GraphQL */ `
       id: ID!
       amount: Int!
       owner: User!
-      status: OrderStatus
+      status: OrderStatus!
       products: [CartItem!]!
       uuid: ID!
       createdAt: String!
@@ -52,10 +52,10 @@ export const typeDefs = /* GraphQL */ `
       VATIN: String!
       phone: String!
       address: String!
-      zipCode: String
-      city: String
+      zipCode: String!
+      city: String!
       email: String!
-      role: Role
+      role: Role!
       password: String
       access: Boolean!
       orders: [Order]
@@ -67,7 +67,7 @@ export const typeDefs = /* GraphQL */ `
     type CartItem {
       quantity: Int!
       amount: Int!
-      TAX: Float
+      TAX: Float!
       product: Product
       orderId: ID!
     }

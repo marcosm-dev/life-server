@@ -1,7 +1,7 @@
-import mongoose, { Document, Model } from 'mongoose'
+import mongoose, { Document, Model, mongo } from 'mongoose'
 
 export interface IUser {
-  id?: mongoose.Schema.Types.ObjectId
+  id?: mongoose.Schema.Types.ObjectId | string
   token: string
   VATIN: string
   access: boolean
