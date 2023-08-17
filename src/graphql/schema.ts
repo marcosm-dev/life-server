@@ -46,7 +46,7 @@ export const typeDefs = /* GraphQL */ `
 
     type User {
       id: ID!
-      token: String!
+      token: String
       name: String!
       lastName: String!
       VATIN: String!
@@ -121,6 +121,7 @@ export const typeDefs = /* GraphQL */ `
       createUser(input: UserInput!): User!
       updateUser(input: UserInput!): User!
       loginUser(email: String!, password: String!): UserAuthResponse!
+      logoutUser: JSON!
       signUp(input: UserInput!): UserAuthResponse!
       recoveryPassword(email: String): UserToken!
     }

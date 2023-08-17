@@ -7,7 +7,7 @@ import Category from '../entities/category.entity.js'
 import Order from '../entities/order.entity.js'
 import User from '../entities/user.entity.js'
 import Product from '../entities/product.entity.js'
-import UserToken from '../entities/user-token.entity.js'
+import UserToken, { IUserToken } from '../entities/user-token.entity.js'
 import { 
   createInvoice, 
   getAllProducts,
@@ -297,6 +297,20 @@ export const resolvers = {
  				throw new GraphQLError(`Error al la crear o enviar factura: ${error.message}`)
 			}
 		},
+    logoutUser: async(_: any, {}, { currentUser }) => {
+      const { token } = currentUser
+
+      if (!token) return new GraphQLError('No estás identificado')
+      try {
+        const response: IUserToken = await UserToken.findOneAndRemove({ token })
+
+        if (!response) return { deleted: 0, error: 'No estás identificado' }
+
+        return  { deleted: 1 }
+      } catch (error) {
+        throw new GraphQLError(`No se encuentra token de usuario: ${error}`)
+      }
+    },
     loginUser: async(_: any, { email, password }) => {
       try {
         const user: IUser = await User.findOne({ email })
@@ -343,15 +357,6 @@ export const resolvers = {
         // 4. Generar el token JWT
         const token = jwt.sign({ userId: newUser._id }, process.env.SECRET, { expiresIn: '7d' })
 
-        // 5. Guardar token en base de datos
-        const expiresDate = calcExpiresDate(new Date(), expiresIn)
-
-        await UserToken.create({
-          token,
-          user: newUser.id,
-          expiresDate,
-        })
-
         // 7. Enviar email al admin para que te de autorización
 
         const html = ORDER_HTML(newUser)
@@ -362,10 +367,9 @@ export const resolvers = {
           text: 'Solicito autorización como instalador para comprar material en su aplicación',
           html
         }
-
         sendEmail(mailOptions)
 
-        return { token, user: newUser }
+        return { user: newUser }
       } catch (error) {
         throw new GraphQLError('Error al crear el usuario:' + error.message)
       }
