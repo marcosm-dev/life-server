@@ -2,6 +2,7 @@ import mongoose, { Document, Model } from 'mongoose'
 
 export interface IUser {
   id?: mongoose.Schema.Types.ObjectId
+  token: string
   VATIN: string
   access: boolean
   address: string
@@ -21,15 +22,24 @@ export interface IUser {
 
 const userSchema = new mongoose.Schema<IUser>(
   {
+    token: String,
+    name: String,
+    lastName: String,
+    email: {
+      type: String,
+      unique: true,
+      required: true
+    },
     VATIN: {
       type: String,
       unique: true,
       required: true
     },
-    access: {
-      type: Boolean,
-      default: false,
+    phone: {
+      type: Number,
+      unique: true,
     },
+    address: String,
     zipCode: {
       type: String,
     },
@@ -37,28 +47,20 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       required: true
     },
-    address: String,
-    email: {
+    role: {
       type: String,
-      unique: true,
-      required: true
+      enum: ['ADMIN', 'INSTALADOR'],
     },
-    lastName: String,
-    name: String,
+    password: String,
     orders: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Order',
       },
     ],
-    password: String,
-    phone: {
-      type: Number,
-      unique: true,
-    },
-    role: {
-      type: String,
-      enum: ['ADMIN', 'INSTALADOR'],
+    access: {
+      type: Boolean,
+      default: false,
     },
     uuid: {
       type: String,

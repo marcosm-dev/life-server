@@ -24,7 +24,7 @@ import { sendEmail } from '../services/nodemailer.js'
 import { calcExpiresDate } from '../utils/transformers.js'
 import { ORDER_HTML, RESET_PASSWORD_HTML } from '../services/nodemailer.config.js'
 
-const expiresIn = 604800 // seconds
+const expiresIn = 604800 // Segundos
 
 export const resolvers = {
   User: {
@@ -56,7 +56,9 @@ export const resolvers = {
   },
   Query: {
     me: (parent: any, args: any, context: any) => {
-      if (!context.currentUser) return new GraphQLError('No estas authenticado!')
+
+      if (!context.currentUser) return new GraphQLError('No estas autenticado!')
+
       return context.currentUser
     },
     // Resolver para obtener un usuario por su id
@@ -73,6 +75,7 @@ export const resolvers = {
     getAllUsers: async () => {
       try {
         const users = await User.find()
+
         return users
       } catch (error) {
         throw new GraphQLError(`No se pudieron obtener los usuarios ${error.message}`)
@@ -165,12 +168,6 @@ export const resolvers = {
       const { userId, products } = input
 			// Tasa de IGIC (7%)
 			const IGIC = 0.07
-
-			// // Cálculo del monto de impuesto
-			// const montoImpuesto = valorProducto * tasaIGIC
-
-			// // Total a pagar (valor del producto + impuesto)
-			// const totalAPagar = valorProducto + montoImpuesto
 
       const resume = {}
 			let totalAmount = 0
@@ -374,7 +371,7 @@ export const resolvers = {
       }
     },
     updateUser: async (_: any, { input }, { currentUser }) => {
-      const { id } = currentUser
+      const { id, token } = currentUser
 
       try {
         // Construye un objeto con los campos del input para actualizar
@@ -392,18 +389,14 @@ export const resolvers = {
           new: true,
           fields: { id: true, name: true, lastName: true, email: true },
         })
+
+        if (!input?.id) {
+          await UserToken.deleteOne({ token })
+        }
     
         return updatedUser
       } catch (error) {
         throw new GraphQLError('No se pudo actualizar el usuario')
-      }
-    },
-    // Resolver para eliminar un usuario por su id
-    deleteUser: async (_: any, { id }: { id: string }) => {
-      try {
-        const deletedUser = await User.deleteOne({ id })
-      } catch (error) {
-        throw new GraphQLError('Error al elimitar al usuario')
       }
     },
     recoveryPassword: async(_:any, { email }) => {
@@ -433,7 +426,7 @@ export const resolvers = {
           subject: 'Correo de recuperación de contraseña LIFE',
           html
         }
-  
+
         sendEmail(options)
         
         return createdTokenUser

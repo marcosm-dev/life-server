@@ -3,7 +3,6 @@ import User from '../entities/user.entity.js'
  
 export async function authenticateUser(request: Request) {
   const header = request.headers.get('Authorization')
-  console.log(header)
   if (header !== null) {
     const token = header.split(' ')[1]
     const tokenPayload = jwt.verify(token, process.env.SECRET) as JwtPayload
@@ -11,7 +10,7 @@ export async function authenticateUser(request: Request) {
 
     const user = await User.findById(userId)
 
-    return user.access ? user : null
+    return user.access ? { ...user, token } : null
   }
   return null
 }

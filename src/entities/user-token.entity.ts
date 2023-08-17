@@ -38,6 +38,5 @@ export async function createTokenIndex() {
 
 }
 
-createTokenIndex()
 
 export default UserToken

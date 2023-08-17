@@ -46,16 +46,17 @@ export const typeDefs = /* GraphQL */ `
 
     type User {
       id: ID!
+      token: String!
       name: String!
       lastName: String!
       VATIN: String!
       phone: String!
       address: String!
+      zipCode: String
+      city: String
       email: String!
       role: Role
       password: String
-      zipCode: String
-      city: String
       access: Boolean!
       orders: [Order]
       createdAt: String!
@@ -119,7 +120,6 @@ export const typeDefs = /* GraphQL */ `
       createOrder(input: OrderInput!): Order!
       createUser(input: UserInput!): User!
       updateUser(input: UserInput!): User!
-      deleteUser(id: ID!): User!
       loginUser(email: String!, password: String!): UserAuthResponse!
       signUp(input: UserInput!): UserAuthResponse!
       recoveryPassword(email: String): UserToken!
