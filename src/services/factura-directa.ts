@@ -23,9 +23,13 @@ const headers = {
 async function getContactById(contactId: string) {
   const path = `/contacts/${contactId}`
 
-  const { data } = await axios.get(URL + path, { headers })
+  try {
+    const { data } = await axios.get(URL + path, { headers })
+    return data
+  } catch (error) {
+    throw new Error(`Error al buscar o crear el contacto: ${error.message}`)
+  }
 
-  return data
 }
 
 async function getOrCreateContact(payload: Contact) {

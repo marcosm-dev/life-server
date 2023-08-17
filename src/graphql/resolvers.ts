@@ -6,16 +6,25 @@ import { IUser } from '../entities/user.entity.js' // Importar la interfaz IUser
 import Category from '../entities/category.entity.js'
 import Order from '../entities/order.entity.js'
 import User from '../entities/user.entity.js'
-import Product, { IProduct } from '../entities/product.entity.js'
-import { TAX, createInvoice, createProduct, getAllProducts, getOrCreateContact, sendInvoice } from '../services/factura-directa.js'
-import { Invoice } from '../services/factura-directa.d.js'
-import { InvoiceTo } from '../services/factura-directa.d.js';
+import Product from '../entities/product.entity.js'
+import UserToken from '../entities/user-token.entity.js'
+import { 
+  createInvoice, 
+  getAllProducts,
+  getOrCreateContact,
+  sendInvoice 
+} from '../services/factura-directa.js'
+import { InvoiceTo } from '../services/factura-directa.d.js'
 
-const ADMIN_EMAIL = ''
-const PRINTER_EMAIL = ''
+// const ADMIN_EMAIL = ''
+// const PRINTER_EMAIL = ''
 
-import { postgreeProducts, CATEGORIES } from '../utils/constans.js';
+import { postgreeProducts, CATEGORIES } from '../utils/constans.js'
 import { sendEmail } from '../services/nodemailer.js'
+import { calcExpiresDate } from '../utils/transformers.js'
+import { ORDER_HTML, RESET_PASSWORD_HTML } from '../services/nodemailer.config.js'
+
+const expiresIn = 604800 // seconds
 
 export const resolvers = {
   User: {
@@ -47,7 +56,7 @@ export const resolvers = {
   },
   Query: {
     me: (parent: any, args: any, context: any) => {
-      if (!context.currentUser) throw new GraphQLError('Unauthenticated!')
+      if (!context.currentUser) return new GraphQLError('No estas authenticado!')
       return context.currentUser
     },
     // Resolver para obtener un usuario por su id
@@ -56,7 +65,7 @@ export const resolvers = {
         const user = await User.findById(id)
         return user
       } catch (error) {
-        throw new GraphQLError('No se pudo obtener el usuario')
+        throw new GraphQLError(`No se pudo obtener el usuario: ${error.message}`)
       }
     },
 
@@ -66,7 +75,7 @@ export const resolvers = {
         const users = await User.find()
         return users
       } catch (error) {
-        throw new GraphQLError('No se pudieron obtener los usuarios')
+        throw new GraphQLError(`No se pudieron obtener los usuarios ${error.message}`)
       }
     },
     getAllCategories: async (_: any, { limit, skip }: { limit: number, skip: number }) => {
@@ -108,7 +117,7 @@ export const resolvers = {
 
 				return orders
 			} catch (error) {
-				throw new GraphQLError(`Error al recuperar los pedidos: s${error.message}`)
+				throw new GraphQLError(`Error al recuperar los pedidos: ${error.message}`)
 			}
 		},
     getAllOrders: async () => {
@@ -116,7 +125,7 @@ export const resolvers = {
         const orders = await Order.find()
         return orders
       } catch (error) {
-        return new GraphQLError('Error al encontrar las órdenes')
+        return new GraphQLError(`Error al encontrar las órdenes: ${error.message}`)
       }
     },
     getOrderById: async (_: any, { id }) => {
@@ -124,7 +133,7 @@ export const resolvers = {
         const order = await Order.findById(id)
         return order
       } catch (error) {
-        return new GraphQLError('Error al encontrar las órdenes')
+        return new GraphQLError(`Error al encontrar la orden: ${error.message}`)
       }
     },
   },
@@ -264,10 +273,6 @@ export const resolvers = {
             }
           }
         }
-
-				// console.log(JSON.stringify(order, null, 2))
-				// console.log(JSON.stringify(invoice, null, 2))
-
         // Crear factura en factura directa
         const item = await createInvoice(invoice)
 
@@ -277,7 +282,7 @@ export const resolvers = {
 				}
 
 				// setTimeout(async() => {
-				// 	await Order.deleteMany({ _id: { $ne: order.id } });
+				// 	await Order.deleteMany({ _id: { $ne: order.id } })
 				// }, 4000)
 
 				const to: InvoiceTo = {
@@ -292,32 +297,41 @@ export const resolvers = {
 
 				return item
 			} catch (error) {
-				throw new GraphQLError(`Error al la crear o enviar factura: ${error.message}`)
+ 				throw new GraphQLError(`Error al la crear o enviar factura: ${error.message}`)
 			}
 		},
     loginUser: async(_: any, { email, password }) => {
       try {
         const user: IUser = await User.findOne({ email })
 
-        if (!user) throw new GraphQLError('No existe ningún usuario con ese correo electrónico')
-          
+        if (!user) return new GraphQLError('No existe ningún usuario con ese correo electrónico')
+        
         const isValid = await argon2.verify(user.password, password)
 
+        if (!isValid) return new GraphQLError('Contraseña incorrecta')
+
         const token = jwt.sign({ userId: user.id }, process.env.SECRET)
+        const expiresDate = calcExpiresDate(new Date(), expiresIn)
+
+        await UserToken.create({
+          token,
+          user: user.id,
+          expiresDate,
+        })
         
-        return isValid ? { token, user } : new GraphQLError('Contraseña incorrecta')
+        return { token, user } 
       } catch (error) {
-        throw new GraphQLError('No se ha podido encontrar al usuario')
+        throw new GraphQLError(`No se ha podido encontrar al usuario:${error}`)
       }
 
     },
     signUp: async (_: any, { input }: { input: any }) => {
-      try {
+       try {
         // 1. Verificar si el usuario ya está registrado
         const existingUser = await User.findOne({ email: input.email })
 
         if (existingUser) {
-          throw new GraphQLError(`El correo electrónico ${input.email} ya está registrado`)
+          return new GraphQLError(`El correo electrónico ${input.email} ya está registrado`)
         }
 
         // 2. Hashear la contraseña
@@ -332,26 +346,19 @@ export const resolvers = {
         // 4. Generar el token JWT
         const token = jwt.sign({ userId: newUser._id }, process.env.SECRET, { expiresIn: '7d' })
 
-        // 5. Enviar email al admin para que te de autorización
+        // 5. Guardar token en base de datos
+        const expiresDate = calcExpiresDate(new Date(), expiresIn)
 
-        const html = 
-        `<body>
-          <ul>
-            <li>Usuario: ${newUser.name} ${newUser.lastName}</li>
-            <li>Teléfono: ${newUser.phone}</li>
-            <li>Fecha de solicitud: ${new Date().toLocaleString()}</li>
-            <li>Dirección: ${newUser.address}</li>
-            <li>Ciudad: ${newUser.city}</li>
-            <li>DNI: ${newUser.VATIN}</li>
-            <li>Usuario con correo electrónico ${newUser.email}, solicita acceso.</li>
-            <strong>Accede a tu panel de administrador desde el siguiente enlance: </strong>
-            <a target="_blank" href="${process.env.SERVER_URI}" alt="Enlace al administrador">
-              Haz click aqui para acceder.
-            </a>
-          </ul>
-        </body>
-        `
+        await UserToken.create({
+          token,
+          user: newUser.id,
+          expiresDate,
+        })
 
+        // 7. Enviar email al admin para que te de autorización
+
+        const html = ORDER_HTML(newUser)
+        
         const mailOptions = {
           to: process.env.ADMIN_EMAIL,
           subject: 'Nuevo usuario registrado',
@@ -366,12 +373,26 @@ export const resolvers = {
         throw new GraphQLError('Error al crear el usuario:' + error.message)
       }
     },
-    updateUser: async (_: any, { id, input }: { id: string, input: any }) => {
+    updateUser: async (_: any, { input }, { currentUser }) => {
+      const { id } = currentUser
+
       try {
-        const updatedUser = await User.findByIdAndUpdate(id, input, {
+        // Construye un objeto con los campos del input para actualizar
+        const updateFields = {}
+        for (const field in input) {
+          if (field === 'password') {
+            updateFields[field] = await argon2.hash(input.password)
+          } else {
+            updateFields[field] = input[field]
+          }
+        }
+    
+        // Actualiza el usuario solo con los campos proporcionados en el input
+        const updatedUser = await User.findByIdAndUpdate(id, { $set: updateFields }, {
           new: true,
           fields: { id: true, name: true, lastName: true, email: true },
         })
+    
         return updatedUser
       } catch (error) {
         throw new GraphQLError('No se pudo actualizar el usuario')
@@ -384,6 +405,41 @@ export const resolvers = {
       } catch (error) {
         throw new GraphQLError('Error al elimitar al usuario')
       }
-    }
-  }
+    },
+    recoveryPassword: async(_:any, { email }) => {
+      const expiresIn = 3600
+  
+      try {
+        const user = await User.findOne({ email })
+        
+        if (!user) return new GraphQLError('No existe un usuario con el email proporcionado')
+        
+        const token = jwt.sign({ userId: user.id }, process.env.SECRET, { expiresIn: '1h' })
+        
+        const expiresDate = calcExpiresDate(new Date(), expiresIn)
+        
+        const createdTokenUser = await UserToken.create({
+          token,
+          user: user.id,
+          expiresDate,
+          type: 'RECOVERY',
+        })
+  
+        const link = `${process.env.APP_URL}/#/recovery-password/${token}`
+        const html = RESET_PASSWORD_HTML(link)
+   
+        const options = {
+          to: email,
+          subject: 'Correo de recuperación de contraseña LIFE',
+          html
+        }
+  
+        sendEmail(options)
+        
+        return createdTokenUser
+      } catch (error) {
+        return new GraphQLError(`Error al crear el token de usuario: ${error.message}`)
+      }
+    },
+  },
 }

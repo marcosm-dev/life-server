@@ -6,6 +6,14 @@ export const typeDefs = /* GraphQL */ `
 
     scalar JSON
 
+    type UserToken {
+      token: String!
+      user: ID!
+      type: TokenState!
+      createdAt: String!
+      expiresAt: String!
+    }
+
     type Order {
       id: ID!
       amount: Int!
@@ -45,7 +53,7 @@ export const typeDefs = /* GraphQL */ `
       address: String!
       email: String!
       role: Role
-      password: String!
+      password: String
       zipCode: String
       city: String
       access: Boolean!
@@ -72,6 +80,11 @@ export const typeDefs = /* GraphQL */ `
     enum TAX {
       S_IGIC_7
       S_IVA_21
+    }
+
+    enum TokenState {
+      SIGN_IN
+      RECOVERY
     }
 
     enum Role {
@@ -101,13 +114,15 @@ export const typeDefs = /* GraphQL */ `
 
     type Mutation {
       sendFacturaDirectaOrder(input: FacturaInput!): JSON!
+      createNewPasswordFromRecovery(token: String!, password: String!): User!
       createProductsFromFacturaDirecta: String!
       createOrder(input: OrderInput!): Order!
       createUser(input: UserInput!): User!
-      updateUser(id: ID!, input: UserInput!): User!
+      updateUser(input: UserInput!): User!
       deleteUser(id: ID!): User!
       loginUser(email: String!, password: String!): UserAuthResponse!
       signUp(input: UserInput!): UserAuthResponse!
+      recoveryPassword(email: String): UserToken!
     }
 
     input OrderLines {
@@ -137,19 +152,19 @@ export const typeDefs = /* GraphQL */ `
     }
 
     input UserInput {
-      name: String!
-      lastName: String!
-      VATIN: String!
-      phone: String!
-      address: String!
-      zipCode: String!
-      city: String!
-      email: String!
+      name: String
+      lastName: String
+      VATIN: String
+      phone: String
+      address: String
+      zipCode: String
+      city: String
+      email: String
       role: Role
-      password: String!
+      password: String
       access: Boolean
     }
-    
+
     input ProductInput {
       name: String!
       description: String
