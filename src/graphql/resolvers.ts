@@ -308,7 +308,7 @@ export const resolvers = {
 			}
 		},
     logoutUser: async(_: any, {}, { currentUser }) => {
-      const { token } = currentUser
+      const token = currentUser?.token
 
       if (!token) return new GraphQLError('No estás identificado')
       try {
