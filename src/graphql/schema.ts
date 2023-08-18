@@ -104,6 +104,7 @@ export const typeDefs = /* GraphQL */ `
     type Query {
       me: User
       getUser(id: ID!): User
+      getCategoryById(id: ID!): Category!
       getAllUsers: [User!]!
       getAllCategories(limit: Int, skip: Int): [Category!]!
       getProductsByCategory(categoryId: ID!): [Product!]!

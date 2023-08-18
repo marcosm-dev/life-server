@@ -2,7 +2,7 @@ import { YogaInitialContext } from 'graphql-yoga'
 import { authenticateUser } from './auth.js'
 import mongoose, { Mongoose } from 'mongoose'
 import IUser from '../entities/user.entity.js'
- 
+
 export type GraphQLContext = {
   mongoose: Mongoose
   currentUser: typeof IUser | {}

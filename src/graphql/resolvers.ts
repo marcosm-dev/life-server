@@ -56,7 +56,6 @@ export const resolvers = {
   },
   Query: {
     me: async (parent: any, args: any, { currentUser }) => {
-
       if (!currentUser) return new GraphQLError('No estas autenticado!')
       return currentUser
     },
@@ -78,6 +77,18 @@ export const resolvers = {
         return users
       } catch (error) {
         throw new GraphQLError(`No se pudieron obtener los usuarios ${error.message}`)
+      }
+    },
+    getCategoryById: async (_: any, { id }) => {
+      console.log(id)
+      try {
+          const category = await Category.findById(id)
+
+          if (!category) return new GraphQLError(`No se encontro la categoría con id ${id}`)
+
+          return category
+      } catch (error) {
+        throw new GraphQLError(`Error al buscar la categoría: ${error}`)
       }
     },
     getAllCategories: async (_: any, { limit, skip }: { limit: number, skip: number }) => {
