@@ -11,6 +11,7 @@ export async function authenticateUser(request: Request) {
     const tokenPayload = jwt.verify(token, process.env.SECRET) as JwtPayload
     const userId = tokenPayload.userId
 
+
     try {
       const [userResponse, tokenResponse ] = await Promise.all([User.findById(userId), UserToken.findOne( { token } )]) 
         
@@ -19,7 +20,7 @@ export async function authenticateUser(request: Request) {
 
       return userResponse
     } catch (error) {
-      return new GraphQLError(`No estas autenticado, por favor, inicia sesión: ${error}`)
+      throw new GraphQLError(`Algo ha fallado con tu sesión de usuario, disculpa las molestias: ${error}`)
     }
 
     // return user?.access ? user : null
