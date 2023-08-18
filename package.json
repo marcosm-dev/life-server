@@ -10,7 +10,7 @@
     "build:watch": "tsc -w",
     "clean": "rimraf dist",
     "start:dev": "nodemon",
-    "start": "node dist/index.js",
+    "start": "npx tsc && node dist/index.js",
     "copy-theme": "copyfiles -u 1 src/themes/**/theme.bundle.js src/themes/**/*.css dist/"
   },
   "prisma": {
