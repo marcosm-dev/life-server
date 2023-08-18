@@ -80,7 +80,6 @@ export const resolvers = {
       }
     },
     getCategoryById: async (_: any, { id }) => {
-      console.log(id)
       try {
           const category = await Category.findById(id)
 
