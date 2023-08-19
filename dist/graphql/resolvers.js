@@ -40,7 +40,7 @@ export const resolvers = {
     Query: {
         me: async (parent, args, { currentUser }) => {
             if (!currentUser)
-                return new GraphQLError('No estas autenticado!');
+                return new GraphQLError('unauthorized');
             return currentUser;
         },
         getUser: async (_, { id }) => {

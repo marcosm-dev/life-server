@@ -56,7 +56,7 @@ export const resolvers = {
   },
   Query: {
     me: async (parent: any, args: any, { currentUser }) => {
-      if (!currentUser) return new GraphQLError('No estas autenticado!')
+      if (!currentUser) return new GraphQLError('unauthorized')
       return currentUser
     },
     // Resolver para obtener un usuario por su id
