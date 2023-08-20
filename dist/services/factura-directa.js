@@ -8,6 +8,7 @@ const API_URI = process.env.FACTURA_DIRECTA_API_URI;
 export const TAX = ['S_IGIC_7'];
 const API_PATH = '/api/profile';
 const URL = `${API_URI}/${CLIENT_ID}`;
+console.log(URL);
 const headers = {
     'facturadirecta-api-key': `${API_KEY}`,
 };
@@ -23,8 +24,6 @@ async function getContactById(contactId) {
 }
 async function getOrCreateContact(payload) {
     const { content: { main } } = payload;
-    console.log(payload);
-    console.log(main);
     try {
         const { data } = await axios.get(URL + `/contacts?search=${main.email}`, { headers });
         if (data?.items.length) {
@@ -34,6 +33,7 @@ async function getOrCreateContact(payload) {
         return response.data;
     }
     catch (response) {
+        console.log(response);
         throw new Error(`Error al crear contacto: ${response.message}`);
     }
 }
@@ -43,6 +43,7 @@ async function createInvoice(payload) {
         return data;
     }
     catch (error) {
+        console.log(error);
         throw new Error(`Error al crear la factura, por favor póngase en contacto con nosotros en el ${config.admin.phone}`);
     }
 }

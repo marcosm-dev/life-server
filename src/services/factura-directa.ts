@@ -14,6 +14,8 @@ export const TAX = ['S_IGIC_7']
 // Ruta de la API de facturadirecta a la que deseas acceder
 const API_PATH = '/api/profile'
 const URL = `${API_URI}/${CLIENT_ID}`
+
+console.log(URL)
 // Función para realizar una solicitud a la API de facturadirecta
 
 const headers = {
@@ -35,8 +37,6 @@ async function getContactById(contactId: string) {
 async function getOrCreateContact(payload: Contact) {
   const { content: { main } } = payload 
 
-  console.log(payload)
-  console.log(main)
 
   try {
 
@@ -51,6 +51,7 @@ async function getOrCreateContact(payload: Contact) {
     
 
   } catch (response) {
+    console.log(response)
       throw new Error(`Error al crear contacto: ${response.message}`)
   }
 }
@@ -61,6 +62,7 @@ async function createInvoice(payload: Invoice) {
       return data
 
   } catch (error) {
+      console.log(error)
       throw new Error(`Error al crear la factura, por favor póngase en contacto con nosotros en el ${config.admin.phone}`)
   }
 }
