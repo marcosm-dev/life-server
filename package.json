@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint src --ext .ts,.tsx",
     "dev": "npx tsc && node --watch ./dist/index.js",
-    "build": "pnpm clean && tsc && pnpm copy-theme",
+    "build": "yarn clean && tsc",
+    "build:dev": "yarn clean && tsc && yarn copy-theme",
     "build:watch": "tsc -w",
     "clean": "rimraf dist",
     "start:dev": "nodemon",
