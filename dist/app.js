@@ -1,7 +1,6 @@
 import session from 'express-session';
 import compression from 'compression';
 import cors from 'cors';
-import morgan from 'morgan';
 import express from 'express';
 import { buildAdminRouter } from './admin/router.js';
 import { generateAdminJSConfig } from './admin/index.js';
@@ -30,7 +29,6 @@ export const attachAdminJS = async (app) => {
 export const attachExpressJS = async (app) => {
     app
         .use(cors({ credentials: true, origin: true }))
-        .use(morgan('dev'))
         .use(session(sessionOptions))
         .use(compression())
         .use(express.static('files'))

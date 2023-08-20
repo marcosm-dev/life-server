@@ -10,7 +10,7 @@
     "build:dev": "yarn clean && tsc && yarn copy-theme",
     "build:watch": "tsc -w",
     "clean": "rimraf dist",
-    "start:dev": "nodemon",
+    "start:dev": "node --watch dist/index.js",
     "start": "node dist/index.js",
     "copy-theme": "copyfiles -u 1 src/themes/**/theme.bundle.js src/themes/**/*.css dist/"
   },
@@ -37,7 +37,6 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.33.1",
     "express-session": "link:@@types/express-session",
-    "morgan": "^1.10.0",
     "prettier": "^3.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6",
