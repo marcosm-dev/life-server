@@ -1,5 +1,5 @@
 {
-  "name": "life-prisma",
+  "name": "life-server",
   "version": "1.0.0",
   "description": "Servidor admin life template",
   "main": "index.js",
