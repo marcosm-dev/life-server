@@ -1,16 +1,5 @@
-import mongoose, { Decimal128, Document, Model } from 'mongoose'
-
-export interface IProduct extends Document {
-  accessories: string
-  categoryId: mongoose.Schema.Types.ObjectId
-  description: string
-  name: string
-  price: number
-  stock: number
-  urlImage: string
-  urlMoreInfo: string
-  uuid: string
-}
+import mongoose, { Model } from 'mongoose'
+import { IProduct } from './product.entity.d.js';
 
 const productSchema = new mongoose.Schema<IProduct>({
   accessories: String,
@@ -30,6 +19,5 @@ const productSchema = new mongoose.Schema<IProduct>({
   uuid: String
 })
 
-const Product: Model<IProduct> = mongoose.model<IProduct>('Product', productSchema)
+export const Product: Model<IProduct> = mongoose.model<IProduct>('Product', productSchema)
 
-export default Product

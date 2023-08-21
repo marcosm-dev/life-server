@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '@adminjs/design-system'
 import { ApiClient, useResource} from 'adminjs'
+import { IUser } from '../../entities/user.entity.js'
 
 
 const UserList = () => {
@@ -20,8 +21,7 @@ const UserList = () => {
 
   useEffect(() => {
     console.log(users)
-    const userData = api.resourceAction({ resourceId: 'User', actionName: 'list'})
-    console.log(userData)
+    const userData: any = api.resourceAction({ resourceId: 'User', actionName: 'list'})
     setData(userData)
   }, [users])
     // api.getDashboard()

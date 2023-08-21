@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 
-const CustomCategorySelector = (props) => {
+const CustomCategorySelector = (props: any) => {
   const { property, record, onChange } = props
   const [categories, setCategories] = useState([])
 
@@ -16,7 +16,7 @@ const CustomCategorySelector = (props) => {
   //   fetchCategories()
   // }, [])
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: any) => {
     const { name, value } = event.target
     onChange(name, value)
   }
@@ -25,7 +25,7 @@ const CustomCategorySelector = (props) => {
     <div>
       <select name={property.name} value={record.params[property.name] || ''} onChange={handleInputChange}>
         <option value="">Categoría</option>
-        {categories.map((category) => (
+        {categories.map((category: any) => (
           <option key={category.id} value={category.id}>
             {category.nombre}
           </option>

@@ -1,27 +1,22 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
-    "paths": {
-      "src": ["./src/*"],
-    },
-    // "strict": true,
-    "jsx": "react",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "declaration": false,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
+    // "baseUrl": "./src",
     "target": "ESNext",
-    "sourceMap": false,
-    "outDir": "./dist",
-    "incremental": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true
-  },
-  "exclude": ["node_modules", "src/**/theme.bundle.js"],
-  "include": ["src/**/*.*", "src/**/*.js", "src/**/*.ts", "src/prisma/*.*"]
-}
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    // "jsx": "react",
+    // "emitDecoratorMetadata": true,
+    // "experimentalDecorators": true,
+    // "allowSyntheticDefaultImports": true,
+    // "forceConsistentCasingInFileNames": true,
+    // "allowJs": true,
+    // "sourceMap": false,
+    // "incremental": true,
+    // "resolveJsonModule": true,
+    // "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+    "strict": true,                          
+    "outDir": "./dist",            /* Enable all strict type-checking options. */
+    // "skipLibCheck": true,                                /* Skip type checking all .d.ts files. */
+    },
+    // "include": ["src/**/*.*", "src/**/*.js", "src/**/*.ts"],
+  }

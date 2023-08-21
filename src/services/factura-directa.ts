@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
 dotenv.config({ path: `${process.cwd()}/.env`})
 import axios from 'axios'
 
@@ -28,7 +28,7 @@ async function getContactById(contactId: string) {
   try {
     const { data } = await axios.get(URL + path, { headers })
     return data
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(`Error al buscar o crear el contacto: ${error.message}`)
   }
 
@@ -50,8 +50,7 @@ async function getOrCreateContact(payload: Contact) {
       return response.data
     
 
-  } catch (response) {
-    console.log(response)
+  } catch (response: any) {
       throw new Error(`Error al crear contacto: ${response.message}`)
   }
 }
@@ -72,7 +71,7 @@ async function sendInvoice(uuid: string, to: InvoiceTo) {
     const { data } = await axios.put(`${URL}/invoices/${uuid}/send`, to, { headers })
 
     return data
-  } catch (error) {
+  } catch (error: any) {
     throw new Error (`Ha ocurrido algo an enviar la factura email: ${error.message}`)
   }
 }
@@ -80,15 +79,16 @@ async function sendInvoice(uuid: string, to: InvoiceTo) {
 async function getInvoiceListById(id: string) {
   try {
     const { data } = await axios(URL + '/invoices', { headers })
-    const invoices = data.items.filter(({ content }) => content.main.contact === id)
+    // @ts-ignore
+    const invoices: any = data.items.filter(({ content }) => content.main.contact === id)
     
     return invoices
-  } catch(error) {
+  } catch(error: any) {
     throw new Error(`Ha ocurrido algún problema al crear la factura: ${error}`)
   }
 }
 
-async function createProduct(product) {
+async function createProduct(product: any) {
   try {
     const { data } = await axios.post(URL + '/products', product, { headers })
     console.log(data)

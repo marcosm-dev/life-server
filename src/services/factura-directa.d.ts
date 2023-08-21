@@ -43,5 +43,5 @@ export interface Invoice {
 }
 
 export interface InvoiceTo {
-  to: [string]!
+  to: [string]
 }

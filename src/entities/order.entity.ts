@@ -1,16 +1,7 @@
-import mongoose, { Document, Model } from 'mongoose'
+import mongoose, { Model } from 'mongoose'
 import { cartItemSchema } from './cart-item.entity.js'
+import { IOrder } from './order.entity.d.js'
 
-interface IOrder extends Document {
-  amount: number
-  status: 'PENDING' | 'SUCCESS' | 'AUTHORIZED' | 'CANCELED' | 'FAILURE'
-  TAX: number
-  owner: mongoose.Schema.Types.ObjectId
-  products: mongoose.Schema.Types.ObjectId[]
-  uuid: string
-  createdAt: Date
-  updatedAt: Date
-}
 
 const orderStatusEnum: ['PENDING', 'SUCCESS', 'AUTHORIZED', 'CANCELED', 'FAILURE'] = [
   'PENDING',
@@ -42,6 +33,5 @@ const orderSchema = new mongoose.Schema<IOrder>({
   products: [cartItemSchema]
 }, { timestamps: true })
 
-const Order: Model<IOrder> = mongoose.model<IOrder>('Order', orderSchema)
 
-export default Order
+export const Order: Model<IOrder> = mongoose.model<IOrder>('Order', orderSchema)

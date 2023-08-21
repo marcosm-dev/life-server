@@ -1,18 +1,13 @@
 import mongoose from 'mongoose'
-import * as AdminJSMongoose from '@adminjs/mongoose'
 import { dark, light, noSidebar } from '@adminjs/themes'
-import { AdminJSOptions, ResourceOptions } from 'adminjs'
+import { AdminJSOptions } from 'adminjs'
 
-import {  DASHBOARD, componentLoader } from './components.bundler.js'
+import {  componentLoader } from './components.bundler.js'
 import resources from './resources/index.js'
 
-export const menu: Record<string, ResourceOptions['navigation']> = {
-  prisma: { name: 'Prisma', icon: 'Folder' },
-  rest: { name: 'REST', icon: 'Link' },
-}
-
 export const generateAdminJSConfig: () => Promise<AdminJSOptions> = async() => {
-  const connection = await mongoose.connect(process.env.MONGO_URI)
+  const MONGO_URI = process.env.MONGO_URI ?? ''
+  const connection = await mongoose.connect(MONGO_URI)
 
   return  {
     databases: [connection],

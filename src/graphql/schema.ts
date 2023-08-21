@@ -1,8 +1,11 @@
 import GraphQLJSON from 'graphql-type-json'
-import { resolvers } from './resolvers.js'
+const { resolvers } = await import('./resolvers.js')
+
+console.log(resolvers)
+
 import { makeExecutableSchema } from '@graphql-tools/schema'
 
-export const typeDefs = /* GraphQL */ `
+const typeDefs = /* GraphQL */ `
 
     scalar JSON
 
@@ -137,7 +140,7 @@ export const typeDefs = /* GraphQL */ `
     }
     
     input FacturaInput {
-      orderId: ID!
+      orderId: ID
       lines: [OrderLines!]!
     }
 
@@ -181,11 +184,11 @@ export const typeDefs = /* GraphQL */ `
 
 const customResolvers = {
   JSON: GraphQLJSON,
-};
-
+}
 
 export const schema = makeExecutableSchema({
-  resolvers: [resolvers, customResolvers],
+  // resolvers: [resolvers, customResolvers],
+  resolvers: [customResolvers],
   typeDefs: [typeDefs]
 })
 

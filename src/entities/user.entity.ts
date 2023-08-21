@@ -1,26 +1,7 @@
-import mongoose, { Document, Model, mongo } from 'mongoose'
+import { Model, Schema, model } from 'mongoose'
+import { IUser } from './user.entity.d.js'
 
-export interface IUser {
-  id?: mongoose.Schema.Types.ObjectId | string
-  token: string
-  VATIN: string
-  access: boolean
-  address: string
-  city: string
-  zipCode: string
-  email: string
-  lastName: string
-  name: string
-  orders: mongoose.Schema.Types.ObjectId[]
-  password: string
-  phone: number
-  role: 'ADMIN' | 'INSTALADOR'
-  createdAt: Date
-  updatedAt: Date
-  uuid: string
-}
-
-const userSchema = new mongoose.Schema<IUser>(
+const userSchema = new Schema<IUser>(
   {
     token: String,
     name: String,
@@ -54,7 +35,7 @@ const userSchema = new mongoose.Schema<IUser>(
     password: String,
     orders: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Order',
       },
     ],
@@ -70,6 +51,4 @@ const userSchema = new mongoose.Schema<IUser>(
   { timestamps: true }
 )
 
-const User: Model<IUser> = mongoose.model<IUser>('User', userSchema)
-
-export default User
+export const User: Model<IUser> = model<IUser>('User', userSchema)

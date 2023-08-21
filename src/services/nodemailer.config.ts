@@ -1,4 +1,4 @@
-import { IUser } from "entities/user.entity.js"
+import { IUser } from '../entities/user.entity.js'
 
 export const RESET_PASSWORD_HTML = (link: string) => {
 
