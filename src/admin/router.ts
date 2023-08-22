@@ -1,40 +1,48 @@
-import AdminJSExpress from '@adminjs/express'
-import AdminJS from 'adminjs'
-import argon2 from 'argon2'
-import { Router } from 'express'
-import User from '../entities/user.entity.js'
+import { IUser } from '../entities/user.entity.d.js';
+import AdminJSExpress from '@adminjs/express';
+import AdminJS from 'adminjs';
+import argon2 from 'argon2';
+import { Router } from 'express';
+import { UserModel }  from '../entities/user.entity.js'
+
+const SECRET = process.env.SECRET
+const NODE =  process.env.NODE_ENV
+// const IS_DEV = process.env.DEV;
 
 const authenticateUser = async (email: string, password: string) => {
-      const isDev = process.env.DEV
-      const user = await User.findOne({ email })
-      if (user && (await argon2.verify(user.password, password))) {
-        const matched: boolean = await argon2.verify(user.password, password)
-        if (matched && user?.role === 'ADMIN') {
-          return user
-        }
-      }
-      return user
-}
 
-const expressAuthenticatedRouter = (adminJs: AdminJS, router: Router | null = null) => {
-  return AdminJSExpress.buildAuthenticatedRouter(adminJs, {
+  const user= await UserModel.findOne({ email })  as IUser  | null 
+  if (user) {
+    const isTrusted = await argon2.verify(user.password, password)
+    const { role } = user
+    if (isTrusted && user &&  role === 'ADMIN') {
+      return user;
+    }
+  }
+  return user;
+};
+
+export const adminJSRouter = (
+  adminJs: AdminJS,
+  router: Router | null = null
+) => {
+  return AdminJSExpress.buildAuthenticatedRouter(
+    adminJs,
+    {
       authenticate: authenticateUser,
       cookieName: 'adminjs',
-      cookiePassword: process.env.SECRET ?? 'sessionsecret',
+      cookiePassword:  SECRET ?? 'sessionsecret',
     },
-    router, {
+    router,
+    {
       resave: true,
       saveUninitialized: true,
-      secret: process.env.SECRET ?? 'sessionsecret',
+      secret: SECRET ?? 'sessionsecret',
       cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure:  NODE === 'production',
       },
       name: 'adminjs',
-    },
-  )
-}
-
-const buildAdminRouter = process.env.DEV  ? AdminJSExpress.buildRouter :expressAuthenticatedRouter 
-
-export { buildAdminRouter }
+    }
+  );
+};

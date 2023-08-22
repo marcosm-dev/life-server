@@ -1,22 +1,24 @@
 {
   "compilerOptions": {
-    // "baseUrl": "./src",
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    // "jsx": "react",
-    // "emitDecoratorMetadata": true,
-    // "experimentalDecorators": true,
-    // "allowSyntheticDefaultImports": true,
-    // "forceConsistentCasingInFileNames": true,
-    // "allowJs": true,
-    // "sourceMap": false,
-    // "incremental": true,
-    // "resolveJsonModule": true,
-    // "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
-    "strict": true,                          
-    "outDir": "./dist",            /* Enable all strict type-checking options. */
-    // "skipLibCheck": true,                                /* Skip type checking all .d.ts files. */
-    },
-    // "include": ["src/**/*.*", "src/**/*.js", "src/**/*.ts"],
-  }
+    "jsx": "preserve",
+    "baseUrl": "./",
+    // "paths": {
+    //   "@/*":  ["./src/*"]
+    // },
+    "outDir": "./dist",
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true
+  },
+  "include": ["./src/**/*.ts", "../src/**/*"],
+  "exclude": ["node_modules"]
+}

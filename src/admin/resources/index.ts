@@ -1,15 +1,13 @@
-import { AdminJSOptions } from 'adminjs'
+import { AdminJSOptions } from 'adminjs';
 
-import Category from './category.js'
-import Product from './product.js'
-import Order from './order.js'
-import User from './user.js'
+import { CategoryModel } from '../../entities/category.entity.js';
+import { ProductModel } from '../../entities/product.entity.js';
+import { OrderModel } from '../../entities/order.entity.js';
+import { UserModel } from '../../entities/user.entity.js';
 
-const resource: AdminJSOptions['resources'] = [
-  Category,
-  Product,
-  Order,
-  User,
-]
-
-export default resource
+export const resources: AdminJSOptions['resources'] = [
+  CategoryModel,
+  ProductModel,
+  OrderModel,
+  UserModel,
+];

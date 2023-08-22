@@ -1,15 +1,14 @@
-import ProductModel from '../../entities/product.entity.js'
-
+import { ProductModel } from  '../../entities/product.entity.js';
 const Product = {
   resource: ProductModel,
   options: {
     properties: {
       categoryId: {
         type: 'ID',
-        reference: 'Category'
-      }
-    }
+        reference: 'Category',
+      },
+    },
   },
-}
+};
 
-export default Product
+export default Product;

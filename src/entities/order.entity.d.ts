@@ -1,14 +1,4 @@
-import { Schema } from 'mongoose'
+import { InferSchemaType } from 'mongoose';
+import { orderSchema } from './order.entity.ts';
 
-export interface IOrder extends Document {
-    id?:  Schema.Types.ObjectId | string
-    amount: number
-    status: 'PENDING' | 'SUCCESS' | 'AUTHORIZED' | 'CANCELED' | 'FAILURE'
-    TAX: number
-    owner: Schema.Types.ObjectId
-    products: Schema.Types.ObjectId[]
-    uuid: string
-    createdAt: Date
-    updatedAt: Date
-  }
-  
+export type IOrder = InferSchemaType<typeof orderSchema>;

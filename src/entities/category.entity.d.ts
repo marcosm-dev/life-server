@@ -1,6 +1,6 @@
-import *  as mongoose from 'mongoose'
+import { Document } from 'mongoose';
 
-export interface ICategory extends mongoose.Document {
-    name: string
-    urlImage: string
-  }
+export interface ICategory extends Document {
+  name: string;
+  urlImage: string;
+}

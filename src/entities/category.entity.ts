@@ -1,8 +1,8 @@
-import * as mongoose from 'mongoose'
-import { ICategory } from './category.entity.d.js'
+import { model, Schema } from 'mongoose';
 
-const categorySchema = new mongoose.Schema<ICategory>({
+const categorySchema = new Schema({
   name: String,
   urlImage: String,
-})
-export const  Category:  mongoose.Model<ICategory> = mongoose.model<ICategory>('Category', categorySchema)
+});
+
+export const CategoryModel = model('Category', categorySchema)

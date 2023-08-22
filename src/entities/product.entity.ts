@@ -1,10 +1,9 @@
-import mongoose, { Model } from 'mongoose'
-import { IProduct } from './product.entity.d.js';
+import { Schema, Types, model } from 'mongoose';
 
-const productSchema = new mongoose.Schema<IProduct>({
+export const productSchema = new Schema({
   accessories: String,
   categoryId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Types.ObjectId,
     ref: 'Category',
   },
   description: String,
@@ -16,8 +15,7 @@ const productSchema = new mongoose.Schema<IProduct>({
   stock: Number,
   urlImage: String,
   urlMoreInfo: String,
-  uuid: String
-})
+  uuid: Schema.Types.UUID,
+});
 
-export const Product: Model<IProduct> = mongoose.model<IProduct>('Product', productSchema)
-
+export const ProductModel = model('Product', productSchema)

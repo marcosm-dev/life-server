@@ -1,25 +1,14 @@
-import mongoose, { Document, Model } from 'mongoose'
+import { model, Schema, Types } from 'mongoose';
 
-export interface ICartItem extends Document {
-  quantity: number
-  amount: number
-  TAX: number
-  productId: mongoose.Schema.Types.ObjectId
-  orderId: mongoose.Schema.Types.ObjectId
-  productDeleted: mongoose.Schema.Types.Mixed
-}
-
-export const cartItemSchema = new mongoose.Schema<ICartItem>({
+export const cartItemSchema = new Schema({
   quantity: Number,
   amount: Number,
   TAX: Number,
-  productId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Product' 
+  productId: {
+    type: Types.ObjectId,
+    ref: 'Product',
   },
-  productDeleted: mongoose.Schema.Types.Mixed,
-})
+  productDeleted: Schema.Types.Mixed,
+});
 
-const CartItem: Model<ICartItem> = mongoose.model<ICartItem>('CartItem', cartItemSchema)
-
-export default CartItem
+export const CartItemNidek = model('CartItem', cartItemSchema)

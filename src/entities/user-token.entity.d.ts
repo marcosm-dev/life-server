@@ -1,10 +1,3 @@
-import { Schema, Document } from 'mongoose'
+import { userTokenSchema } from './user-token.entity.js';
 
-export interface IUserToken extends Document {
-    token: string
-    user: Schema.Types.ObjectId
-    type: string
-    createdAt: Date
-    expiresDate: Date
-  }
-  
+export type IUserToken = InferSchemaType<typeof userTokenSchema>;

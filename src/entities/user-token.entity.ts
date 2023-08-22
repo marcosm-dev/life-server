@@ -1,31 +1,29 @@
-import  {  Model, Types, model, Schema } from 'mongoose'
-import { IUserToken } from './user-token.entity.d.js';
+import { Schema, Types, model } from 'mongoose';
 
-export const userTokenSchema = new Schema<IUserToken>({
+export const userTokenSchema = new Schema({
   token: String,
   user: Types.ObjectId,
   type: {
     type: String,
     default: 'SIGN_IN',
-    enum:  ['RECOVERY', 'SIGN_IN'],
+    enum: ['RECOVERY', 'SIGN_IN'],
   },
   createdAt: {
     type: Date,
-    default: new Date()
+    default: new Date(),
   },
-  expiresDate: Date
-})
+  expiresDate: Date,
+});
 
-export const UserToken: Model<IUserToken> = model<IUserToken>('UserToken', userTokenSchema)
+export const UserTokenModel = model('UserToken', userTokenSchema)
 
 const indexOptions = {
   name: 'Delete expiresAt index',
   background: true,
   sparce: true,
-  expireAfterSeconds: 0
-}
+  expireAfterSeconds: 0,
+};
 
 export async function createTokenIndex() {
-  await UserToken.collection.createIndex({ expiresDate: 1 }, indexOptions)
-
+  await UserTokenModel.collection.createIndex({ expiresDate: 1 }, indexOptions);
 }

@@ -1,42 +1,21 @@
-import { YogaInitialContext } from 'graphql-yoga'
-import { authenticateUser } from './auth.js'
-import { Schema }  from 'mongoose'
-
-enum Role {
-  'ADMIN',
-  'INSTALADOR'
-}
-
-type IUser = {
-  id?: Schema.Types.ObjectId | string;
-  token: string;
-  VATIN: string;
-  access: boolean;
-  address: string;
-  city: string;
-  zipCode: string;
-  email: string;
-  lastName: string;
-  name: string;
-  orders: Schema.Types.ObjectId[];
-  password: string;
-  phone: number;
-  role: Role;
-  createdAt: Date;
-  updatedAt: Date;
-  uuid: string;
-}
+import { authenticateUser } from './auth.js';
+import { IUser } from '../entities/user.entity.d.js';
+import { YogaInitialContext } from 'graphql-yoga';
 
 export type GraphQLContext = {
-  currentUser: IUser | null
-}
+  currentUser: IUser | null;
+};
 
-export async function createContext(initialContext: YogaInitialContext): Promise<GraphQLContext> {
-  const currentUser =  await authenticateUser(initialContext.request) as any
+export async function createContext(
+  initialContext: YogaInitialContext
+): Promise<GraphQLContext> {
+  const currentUser = (await authenticateUser(
+    initialContext.request
+  )) as IUser | null;
 
-  const userContext: GraphQLContext | null =  {
-    currentUser
-  }
+  const userContext: GraphQLContext | null = {
+    currentUser,
+  };
 
-  return userContext
+  return userContext;
 }

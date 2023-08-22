@@ -1,7 +1,7 @@
-import { Model, Schema, model } from 'mongoose'
-import { IUser } from './user.entity.d.js'
+import { Schema, Types, model } from 'mongoose';
+import { IOrder } from './order.entity.d.js';
 
-const userSchema = new Schema<IUser>(
+export const userSchema = new Schema(
   {
     token: String,
     name: String,
@@ -9,15 +9,15 @@ const userSchema = new Schema<IUser>(
     email: {
       type: String,
       unique: true,
-      required: true
+      required: true,
     },
     VATIN: {
       type: String,
       unique: true,
-      required: true
+      required: true,
     },
     phone: {
-      type: Number,
+      type: String,
       unique: true,
     },
     address: String,
@@ -26,29 +26,30 @@ const userSchema = new Schema<IUser>(
     },
     city: {
       type: String,
-      required: true
+      required: true,
     },
     role: {
       type: String,
-      enum: ['ADMIN', 'INSTALADOR'],
+      enum: ['ADMIN', 'USER']
     },
-    password: String,
-    orders: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Order',
-      },
-    ],
+    password: {
+      type: String,
+      required: false
+    },
+    orders: {
+      type: Types.ObjectId,
+      ref: 'Order'
+    },
     access: {
       type: Boolean,
       default: false,
     },
     uuid: {
-      type: String,
-      required: false
-    }
+      type: Schema.Types.UUID,
+      required: false,
+    },
   },
   { timestamps: true }
-)
+);
 
-export const User: Model<IUser> = model<IUser>('User', userSchema)
+export const UserModel = model('User', userSchema)

@@ -1,7 +1,6 @@
-import { IUser } from '../entities/user.entity.js'
+import { IUser } from '../entities/user.entity.d.js';
 
 export const RESET_PASSWORD_HTML = (link: string) => {
-
   return `
       <!DOCTYPE html>
         <html>
@@ -35,8 +34,8 @@ export const RESET_PASSWORD_HTML = (link: string) => {
         </body>
         </html>
         
-      `
-}
+      `;
+};
 
 export const ORDER_HTML = (newUser: IUser) => `
   <body>
@@ -49,9 +48,11 @@ export const ORDER_HTML = (newUser: IUser) => `
       <li>DNI: ${newUser.VATIN}</li>
       <li>Usuario con correo electrónico ${newUser.email}, solicita acceso.</li>
       <strong>Accede a tu panel de administrador desde el siguiente enlance: </strong>
-      <a target="_blank" href="${process.env.SERVER_URI}" alt="Enlace al administrador">
+      <a target="_blank" href="${
+        process.env.SERVER_URI
+      }" alt="Enlace al administrador">
         Haz click aqui para acceder.
       </a>
     </ul>
   </body>
-`
+`;
