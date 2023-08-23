@@ -18,4 +18,4 @@ export const productSchema = new Schema({
   uuid: Schema.Types.UUID,
 });
 
-export const ProductModel = model('Product', productSchema)
+export const ProductModel = model('Product', productSchema);

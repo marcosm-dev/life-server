@@ -1,4 +1,4 @@
-import { CategoryModel } from '../../entities/category.entity.js'
+import { CategoryModel } from '../../entities/category.entity.js';
 
 const Category = {
   resource: CategoryModel,

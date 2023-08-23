@@ -21,8 +21,8 @@ import { adminJSRouter } from './admin/router.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const sessionOptions: SessionOptions = {
   secret: process.env.SECRET || 'secretpassword',
   resave: false,
@@ -49,7 +49,7 @@ export const attachExpressJS = async (app: Express) => {
     .use(express.static(path.join(__dirname, '../../../public')))
     .use(express.static('files'))
     // .use('/static', express.static('public'))
-    .get('/', (_: any, res: any) => res.send('Hello Life'))
+    .get('/', (_, res) => res.send('Hello Life'));
 };
 
 export const attachGraphQLYoga = async (app: Express) => {

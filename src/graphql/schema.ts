@@ -1,6 +1,6 @@
-import GraphQLJSON from 'graphql-type-json'
-import { resolvers } from './resolvers.js'
-import { makeExecutableSchema } from '@graphql-tools/schema'
+import GraphQLJSON from 'graphql-type-json';
+import { resolvers } from './resolvers.js';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 const typeDefs = /* GraphQL */ `
   scalar JSON
@@ -180,9 +180,9 @@ const typeDefs = /* GraphQL */ `
 
 const customResolvers = {
   JSON: GraphQLJSON,
-}
+};
 
 export const schema = makeExecutableSchema({
   resolvers: [resolvers, customResolvers],
-  typeDefs: [typeDefs]
-})
+  typeDefs: [typeDefs],
+});

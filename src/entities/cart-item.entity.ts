@@ -11,4 +11,4 @@ export const cartItemSchema = new Schema({
   productDeleted: Schema.Types.Mixed,
 });
 
-export const CartItemNidek = model('CartItem', cartItemSchema)
+export const CartItemNidek = model('CartItem', cartItemSchema);

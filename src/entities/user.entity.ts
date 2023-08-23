@@ -1,7 +1,7 @@
-import { Schema, Types, model } from 'mongoose';
-import { IOrder } from './order.entity.d.js';
+import { Model, Schema, model } from 'mongoose';
+import { IUser, UserModelType } from './user.entity.d.js';
 
-export const userSchema = new Schema(
+export const userSchema = new Schema<IUser, Model<IUser>>(
   {
     token: String,
     name: String,
@@ -30,16 +30,13 @@ export const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ['ADMIN', 'USER']
+      enum: ['ADMIN', 'USER'],
     },
     password: {
       type: String,
-      required: false
+      required: false,
     },
-    orders: {
-      type: Types.ObjectId,
-      ref: 'Order'
-    },
+    orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
     access: {
       type: Boolean,
       default: false,
@@ -52,4 +49,4 @@ export const userSchema = new Schema(
   { timestamps: true }
 );
 
-export const UserModel = model('User', userSchema)
+export const UserModel = model<IUser, UserModelType>('User', userSchema);

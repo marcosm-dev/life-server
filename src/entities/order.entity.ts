@@ -1,5 +1,6 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import { cartItemSchema } from './cart-item.entity.js';
+import { IOrder, OrderModelType } from './order.entity.d.js';
 
 const orderStatusEnum: [
   'PENDING',
@@ -9,8 +10,9 @@ const orderStatusEnum: [
   'FAILURE',
 ] = ['PENDING', 'SUCCESS', 'AUTHORIZED', 'CANCELED', 'FAILURE'];
 
-export const orderSchema = new Schema(
+export const orderSchema = new Schema<IOrder, OrderModelType>(
   {
+    _id: Types.ObjectId,
     amount: Number,
     status: {
       type: String,
@@ -21,7 +23,7 @@ export const orderSchema = new Schema(
       type: Number,
     },
     owner: {
-      type: Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: 'User',
       required: true,
     },
@@ -34,4 +36,4 @@ export const orderSchema = new Schema(
   { timestamps: true }
 );
 
-export const OrderModel = model('Order', orderSchema)
+export const OrderModel = model<IOrder, OrderModelType>('Order', orderSchema);

@@ -12,10 +12,9 @@ export const userTokenSchema = new Schema({
     type: Date,
     default: new Date(),
   },
-  expiresDate: Date,
 });
 
-export const UserTokenModel = model('UserToken', userTokenSchema)
+export const UserTokenModel = model('UserToken', userTokenSchema);
 
 const indexOptions = {
   name: 'Delete expiresAt index',

@@ -5,7 +5,9 @@ import { AdminJSOptions } from 'adminjs';
 // import { componentLoader } from './components.bundler.js';
 import { resources } from './resources/index.js';
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://admin:JAQKcfDcNicKATbp@life.91cdamb.mongodb.net/life-prisma';
+const MONGO_URI =
+  process.env.MONGO_URI ||
+  'mongodb+srv://admin:JAQKcfDcNicKATbp@life.91cdamb.mongodb.net/life-prisma';
 
 export const generateAdminJSConfig: () => Promise<AdminJSOptions> =
   async () => {

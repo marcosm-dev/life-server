@@ -10,9 +10,9 @@ const app: Express = express();
 
 // import './services/factura-directa.js'
 const start = async () => {
-  await attachExpressJS(app)
-  await attachAdminJS(app)
-  await attachGraphQLYoga(app)
+  await attachExpressJS(app);
+  await attachAdminJS(app);
+  await attachGraphQLYoga(app);
 
   app.listen(PORT, () => {
     console.info(

@@ -1,5 +1,5 @@
-import * as nodemailer from 'nodemailer'
-import { MailOptions } from 'nodemailer/lib/json-transport/index.js'
+import * as nodemailer from 'nodemailer';
+import { MailOptions } from 'nodemailer/lib/json-transport/index.js';
 
 // const transporter = nodemailer.createTransport(transport[, defaults])
 
@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
     user: 'serpica.sl@gmail.com',
     pass: process.env.NODEMAILER_SECRET,
   },
-})
+});
 
 // Verificar transport 'No necesario'
 
@@ -21,19 +21,19 @@ const transporter = nodemailer.createTransport({
 //   })
 //   .catch(err => new Error ('Error al conectar nodemailer: ', err))
 
-export const  sendEmail = ({ to, subject, html }: MailOptions) => {
-    const mailOptions = {
-        from: process.env.ADMIN_EMAIL,
-        to,
-        subject,
-        html,
-    }
+export const sendEmail = ({ to, subject, html }: MailOptions) => {
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to,
+    subject,
+    html,
+  };
 
-    transporter.sendMail(mailOptions, (error, info) => {
+  transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.log('Error al enviar el correo:', error)
+      console.log('Error al enviar el correo:', error);
     } else {
-      console.log('Correo enviado:', info.response)
+      console.log('Correo enviado:', info.response);
     }
-  })
-}
+  });
+};
