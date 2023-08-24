@@ -1,17 +1,17 @@
-import mongoose from 'mongoose';
-import { dark, light, noSidebar } from '@adminjs/themes';
-import { AdminJSOptions } from 'adminjs';
+import mongoose from 'mongoose'
+import { dark, light, noSidebar } from '@adminjs/themes'
+import { AdminJSOptions } from 'adminjs'
+import { resources } from './resources/index.js'
 
 // import { componentLoader } from './components.bundler.js';
-import { resources } from './resources/index.js';
 
 const MONGO_URI =
   process.env.MONGO_URI ||
-  'mongodb+srv://admin:JAQKcfDcNicKATbp@life.91cdamb.mongodb.net/life-prisma';
+  'mongodb+srv://admin:JAQKcfDcNicKATbp@life.91cdamb.mongodb.net/life-prisma'
 
 export const generateAdminJSConfig: () => Promise<AdminJSOptions> =
   async () => {
-    const connection = await mongoose.connect(MONGO_URI);
+    const connection = await mongoose.connect(MONGO_URI)
     return {
       databases: [connection],
       version: { admin: true, app: '1.0.0' },
@@ -22,7 +22,7 @@ export const generateAdminJSConfig: () => Promise<AdminJSOptions> =
         message: 'Logeate con tu admin:',
         companyName: 'Life Serpica',
         logo: '/static/logo.svg',
-        favicon: '/static/life-logo-color.png',
+        favicon: '/static/life-logo-color.png'
       },
       // componentLoader,
       resources,
@@ -31,6 +31,6 @@ export const generateAdminJSConfig: () => Promise<AdminJSOptions> =
       //   component: DASHBOARD
       // },
       // pages,
-      env: {},
-    };
-  };
+      env: {}
+    }
+  }
