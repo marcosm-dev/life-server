@@ -1,16 +1,16 @@
 import * as dotenv from 'dotenv'
-dotenv.config()
-import express, { Express } from 'express'
-
-const PORT = process.env.PORT || 4000
+import express, { type Express } from 'express'
 
 import { attachExpressJS, attachAdminJS, attachGraphQLYoga } from './app.js'
 
+import './services/cloudinary/index.js'
+dotenv.config()
+
+const PORT = process.env.PORT ?? 4000
+
 const app: Express = express()
 
-import './services/cloudinary/index.js'
-
-const start = async () => {
+async function start(): Promise<void> {
   await attachExpressJS(app)
   await attachAdminJS(app)
   await attachGraphQLYoga(app)
@@ -23,4 +23,4 @@ const start = async () => {
   })
 }
 
-start()
+await start()

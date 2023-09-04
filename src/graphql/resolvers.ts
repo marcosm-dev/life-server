@@ -1,5 +1,4 @@
 import * as dotenv from 'dotenv'
-dotenv.config()
 
 import argon2 from 'argon2'
 import { GraphQLError } from 'graphql'
@@ -24,9 +23,10 @@ import {
 } from '../services/factura-directa.js'
 import { calcExpiresDate } from '../utils/transformers.js'
 import { sendEmail } from '../services/nodemailer.js'
-import { IProduct } from '../entities/product.entity.d.js'
+import { type IProduct } from '../entities/product.entity.d.js'
+dotenv.config()
 
-const SECRET = process.env.SECRET || ''
+const SECRET = process.env.SECRET ?? ''
 const expiresIn = 604800 // Segundos
 
 export const resolvers = {
@@ -92,8 +92,9 @@ export const resolvers = {
       try {
         const category = await CategoryModel.findById(id)
 
-        if (!category)
+        if (!category) {
           return new GraphQLError(`No se encontro la categoría con id ${id}`)
+        }
 
         return category
       } catch (error) {
@@ -201,6 +202,13 @@ export const resolvers = {
 
       return 'DONE'
     },
+    removeOrderById: async (_, { orderId }) => {
+      try {
+        return await OrderModel.deleteOne({ _id: orderId })
+      } catch (error) {
+        return new GraphQLError('No se ha podido eliminar la orden')
+      }
+    },
     createOrder: async (_, { input }) => {
       const { userId, products } = input
       // Tasa de IGIC (7%)
@@ -220,7 +228,7 @@ export const resolvers = {
           stock: { $gt: 0 }
         })) as IProduct[] | []
 
-        const productObject: { [key: string]: number } = {}
+        const productObject: Record<string, number> = {}
 
         products.forEach((p: string) => {
           productObject[p] = (productObject[p] || 0) + 1
@@ -238,11 +246,10 @@ export const resolvers = {
               TAX,
               quantity,
               amount,
-              productId: pro._id
+              productId: pro.id
             }
           }
         })
-
         // Crear la orden en la base de datos
         const order = await OrderModel.create({
           amount: totalAmount,
@@ -251,11 +258,12 @@ export const resolvers = {
           products: generateItemsWithProducts
         })
 
-        // user.orders.push(order.id)
+        user.orders.push(order.id)
         user.save()
 
         return order
       } catch (error) {
+        console.log(error)
         throw new GraphQLError(`Error al crear la orden: ${error.message}`)
       }
     },
@@ -281,13 +289,13 @@ export const resolvers = {
           }
         }
       }
-
       try {
         const { content } = await getOrCreateContact(contact)
         const { uuid } = content
 
-        if (uuid !== currentUser.uuid)
+        if (uuid !== currentUser.uuid) {
           await UserModel.findOneAndUpdate({ _id: currentUser.id }, { uuid })
+        }
 
         const order = await OrderModel.findById(input.orderId).populate(
           'products'
@@ -332,6 +340,8 @@ export const resolvers = {
 
         return item
       } catch (error) {
+        console.log(error)
+
         throw new GraphQLError(
           `Error al la crear o enviar factura: ${error.message}`
         )
@@ -355,10 +365,11 @@ export const resolvers = {
       try {
         const user = await UserModel.findOne({ email })
 
-        if (!user)
+        if (!user) {
           return new GraphQLError(
             'No existe ningún usuario con ese correo electrónico'
           )
+        }
 
         const isValid = await argon2.verify(user.password, password)
 
@@ -447,10 +458,11 @@ export const resolvers = {
       try {
         const user = await UserModel.findOne({ email })
 
-        if (!user)
+        if (!user) {
           return new GraphQLError(
             'No existe un usuario con el email proporcionado'
           )
+        }
 
         const token = jwt.sign({ userId: user.id }, SECRET, {
           expiresIn: '1h'

@@ -15,7 +15,7 @@ export const productSchema = new Schema({
   stock: Number,
   urlImage: String,
   urlMoreInfo: String,
-  uuid: Schema.Types.UUID
+  uuid: String
 })
 
 export const ProductModel = model('Product', productSchema)

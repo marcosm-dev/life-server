@@ -1,17 +1,15 @@
 import { authenticateUser } from './auth.js'
-import { IUser } from '../entities/user.entity.d.js'
-import { YogaInitialContext } from 'graphql-yoga'
+import { type IUser } from '../entities/user.entity.d.js'
+import { type YogaInitialContext } from 'graphql-yoga'
 
-export type GraphQLContext = {
+export interface GraphQLContext {
   currentUser: IUser | null
 }
 
 export async function createContext(
   initialContext: YogaInitialContext
 ): Promise<GraphQLContext> {
-  const currentUser = (await authenticateUser(
-    initialContext.request
-  )) as IUser | null
+  const currentUser = await authenticateUser(initialContext.request)
 
   const userContext: GraphQLContext | null = {
     currentUser

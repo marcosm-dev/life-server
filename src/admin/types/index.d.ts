@@ -1,9 +1,9 @@
 import type { ResourceOptions, FeatureType } from 'adminjs'
 
-export type CreateResourceResult<T> = {
+export interface CreateResourceResult<T> {
   resource: T
   options: ResourceOptions
-  features?: Array<FeatureType>
+  features?: FeatureType[]
 }
 
 export type ResourceFunction<T = unknown> = () => CreateResourceResult<T>

@@ -1,10 +1,7 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
-
 import AdminJS from 'adminjs'
 
-import express, { Express } from 'express'
-import session, { SessionOptions } from 'express-session'
+import express, { type Express } from 'express'
+import session, { type SessionOptions } from 'express-session'
 import compression from 'compression'
 import cors from 'cors'
 import { Database, Resource } from '@adminjs/mongoose'
@@ -15,16 +12,14 @@ import { logger } from './graphql/logger.js'
 import { createContext } from './graphql/context.js'
 import { schema } from './graphql/schema.js'
 
-// // import { fileURLToPath } from 'url'
-// // import path from 'path'
 import { adminJSRouter } from './admin/router.js'
-import { fileURLToPath } from 'url'
-import path from 'path'
+// import { fileURLToPath } from 'url'
+// import path from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// const _filename = fileURLToPath(import.meta.url)
+// const _dirname = path.dirname(_filename)
 const sessionOptions: SessionOptions = {
-  secret: process.env.SECRET || 'secretpassword',
+  secret: process.env.SECRET ?? 'secretpassword',
   resave: false,
   saveUninitialized: false
 }
@@ -46,9 +41,9 @@ export const attachExpressJS = async (app: Express) => {
     .use(cors({ credentials: true, origin: true }))
     .use(session(sessionOptions))
     .use(compression())
-    .use(express.static(path.join(__dirname, '../../../public')))
+    // .use(express.static(path.join(_dirname, '../../../public')))
     .use(express.static('files'))
-    // .use('/static', express.static('public'))
+    .use('/static', express.static('public'))
     .get('/', (_, res) => res.send('Hello Life'))
 }
 

@@ -1,4 +1,4 @@
-import { AdminJSOptions } from 'adminjs'
+import { type AdminJSOptions } from 'adminjs'
 
 import { CategoryModel } from '../../entities/category.entity.js'
 import { ProductModel } from '../../entities/product.entity.js'

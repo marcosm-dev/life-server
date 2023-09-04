@@ -1,16 +1,16 @@
 import * as dotenv from 'dotenv'
-dotenv.config()
 
 import { GraphQLError } from 'graphql'
 import jwt from 'jsonwebtoken'
-import { IUser } from '../entities/user.entity.d.js'
-import { IUserToken } from '../entities/user-token.entity.d.js'
+import { type IUser } from '../entities/user.entity.d.js'
+import { type IUserToken } from '../entities/user-token.entity.d.js'
 
 import { UserTokenModel } from '../entities/user-token.entity.js'
 import { UserModel } from '../entities/user.entity.js'
+dotenv.config()
 
 export async function authenticateUser(request: Request) {
-  const SECRET = process.env.SECRET || ''
+  const SECRET = process.env.SECRET ?? ''
   const header = request.headers.get('Authorization')
   if (header !== null) {
     const [, token] = header.split(' ')
@@ -28,10 +28,11 @@ export async function authenticateUser(request: Request) {
       const user: IUser | null = userResponse
       const tokenData: IUserToken | null = tokenResponse
 
-      if (typeof tokenResponse === 'undefined' || !userResponse)
+      if (typeof tokenResponse === 'undefined' || !userResponse) {
         return new GraphQLError(
           'Tu sesión ha caducado, por favor, vuelve a iniciar sesión'
         )
+      }
 
       if (user) {
         const userToken = tokenData?.token || ''

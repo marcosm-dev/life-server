@@ -1,11 +1,9 @@
-import { InferSchemaType, Model } from 'mongoose'
-import { orderSchema } from './order.entity.ts'
+import { type InferSchemaType, type Model } from 'mongoose'
+import { type orderSchema } from './order.entity.ts'
 
 export type IOrder = InferSchemaType<typeof orderSchema>
 
 export type OrderModelType = Model<IOrder>
-
-import { IOrder } from './order.entity.js'
 
 type IUser = inferSchemaType<typeof userSchema>
 
