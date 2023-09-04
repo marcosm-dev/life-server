@@ -1,6 +1,6 @@
-import { Document } from 'mongoose';
+import { Document } from 'mongoose'
 
-export interface ICategory extends Document {
-  name: string;
-  urlImage: string;
+type ICategory = Document & {
+  name: string
+  urlImage: string
 }

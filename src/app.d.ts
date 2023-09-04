@@ -1,11 +1,11 @@
-import express from 'express';
+import express from 'express'
 
 declare module 'app.js' {
-  export function attachExpressJS(app: express.Express): Promise<void>;
+  export function attachExpressJS(app: express.Express): Promise<void>
 
-  export function attachGraphQLYoga(app: express.Express): Promise<void>;
+  export function attachGraphQLYoga(app: express.Express): Promise<void>
 
-  export function attachAdminJS(app: express.Express): Promise<void>;
+  export function attachAdminJS(app: express.Express): Promise<void>
 }
 
 declare module 'graphql/logger.js' {

@@ -1,25 +1,25 @@
-import { IUser } from '../entities/user.entity.d.js';
-import AdminJSExpress from '@adminjs/express';
-import AdminJS from 'adminjs';
-import argon2 from 'argon2';
-import { Router } from 'express';
-import { UserModel } from '../entities/user.entity.js';
+import { type IUser } from '../entities/user.entity.d.js'
+import AdminJSExpress from '@adminjs/express'
+import type AdminJS from 'adminjs'
+import argon2 from 'argon2'
+import { type Router } from 'express'
+import { UserModel } from '../entities/user.entity.js'
 
-const SECRET = process.env.SECRET;
-const NODE = process.env.NODE_ENV;
+const SECRET = process.env.SECRET
+const NODE = process.env.NODE_ENV
 // const IS_DEV = process.env.DEV;
 
 const authenticateUser = async (email: string, password: string) => {
-  const user = (await UserModel.findOne({ email })) as IUser | null;
+  const user = (await UserModel.findOne({ email })) as IUser | null
   if (user) {
-    const isTrusted = await argon2.verify(user.password, password);
-    const { role } = user;
+    const isTrusted = await argon2.verify(user.password, password)
+    const { role } = user
     if (isTrusted && user && role === 'ADMIN') {
-      return user;
+      return user
     }
   }
-  return user;
-};
+  return user
+}
 
 export const adminJSRouter = (
   adminJs: AdminJS,
@@ -30,7 +30,7 @@ export const adminJSRouter = (
     {
       authenticate: authenticateUser,
       cookieName: 'adminjs',
-      cookiePassword: SECRET ?? 'sessionsecret',
+      cookiePassword: SECRET ?? 'sessionsecret'
     },
     router,
     {
@@ -39,9 +39,9 @@ export const adminJSRouter = (
       secret: SECRET ?? 'sessionsecret',
       cookie: {
         httpOnly: true,
-        secure: NODE === 'production',
+        secure: NODE === 'production'
       },
-      name: 'adminjs',
+      name: 'adminjs'
     }
-  );
-};
+  )
+}

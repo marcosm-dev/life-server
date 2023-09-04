@@ -1,5 +1,5 @@
 export default {
   admin: {
-    phone: '666666666',
-  },
-};
+    phone: '666666666'
+  }
+}

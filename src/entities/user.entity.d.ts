@@ -1,19 +1,19 @@
-// import { InferSchemaType, Schema } from 'mongoose';
-// import { userSchema } from './user.entity.ts';
+import { type userSchema } from './user.entity.ts'
+import { type InferSchemaType } from 'mongoose'
 
-import { IOrder } from './order.entity.js';
+import { type IOrder } from './order.entity.js'
 
 export enum ADMIN_OPTIONS {
   ADMIN = 'ADMIN',
-  INSTALADOR = 'USER',
+  INSTALADOR = 'USER'
 }
-type IUser = NonNullable<InferSchemaType<typeof userSchema>>;
+type IUser = InferSchemaType<typeof userSchema>
 
-type UserDocumentOverrides = {
-  orders: Types.Subdocument<Types.ObjectId> & IOrder;
-};
+interface UserDocumentOverrides {
+  orders: Types.Subdocument<Types.ObjectId> & IOrder
+}
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type UserModelType = Model<User, {}, UserDocumentOverrides>;
+export type UserModelType = Model<User, {}, UserDocumentOverrides>
 
 // export type UserModelType = Model<User>;
 

@@ -1,6 +1,6 @@
-import GraphQLJSON from 'graphql-type-json';
-import { resolvers } from './resolvers.js';
-import { makeExecutableSchema } from '@graphql-tools/schema';
+import GraphQLJSON from 'graphql-type-json'
+import { resolvers } from './resolvers.js'
+import { makeExecutableSchema } from '@graphql-tools/schema'
 
 const typeDefs = /* GraphQL */ `
   scalar JSON
@@ -40,7 +40,7 @@ const typeDefs = /* GraphQL */ `
     stock: Int!
     urlImage: String
     categoryId: ID!
-    uuid: String
+    uuid: ID!
   }
 
   type User {
@@ -118,6 +118,7 @@ const typeDefs = /* GraphQL */ `
     createNewPasswordFromRecovery(token: String!, password: String!): User!
     createProductsFromFacturaDirecta: String!
     createOrder(input: OrderInput!): Order!
+    removeOrderById(orderId: ID!): JSON!
     createUser(input: UserInput!): User!
     updateUser(input: UserInput!): User!
     loginUser(email: String!, password: String!): UserAuthResponse!
@@ -176,13 +177,13 @@ const typeDefs = /* GraphQL */ `
     urlImage: String
     categoryId: ID!
   }
-`;
+`
 
 const customResolvers = {
-  JSON: GraphQLJSON,
-};
+  JSON: GraphQLJSON
+}
 
 export const schema = makeExecutableSchema({
   resolvers: [resolvers, customResolvers],
-  typeDefs: [typeDefs],
-});
+  typeDefs: [typeDefs]
+})
