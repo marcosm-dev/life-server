@@ -1,5 +1,4 @@
-import ProductModel from '../../entities/product.entity.js'
-
+import { ProductModel } from '../../entities/product.entity.js'
 const Product = {
   resource: ProductModel,
   options: {
@@ -9,7 +8,7 @@ const Product = {
         reference: 'Category'
       }
     }
-  },
+  }
 }
 
 export default Product

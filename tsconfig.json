@@ -1,27 +1,25 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
-    "paths": {
-      "src": ["./src/*"],
-    },
-    // "strict": true,
-    "jsx": "react",
+    "jsx": "preserve",
+    "baseUrl": "./",
+    // "paths": {
+    //   "@/*":  ["./src/*"]
+    // },
+    "outDir": "./dist",
+    "target": "esnext",
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "declaration": false,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "target": "ESNext",
-    "sourceMap": false,
-    "outDir": "./dist",
-    "incremental": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true
   },
-  "exclude": ["node_modules", "src/**/theme.bundle.js"],
-  "include": ["src/**/*.*", "src/**/*.js", "src/**/*.ts", "src/prisma/*.*"]
+  "include": ["./src/**/*.ts", "../src/**/*", ".eslintrc.cjs"],
+  "exclude": ["node_modules"]
 }

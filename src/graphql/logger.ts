@@ -9,13 +9,10 @@ const logFormat = printf(({ level, message, timestamp }) => {
 // Crea el logger
 const logger = createLogger({
   level: 'debug',
-  format: combine(
-    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    logFormat
-  ),
+  format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), logFormat),
   transports: [
-    new transports.Console(), // Salida de log en la consola
-  ],
+    new transports.Console() // Salida de log en la consola
+  ]
 })
 
 export { logger }

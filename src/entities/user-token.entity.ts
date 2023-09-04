@@ -1,30 +1,20 @@
-import mongoose, { Document, Model } from 'mongoose'
-import { calcExpiresDate } from 'utils/transformers.js'
+import { Schema, Types, model } from 'mongoose'
 
-export interface IUserToken extends Document {
-  token: string
-  user: mongoose.Schema.Types.ObjectId
-  type: string
-  createdAt: Date
-  expiresDate: Date
-}
-
-export const userTokenSchema = new mongoose.Schema<IUserToken>({
+export const userTokenSchema = new Schema({
   token: String,
-  user: mongoose.Types.ObjectId,
+  user: Types.ObjectId,
   type: {
     type: String,
     default: 'SIGN_IN',
-    enum:  ['RECOVERY', 'SIGN_IN'],
+    enum: ['RECOVERY', 'SIGN_IN']
   },
   createdAt: {
     type: Date,
     default: new Date()
-  },
-  expiresDate: Date
+  }
 })
 
-const UserToken: Model<IUserToken> = mongoose.model<IUserToken>('UserToken', userTokenSchema)
+export const UserTokenModel = model('UserToken', userTokenSchema)
 
 const indexOptions = {
   name: 'Delete expiresAt index',
@@ -34,9 +24,5 @@ const indexOptions = {
 }
 
 export async function createTokenIndex() {
-  await UserToken.collection.createIndex({ expiresDate: 1 }, indexOptions)
-
+  await UserTokenModel.collection.createIndex({ expiresDate: 1 }, indexOptions)
 }
-
-
-export default UserToken

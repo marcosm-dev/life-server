@@ -1,15 +1,8 @@
-import mongoose, { Document, Model } from 'mongoose'
+import { model, Schema } from 'mongoose'
 
-interface ICategory extends Document {
-  name: string
-  urlImage: string
-}
-
-const categorySchema = new mongoose.Schema<ICategory>({
+const categorySchema = new Schema({
   name: String,
-  urlImage: String,
+  urlImage: String
 })
 
-const Category: Model<ICategory> = mongoose.model<ICategory>('Category', categorySchema)
-
-export default Category
+export const CategoryModel = model('Category', categorySchema)

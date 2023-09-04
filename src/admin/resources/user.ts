@@ -1,7 +1,7 @@
-import UserModel from '../../entities/user.entity.js'
+import { UserModel } from '../../entities/user.entity.js'
 
 const User = {
-  resource: UserModel,
+  resource: UserModel
 }
 
 export default User

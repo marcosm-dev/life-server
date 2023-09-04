@@ -1,26 +1,7 @@
-import mongoose, { Document, Model, mongo } from 'mongoose'
+import { type Model, Schema, model } from 'mongoose'
+import { type IUser, type UserModelType } from './user.entity.d.js'
 
-export interface IUser {
-  id?: mongoose.Schema.Types.ObjectId | string
-  token: string
-  VATIN: string
-  access: boolean
-  address: string
-  city: string
-  zipCode: string
-  email: string
-  lastName: string
-  name: string
-  orders: mongoose.Schema.Types.ObjectId[]
-  password: string
-  phone: number
-  role: 'ADMIN' | 'INSTALADOR'
-  createdAt: Date
-  updatedAt: Date
-  uuid: string
-}
-
-const userSchema = new mongoose.Schema<IUser>(
+export const userSchema = new Schema<IUser, Model<IUser>>(
   {
     token: String,
     name: String,
@@ -36,12 +17,12 @@ const userSchema = new mongoose.Schema<IUser>(
       required: true
     },
     phone: {
-      type: Number,
-      unique: true,
+      type: String,
+      unique: true
     },
     address: String,
     zipCode: {
-      type: String,
+      type: String
     },
     city: {
       type: String,
@@ -49,27 +30,23 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ['ADMIN', 'INSTALADOR'],
+      enum: ['ADMIN', 'USER']
     },
-    password: String,
-    orders: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Order',
-      },
-    ],
+    password: {
+      type: String,
+      required: false
+    },
+    orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
     access: {
       type: Boolean,
-      default: false,
+      default: false
     },
     uuid: {
-      type: String,
+      type: Schema.Types.UUID,
       required: false
     }
   },
   { timestamps: true }
 )
 
-const User: Model<IUser> = mongoose.model<IUser>('User', userSchema)
-
-export default User
+export const UserModel = model<IUser, UserModelType>('User', userSchema)

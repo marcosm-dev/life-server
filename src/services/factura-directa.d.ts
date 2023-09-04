@@ -1,4 +1,4 @@
-export interface Contact {
+export type IContact = {
   content: {
     type: string
     main: {
@@ -18,7 +18,7 @@ export interface Contact {
   }
 }
 
-export interface Lines {
+export type Lines = {
   document: string
   quantity: number
   tax: string[]
@@ -27,7 +27,7 @@ export interface Lines {
   account: string
 }
 
-export interface Invoice {
+export type IInvoice = {
   content: {
     type: string
     main: {
@@ -41,7 +41,6 @@ export interface Invoice {
     }
   }
 }
-
-export interface InvoiceTo {
-  to: [string]!
+export type InvoiceTo = {
+  to: [string]
 }

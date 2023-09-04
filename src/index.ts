@@ -1,24 +1,26 @@
-import dotenv from 'dotenv'
-dotenv.config({ path: `${process.cwd()}/.env`})
-import express from 'express'
+import * as dotenv from 'dotenv'
+import express, { type Express } from 'express'
 
-const PORT = process.env.PORT || 4000
-import { attachAdminJS, attachExpressJS, attachGraphQLYoga } from './app.js'
+import { attachExpressJS, attachAdminJS, attachGraphQLYoga } from './app.js'
 
-import './services/factura-directa.js'
-import './services/nodemailer.js'
+import './services/cloudinary/index.js'
+dotenv.config()
 
-const start = async () => {
-  const app = express()
+const PORT = process.env.PORT ?? 4000
+
+const app: Express = express()
+
+async function start(): Promise<void> {
   await attachExpressJS(app)
   await attachAdminJS(app)
   await attachGraphQLYoga(app)
-  
-  app
-    .listen(PORT, () => {
-      console.info(`\nYogaGraphQL Express corriendo en:\nhttp://localhost:${PORT}/graphql`)
-      console.info(`Admin corriendo en:\nhttp://localhost:${PORT}/admin`)
-    })
-  }
 
-start()
+  app.listen(PORT, () => {
+    console.info(
+      `\nYogaGraphQL Express corriendo en:\nhttp://localhost:${PORT}/graphql`
+    )
+    console.info(`Admin corriendo en:\nhttp://localhost:${PORT}/admin`)
+  })
+}
+
+await start()

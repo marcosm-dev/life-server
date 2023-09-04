@@ -1,98 +1,112 @@
+import * as dotenv from 'dotenv'
+
 import argon2 from 'argon2'
-import jwt from 'jsonwebtoken'
 import { GraphQLError } from 'graphql'
+import jwt from 'jsonwebtoken'
 
-import { IUser } from '../entities/user.entity.js' // Importar la interfaz IUser
-import Category from '../entities/category.entity.js'
-import Order from '../entities/order.entity.js'
-import User from '../entities/user.entity.js'
-import Product from '../entities/product.entity.js'
-import UserToken, { IUserToken } from '../entities/user-token.entity.js'
-import { 
-  createInvoice, 
-  getAllProducts,
+import { UserTokenModel } from '../entities/user-token.entity.js'
+import { UserModel } from '../entities/user.entity.js'
+import { ProductModel } from '../entities/product.entity.js'
+import { OrderModel } from '../entities/order.entity.js'
+import { CategoryModel } from '../entities/category.entity.js'
+
+import {
+  ORDER_HTML,
+  RESET_PASSWORD_HTML
+} from '../services/nodemailer.config.js'
+import type { InvoiceTo } from '../services/factura-directa.d.js'
+import {
+  createInvoice,
+  // getAllProducts,
   getOrCreateContact,
-  sendInvoice 
+  sendInvoice
 } from '../services/factura-directa.js'
-import { InvoiceTo } from '../services/factura-directa.d.js'
-
-// const ADMIN_EMAIL = ''
-// const PRINTER_EMAIL = ''
-
-import { postgreeProducts, CATEGORIES } from '../utils/constans.js'
-import { sendEmail } from '../services/nodemailer.js'
 import { calcExpiresDate } from '../utils/transformers.js'
-import { ORDER_HTML, RESET_PASSWORD_HTML } from '../services/nodemailer.config.js'
+import { sendEmail } from '../services/nodemailer.js'
+import { type IProduct } from '../entities/product.entity.d.js'
+dotenv.config()
 
+const SECRET = process.env.SECRET ?? ''
 const expiresIn = 604800 // Segundos
 
 export const resolvers = {
   User: {
-    orders: async (parent) => {
+    orders: async (parent, args, { currentUser }) => {
+      console.log(parent.name === currentUser)
       try {
-        // Assuming that the 'orders' field in the User model holds an array of ObjectIds
-        // You can use the populate() method to fetch the detailed order data
-        const populatedOrders = await User.populate(parent, { path: 'orders' })
-
-        // Return the populated orders array
-        return populatedOrders.orders
+        const isOwer = parent.name === currentUser?.id
+        const orders = await OrderModel.find(
+          isOwer ? { id: currentUser.id } : {}
+        )
+        return orders
       } catch (error) {
-        console.error('Error populating orders:', error)
-        throw new Error('Failed to populate orders')
+        throw new GraphQLError(
+          `Ha ocurrido algo al intentar recuperar los pedidos: ${error}`
+        )
       }
-    },
+    }
   },
   CartItem: {
     product: async (parent) => {
-      const product = await Product.findById(parent.productId)
+      const product = await ProductModel.findById(parent.productId)
       return product
     }
   },
   Order: {
-    owner: async (parent: any, args: any, context: any) => {
-      const owner = await User.findById(parent.owner) 
+    owner: async (parent) => {
+      const owner = await UserModel.findById(parent.owner)
       return owner
-    },
+    }
   },
   Query: {
-    me: async (parent: any, args: any, { currentUser }) => {
+    me: async (parent, args, { currentUser }) => {
       if (!currentUser) return new GraphQLError('unauthorized')
       return currentUser
     },
     // Resolver para obtener un usuario por su id
-    getUser: async (_: any, { id }: { id: string }) => {
+    getUser: async (_, { id }) => {
       try {
-        const user = await User.findById(id)
+        const user = await UserModel.findById(id)
         return user
       } catch (error) {
-        throw new GraphQLError(`No se pudo obtener el usuario: ${error.message}`)
+        throw new GraphQLError(
+          `No se pudo obtener el usuario: ${error.message}`
+        )
       }
     },
 
     // Resolver para obtener todos los usuarios
     getAllUsers: async () => {
       try {
-        const users = await User.find()
+        const users = await UserModel.find().populate('orders')
 
         return users
       } catch (error) {
-        throw new GraphQLError(`No se pudieron obtener los usuarios ${error.message}`)
+        console.log(error)
+        throw new GraphQLError(
+          `No se pudieron obtener los usuarios ${error.message}`
+        )
       }
     },
-    getCategoryById: async (_: any, { id }) => {
+    getCategoryById: async (_, { id }) => {
       try {
-          const category = await Category.findById(id)
+        const category = await CategoryModel.findById(id)
 
-          if (!category) return new GraphQLError(`No se encontro la categoría con id ${id}`)
+        if (!category) {
+          return new GraphQLError(`No se encontro la categoría con id ${id}`)
+        }
 
-          return category
+        return category
       } catch (error) {
         throw new GraphQLError(`Error al buscar la categoría: ${error}`)
       }
     },
-    getAllCategories: async (_: any, { limit, skip }: { limit: number, skip: number }) => {
+    getAllCategories: async (
+      _,
+      { limit, skip }: { limit: number; skip: number }
+    ) => {
       try {
-        const categories = await Category.find().limit(limit).skip(skip)
+        const categories = await CategoryModel.find().limit(limit).skip(skip)
         if (!categories || categories.length === 0) {
           return []
         }
@@ -104,7 +118,7 @@ export const resolvers = {
     },
     getAllProducts: async () => {
       try {
-        const products = await Product.find()
+        const products = await ProductModel.find()
         if (!products || products.length === 0) {
           return []
         }
@@ -114,167 +128,190 @@ export const resolvers = {
         throw new GraphQLError(`Error al obtener productos: ${error.message}`)
       }
     },
-    getProductsByCategory: async (_: any, { categoryId }: { categoryId: string }) => {
+    getProductsByCategory: async (
+      _,
+      { categoryId }: { categoryId: string }
+    ) => {
       try {
-        const products = await Product.find({ categoryId })
+        const products = await ProductModel.find({ categoryId })
         return products
       } catch (error) {
-        throw new GraphQLError(`Error al obtener productos por categoría: ${error.message}`)
+        console.log(error)
+        throw new GraphQLError(
+          `Error al obtener productos por categoría: ${error.message}`
+        )
       }
     },
-		getMyOrders: async (_, {}, { currentUser }) => {
-
-			try {
-				const orders = await Order.find({ owner: currentUser.id})
-
-				return orders
-			} catch (error) {
-				throw new GraphQLError(`Error al recuperar los pedidos: ${error.message}`)
-			}
-		},
-    getAllOrders: async () => {
+    getMyOrders: async (_, args, { currentUser }) => {
       try {
-        const orders = await Order.find()
+        const orders = await OrderModel.find({ owner: currentUser.id })
+
         return orders
       } catch (error) {
-        return new GraphQLError(`Error al encontrar las órdenes: ${error.message}`)
+        throw new GraphQLError(
+          `Error al recuperar los pedidos: ${error.message}`
+        )
       }
     },
-    getOrderById: async (_: any, { id }) => {
+    getAllOrders: async () => {
       try {
-        const order = await Order.findById(id)
+        const orders = await OrderModel.find()
+        return orders
+      } catch (error) {
+        return new GraphQLError(
+          `Error al encontrar las órdenes: ${error.message}`
+        )
+      }
+    },
+    getOrderById: async (_, { id }) => {
+      try {
+        const order = await OrderModel.findById(id)
         return order
       } catch (error) {
         return new GraphQLError(`Error al encontrar la orden: ${error.message}`)
       }
-    },
+    }
   },
   Mutation: {
     createProductsFromFacturaDirecta: async () => {
-			const facturaDirectaProducts = await getAllProducts()
+      // const facturaDirectaProducts = await getAllProducts();
 
-			postgreeProducts.forEach(async(pro) => {
-				const name = pro.name.trim().toLowerCase()
+      // postgreeProducts.forEach(async(pro: any) => {
+      // 	const name = pro.name.trim().toLowerCase()
 
-				const uuid = facturaDirectaProducts.items.find(prod => prod.content.main.name.trim().toLowerCase() === name).content.uuid
+      // 	const uuid: string = facturaDirectaProducts.items.find((prod: any) => prod.content.main.name.trim().toLowerCase() === name).content.uuid
+      //   let categoryId: string = ''
 
-				await Product.create({
-					accessories: pro.accesories,
-					categoryId: CATEGORIES[pro.categoryId],
-					description: pro.description,
-					name: pro.name,
-					price: pro.price,
-					stock: pro.stock,
-					urlImage: pro.urlImage.includes('hotos.app.goo.gl') ? `${pro.name.replace(/[^a-zA-Z0-9]/g, '_')}.png` : pro.urlImage,
-					urlMoreInfo: pro.urlMoreInfo,
-					uuid
-				})
-			})
+      //   if(pro.categoryId) {
+      //     // @ts-ignore
+      //     categorieId =  CATEGORIES[pro?.categoryId]
+      //   }
+
+      // 	await Product.create({
+      // 		accessories: pro.accesories,
+      // 		categoryId,
+      // 		description: pro.description,
+      // 		name: pro.name,
+      // 		price: pro.price,
+      // 		stock: pro.stock,
+      // 		urlImage: pro.urlImage.includes('hotos.app.goo.gl') ? `${pro.name.replace(/[^a-zA-Z0-9]/g, '_')}.png` : pro.urlImage,
+      // 		urlMoreInfo: pro.urlMoreInfo,
+      // 		uuid
+      // 	})
+      // })
 
       return 'DONE'
     },
-    createOrder: async (_: any, { input }: { input: any }) => {
+    removeOrderById: async (_, { orderId }) => {
+      try {
+        return await OrderModel.deleteOne({ _id: orderId })
+      } catch (error) {
+        return new GraphQLError('No se ha podido eliminar la orden')
+      }
+    },
+    createOrder: async (_, { input }) => {
       const { userId, products } = input
-			// Tasa de IGIC (7%)
-			const IGIC = 0.07
+      // Tasa de IGIC (7%)
+      const IGIC = 0.07
 
       const resume = {}
-			let totalAmount = 0
+      let totalAmount = 0
 
       try {
         // Verificar si el usuario existe
-        const user = await User.findById(userId)
+        const user = await UserModel.findById(userId)
         if (!user) throw new GraphQLError('El usuario no existe.')
-        
 
         // Verificar stock de productos
-        const productsInStock = await Product.find({
+        const productsInStock = (await ProductModel.find({
           _id: { $in: products },
-					 stock: { $gt: 0 }
+          stock: { $gt: 0 }
+        })) as IProduct[] | []
+
+        const productObject: Record<string, number> = {}
+
+        products.forEach((p: string) => {
+          productObject[p] = (productObject[p] || 0) + 1
         })
-
-        const productObject: { [key: string]: number } = {}
-
-				products.forEach((p: string) => {
-					productObject[p] = (productObject[p] || 0) + 1
-				})
-
-        const generateItemsWithProducts = productsInStock.map((pro: any) => {
+        const generateItemsWithProducts = productsInStock.map((pro) => {
           if (!resume[pro.id]) {
-						totalAmount += pro.price
+            totalAmount += pro?.price
             const quantity = productObject[pro.id] || 0
-            const amount = quantity * pro.price
-						const TAX = (amount * IGIC).toFixed(2)
+            const amount = quantity * pro?.price
+            const TAX = (amount * IGIC).toFixed(2)
+
             resume[pro.id] = true
-						
+
             return {
-							TAX,
+              TAX,
               quantity,
               amount,
-              productId: pro._id,
+              productId: pro.id
             }
           }
         })
-
         // Crear la orden en la base de datos
-        const order = await Order.create({
+        const order = await OrderModel.create({
           amount: totalAmount,
           owner: userId,
           status: 'PENDING',
-          products: generateItemsWithProducts,
+          products: generateItemsWithProducts
         })
 
-        user.orders.push(order._id)
+        user.orders.push(order.id)
         user.save()
 
         return order
       } catch (error) {
+        console.log(error)
         throw new GraphQLError(`Error al crear la orden: ${error.message}`)
       }
     },
-		sendFacturaDirectaOrder: async(_: any, { input }, ctx) => {
+    sendFacturaDirectaOrder: async (_, { input }, ctx) => {
+      const { lines } = input
+      const { currentUser } = ctx
 
-			const { lines } = input
-			const { currentUser } = ctx
+      const contact = {
+        content: {
+          type: 'contact',
+          main: {
+            name: currentUser.name,
+            fiscalId: currentUser.VATIN,
+            currency: 'EUR',
+            country: 'ES',
+            email: currentUser.email,
+            address: currentUser.address,
+            zipcode: currentUser.zipCode,
+            city: currentUser.city,
+            accounts: {
+              client: '430000'
+            }
+          }
+        }
+      }
+      try {
+        const { content } = await getOrCreateContact(contact)
+        const { uuid } = content
 
-			const contact = {
-				content: {
-					type: 'contact',
-					main: {
-						name: currentUser.name,
-						fiscalId: currentUser.VATIN,
-						currency: 'EUR',
-						country: 'ES',
-						email: currentUser.email,
-						address: currentUser.address,
-						zipcode: currentUser.zipCode,
-						city: currentUser.city,
-						accounts: {
-							client: "430000",
-						}
-					}
-				}
-			} 
+        if (uuid !== currentUser.uuid) {
+          await UserModel.findOneAndUpdate({ _id: currentUser.id }, { uuid })
+        }
 
-			try {
-				const { content } = await getOrCreateContact(contact)
-				const { uuid } = content
-				
-				if (uuid !== currentUser.uuid) await User.findOneAndUpdate({ _id: currentUser.id }, { uuid })
+        const order = await OrderModel.findById(input.orderId).populate(
+          'products'
+        )
 
-				const order = await Order.findById(input.orderId).populate('products')
-	
-				// Crear factura en factura directa
+        // Crear factura en factura directa
         const invoice = {
           content: {
-            type: "invoice",
+            type: 'invoice',
             main: {
               docNumber: {
-                series: "F"
+                series: 'F'
               },
               // taxIncludedPrices: true,
               contact: uuid,
-              currency: "EUR",
+              currency: 'EUR',
               lines
             }
           }
@@ -282,94 +319,93 @@ export const resolvers = {
         // Crear factura en factura directa
         const item = await createInvoice(invoice)
 
-				if (item) {
-					order.status = 'SUCCESS'
-					await order.save()
-				}
+        if (item && order) {
+          order.status = 'SUCCESS'
+          await order.save()
+        }
 
-				// setTimeout(async() => {
-				// 	await Order.deleteMany({ _id: { $ne: order.id } })
-				// }, 4000)
+        // setTimeout(async() => {
+        // 	await Order.deleteMany({ _id: { $ne: order.id } })
+        // }, 4000)
 
-				const to: InvoiceTo = {
-					to: [
-						currentUser.email,
-						// ADMIN_EMAIL,
-						// PRINTER_EMAIL,
-					]
-				}
+        const to: InvoiceTo = {
+          to: [
+            currentUser.email
+            // ADMIN_EMAIL,
+            // PRINTER_EMAIL,
+          ]
+        }
 
-				await sendInvoice(item.content.uuid, to)
+        await sendInvoice(item.content.uuid, to)
 
-				return item
-			} catch (error) {
- 				throw new GraphQLError(`Error al la crear o enviar factura: ${error.message}`)
-			}
-		},
-    logoutUser: async(_: any, {}, { currentUser }) => {
+        return item
+      } catch (error) {
+        console.log(error)
+
+        throw new GraphQLError(
+          `Error al la crear o enviar factura: ${error.message}`
+        )
+      }
+    },
+    logoutUser: async (_, args, { currentUser }) => {
       const token = currentUser?.token
 
       if (!token) return new GraphQLError('No estás identificado')
       try {
-        const response: IUserToken = await UserToken.findOneAndRemove({ token })
+        const response = await UserTokenModel.findOneAndRemove({ token })
 
         if (!response) return { deleted: 0, error: 'No estás identificado' }
 
-        return  { deleted: 1 }
+        return { deleted: 1 }
       } catch (error) {
         throw new GraphQLError(`No se encuentra token de usuario: ${error}`)
       }
     },
-    loginUser: async(_: any, { email, password }) => {
+    loginUser: async (_, { email, password }) => {
       try {
-        const user = await User.findOne({ email })
+        const user = await UserModel.findOne({ email })
 
-        if (!user) return new GraphQLError('No existe ningún usuario con ese correo electrónico')
-        
+        if (!user) {
+          return new GraphQLError(
+            'No existe ningún usuario con ese correo electrónico'
+          )
+        }
+
         const isValid = await argon2.verify(user.password, password)
 
         if (!isValid) return new GraphQLError('Contraseña incorrecta')
-
-        const token = jwt.sign({ userId: user.id }, process.env.SECRET)
+        const token = jwt.sign({ userId: user.id }, SECRET)
         const expiresDate = calcExpiresDate(new Date(), expiresIn)
 
-        await UserToken.create({
+        await UserTokenModel.create({
           token,
           user: user.id,
-          expiresDate,
+          expiresDate
         })
-        
-        return { token, user } 
+
+        return { token, user }
       } catch (error) {
         throw new GraphQLError(`No se ha podido encontrar al usuario:${error}`)
       }
-
     },
-    signUp: async (_: any, { input }: { input: any }) => {
-       try {
+    signUp: async (_, { input }) => {
+      try {
         // 1. Verificar si el usuario ya está registrado
-        const existingUser = await User.findOne({ email: input.email })
+        const existingUser = await UserModel.findOne({ email: input.email })
 
         if (existingUser) {
-          return new GraphQLError(`El correo electrónico ${input.email} ya está registrado`)
+          return new GraphQLError(
+            `El correo electrónico ${input.email} ya está registrado`
+          )
         }
-
-        // 2. Hashear la contraseña
         const hashedPassword = await argon2.hash(input.password)
-
-        // 3. Crear un nuevo usuario en la base de datos
-        const newUser = await User.create({
+        const newUser = await UserModel.create({
           ...input,
-          password: hashedPassword,
+          password: hashedPassword
         })
 
-        // 4. Generar el token JWT
-        const token = jwt.sign({ userId: newUser._id }, process.env.SECRET, { expiresIn: '7d' })
-
-        // 7. Enviar email al admin para que te de autorización
-
         const html = ORDER_HTML(newUser)
-        
+
         const mailOptions = {
           to: process.env.ADMIN_EMAIL,
           subject: 'Nuevo usuario registrado',
@@ -383,7 +419,7 @@ export const resolvers = {
         throw new GraphQLError('Error al crear el usuario:' + error.message)
       }
     },
-    updateUser: async (_: any, { input }, { currentUser }) => {
+    updateUser: async (_, { input }, { currentUser }) => {
       const { id, token } = currentUser
 
       try {
@@ -393,47 +429,57 @@ export const resolvers = {
           if (field === 'password') {
             updateFields[field] = await argon2.hash(input.password)
           } else {
-            updateFields[field] = input[field]
+            // updateFields[field] = input[field]
           }
         }
-    
+
         // Actualiza el usuario solo con los campos proporcionados en el input
-        const updatedUser = await User.findByIdAndUpdate(id, { $set: updateFields }, {
-          new: true,
-          fields: { id: true, name: true, lastName: true, email: true },
-        })
+        const updatedUser = await UserModel.findByIdAndUpdate(
+          id,
+          { $set: updateFields },
+          {
+            new: true,
+            fields: { id: true, name: true, lastName: true, email: true }
+          }
+        )
 
         if (!input?.id) {
-          await UserToken.deleteOne({ token })
+          await UserTokenModel.deleteOne({ token })
         }
-    
+
         return updatedUser
       } catch (error) {
         throw new GraphQLError('No se pudo actualizar el usuario')
       }
     },
-    recoveryPassword: async(_:any, { email }) => {
+    recoveryPassword: async (_, { email }: { email: string }) => {
       const expiresIn = 3600
-  
+
       try {
-        const user = await User.findOne({ email })
-        
-        if (!user) return new GraphQLError('No existe un usuario con el email proporcionado')
-        
-        const token = jwt.sign({ userId: user.id }, process.env.SECRET, { expiresIn: '1h' })
-        
+        const user = await UserModel.findOne({ email })
+
+        if (!user) {
+          return new GraphQLError(
+            'No existe un usuario con el email proporcionado'
+          )
+        }
+
+        const token = jwt.sign({ userId: user.id }, SECRET, {
+          expiresIn: '1h'
+        })
+
         const expiresDate = calcExpiresDate(new Date(), expiresIn)
-        
-        const createdTokenUser = await UserToken.create({
+
+        const createdTokenUser = await UserTokenModel.create({
           token,
           user: user.id,
           expiresDate,
-          type: 'RECOVERY',
+          type: 'RECOVERY'
         })
-  
+
         const link = `${process.env.APP_URL}/#/recovery-password/${token}`
         const html = RESET_PASSWORD_HTML(link)
-   
+
         const options = {
           to: email,
           subject: 'Correo de recuperación de contraseña LIFE',
@@ -441,11 +487,13 @@ export const resolvers = {
         }
 
         sendEmail(options)
-        
+
         return createdTokenUser
       } catch (error) {
-        return new GraphQLError(`Error al crear el token de usuario: ${error.message}`)
+        return new GraphQLError(
+          `Error al crear el token de usuario: ${error.message}`
+        )
       }
-    },
-  },
+    }
+  }
 }

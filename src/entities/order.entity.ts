@@ -1,47 +1,39 @@
-import mongoose, { Document, Model } from 'mongoose'
+import { Schema, Types, model } from 'mongoose'
 import { cartItemSchema } from './cart-item.entity.js'
+import { type IOrder, type OrderModelType } from './order.entity.d.js'
 
-interface IOrder extends Document {
-  amount: number
-  status: 'PENDING' | 'SUCCESS' | 'AUTHORIZED' | 'CANCELED' | 'FAILURE'
-  TAX: number
-  owner: mongoose.Schema.Types.ObjectId
-  products: mongoose.Schema.Types.ObjectId[]
-  uuid: string
-  createdAt: Date
-  updatedAt: Date
-}
-
-const orderStatusEnum: ['PENDING', 'SUCCESS', 'AUTHORIZED', 'CANCELED', 'FAILURE'] = [
+const orderStatusEnum: [
   'PENDING',
   'SUCCESS',
   'AUTHORIZED',
   'CANCELED',
-  'FAILURE',
-]
+  'FAILURE'
+] = ['PENDING', 'SUCCESS', 'AUTHORIZED', 'CANCELED', 'FAILURE']
 
-const orderSchema = new mongoose.Schema<IOrder>({
-  amount: Number,
-  status: {
-    type: String,
-    enum: orderStatusEnum,
-    default: 'PENDING',
+export const orderSchema = new Schema<IOrder, OrderModelType>(
+  {
+    // _id: Types.ObjectId,
+    amount: Number,
+    status: {
+      type: String,
+      enum: orderStatusEnum,
+      default: 'PENDING'
+    },
+    TAX: {
+      type: Number
+    },
+    owner: {
+      type: Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    uuid: {
+      type: Schema.Types.UUID,
+      required: false
+    },
+    products: [cartItemSchema]
   },
-  TAX: {
-    type: Number,
-  },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  uuid: {
-    type: String,
-    required: false
-  },
-  products: [cartItemSchema]
-}, { timestamps: true })
+  { timestamps: true }
+)
 
-const Order: Model<IOrder> = mongoose.model<IOrder>('Order', orderSchema)
-
-export default Order
+export const OrderModel = model<IOrder, OrderModelType>('Order', orderSchema)

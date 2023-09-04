@@ -7,7 +7,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://photos.app.goo.gl/afwpFL269xbxzJNk6',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/afwpFL269xbxzJNk6',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'ARMOR UNI 250KG',
@@ -18,7 +18,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/armor/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/osVDms6BB7SoMN5Q6',
-    categoryId: 4,
+    categoryId: 4
   },
   {
     name: 'ARMOR/1 UNI 250KG',
@@ -29,7 +29,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/armor/',
     stock: 7,
     urlImage: 'https://photos.app.goo.gl/osVDms6BB7SoMN5Q6',
-    categoryId: 4,
+    categoryId: 4
   },
   {
     name: 'SINUO/1 600KG',
@@ -40,7 +40,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/sinuo/',
     stock: 7,
     urlImage: 'https://photos.app.goo.gl/GvXY2G1pcPwJiuFQ7',
-    categoryId: 4,
+    categoryId: 4
   },
   {
     name: 'SINUO/1 400KG',
@@ -51,7 +51,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/sinuo/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/GvXY2G1pcPwJiuFQ7',
-    categoryId: 4,
+    categoryId: 4
   },
   {
     name: 'SINUO 600KG',
@@ -62,7 +62,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/sinuo/',
     stock: 5,
     urlImage: 'https://photos.app.goo.gl/GvXY2G1pcPwJiuFQ7',
-    categoryId: 4,
+    categoryId: 4
   },
   {
     name: 'SINUO 400KG',
@@ -73,7 +73,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/sinuo/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/GvXY2G1pcPwJiuFQ7',
-    categoryId: 4,
+    categoryId: 4
   },
   {
     name: 'OP5/1 UNI 900KG',
@@ -83,7 +83,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/optimo/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/oWWusJQ1vzc22BV88',
-    categoryId: 2,
+    categoryId: 2
   },
   {
     name: 'OP5 UNI 900KG',
@@ -93,7 +93,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/optimo/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/MHPW13FHg1S7AF637',
-    categoryId: 2,
+    categoryId: 2
   },
   {
     name: 'OP3/1 UNI 800KG',
@@ -103,7 +103,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/optimo/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/oWWusJQ1vzc22BV88',
-    categoryId: 2,
+    categoryId: 2
   },
   {
     name: 'OP3/1 SKYLINE 350KG',
@@ -113,7 +113,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/optimo/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/oWWusJQ1vzc22BV88',
-    categoryId: 2,
+    categoryId: 2
   },
   {
     name: 'OP3 UNI 800KG',
@@ -123,7 +123,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/optimo/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/MHPW13FHg1S7AF637',
-    categoryId: 2,
+    categoryId: 2
   },
   {
     name: 'ERGO/1 700KG',
@@ -133,7 +133,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/ergo/',
     stock: 5,
     urlImage: 'https://photos.app.goo.gl/u7KnGaikBqeh7dt86',
-    categoryId: 3,
+    categoryId: 3
   },
   {
     name: 'OP3 SKYLINE 350KG',
@@ -143,7 +143,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/optimo/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/MHPW13FHg1S7AF637',
-    categoryId: 2,
+    categoryId: 2
   },
   {
     name: 'OP2 24 UNI 250KG',
@@ -153,7 +153,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/optimo/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/e6BW8Dq66SJqrfK59',
-    categoryId: 2,
+    categoryId: 2
   },
   {
     name: 'ERGO/1 600KG',
@@ -163,7 +163,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/ergo/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/u7KnGaikBqeh7dt86',
-    categoryId: 3,
+    categoryId: 3
   },
   {
     name: 'ERGO CAJA',
@@ -173,7 +173,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/ergo/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/3ueHnP22sDs3PvMg8',
-    categoryId: 3,
+    categoryId: 3
   },
   {
     name: 'ERGO 700KG',
@@ -183,7 +183,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/ergo/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/u7KnGaikBqeh7dt86',
-    categoryId: 3,
+    categoryId: 3
   },
   {
     name: 'ERGO 600KG',
@@ -193,7 +193,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/ergo/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/u7KnGaikBqeh7dt86',
-    categoryId: 3,
+    categoryId: 3
   },
   {
     name: 'DEUS 600KG',
@@ -203,7 +203,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/deus/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/tZdxEUk2qhHuBvPv9',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'DEUS 400KG/SPEED',
@@ -213,7 +213,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/deus/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/tZdxEUk2qhHuBvPv9',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'BARRA REDONDA',
@@ -223,7 +223,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://photos.app.goo.gl/AnumEvsSGUAjYPt48',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/AnumEvsSGUAjYPt48',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'ACER 1200KG',
@@ -233,7 +233,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/acer/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/K57xgch7jFFoCsNb7',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'AAC1',
@@ -243,7 +243,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://photos.app.goo.gl/afwpFL269xbxzJNk6',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/afwpFL269xbxzJNk6',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'ACER 600KG',
@@ -253,7 +253,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/acer/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/FGmNyQju76aM9xAu6',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'ACER 400KG',
@@ -263,7 +263,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/acer/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/FGmNyQju76aM9xAu6',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'DEUS 400KG',
@@ -273,7 +273,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/deus/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/tZdxEUk2qhHuBvPv9',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'ACER 800KG',
@@ -283,7 +283,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/acer/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/FGmNyQju76aM9xAu6',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'ACER 600KG/24V',
@@ -293,7 +293,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/acer/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/FGmNyQju76aM9xAu6',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'ACER 300KG/24V',
@@ -303,7 +303,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/acer/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/FGmNyQju76aM9xAu6',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'ACER 1500KG',
@@ -313,7 +313,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/acer/',
     stock: 6,
     urlImage: 'https://photos.app.goo.gl/K57xgch7jFFoCsNb7',
-    categoryId: 1,
+    categoryId: 1
   },
   {
     name: 'BARRA 4',
@@ -323,7 +323,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://photos.app.goo.gl/SSBq53pvhMrU68f76',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/SSBq53pvhMrU68f76',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'VIS MV',
@@ -334,7 +334,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/vis/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/9cGkDMkwDV2xpK6i6',
-    categoryId: 5,
+    categoryId: 5
   },
   {
     name: 'PLUS',
@@ -345,7 +345,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/plus/',
     stock: 1,
     urlImage: 'https://photos.app.goo.gl/w4ztDQNQkx3Hmb1R8',
-    categoryId: 6,
+    categoryId: 6
   },
   {
     name: 'PROBO 120',
@@ -355,7 +355,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/probo-xl/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/o5QGSQTR11RNCrZX9',
-    categoryId: 5,
+    categoryId: 5
   },
   {
     name: 'MAXI 4 ROJO',
@@ -365,7 +365,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/touzP3Nt8PvuQNvy7',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'VIS 400 DESPLAZADO/CADENA',
@@ -376,7 +376,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/vis/',
     stock: 1,
     urlImage: 'https://photos.app.goo.gl/VrLT1CZUh1RKan1J8',
-    categoryId: 9,
+    categoryId: 9
   },
   {
     name: 'PROBO 100',
@@ -386,7 +386,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/probo-xl/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/o5QGSQTR11RNCrZX9',
-    categoryId: 5,
+    categoryId: 5
   },
   {
     name: 'PROBO 100-4',
@@ -396,7 +396,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/probo-xl/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/o5QGSQTR11RNCrZX9',
-    categoryId: 5,
+    categoryId: 5
   },
   {
     name: 'PROBO 60',
@@ -406,7 +406,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/probo-r/',
     stock: 5,
     urlImage: 'https://photos.app.goo.gl/xWJFBWdnP8z6Yec7A',
-    categoryId: 5,
+    categoryId: 5
   },
   {
     name: 'TENAX 420F',
@@ -416,7 +416,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/tenax/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/6aR7VS22mUxmbvNaA',
-    categoryId: 7,
+    categoryId: 7
   },
   {
     name: 'VIS 400 CADENA',
@@ -427,7 +427,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/vis/',
     stock: 1,
     urlImage: 'https://photos.app.goo.gl/VrLT1CZUh1RKan1J8',
-    categoryId: 9,
+    categoryId: 9
   },
   {
     name: 'TENAX 210F',
@@ -437,7 +437,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/tenax/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/6aR7VS22mUxmbvNaA',
-    categoryId: 7,
+    categoryId: 7
   },
   {
     name: 'TENAX 120F',
@@ -447,7 +447,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/tenax/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/6aR7VS22mUxmbvNaA',
-    categoryId: 7,
+    categoryId: 7
   },
   {
     name: 'GEN UNI EASY',
@@ -457,7 +457,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/gebox/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/98hm5GFgV21XnAH97',
-    categoryId: 7,
+    categoryId: 7
   },
   {
     name: 'SUPRA SU 424-4',
@@ -467,7 +467,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/supra-su4-24/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/oGJqgmtX6KxGuFpz8',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'DOS',
@@ -477,7 +477,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/des-dese/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/eQ7HQwj4vuyhwHe78',
-    categoryId: 7,
+    categoryId: 7
   },
   {
     name: 'KIT MAXI 4-1',
@@ -487,7 +487,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/hcVJepFBACDfwDvd7',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'SUPRA SU 424-3',
@@ -497,7 +497,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/supra-su4-24/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/oGJqgmtX6KxGuFpz8',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'SUPRA MB24V-A',
@@ -508,7 +508,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/supra-mb-24v/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/2hTqxjUchDeVEyvz6',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'SUPRA MB24V-5',
@@ -518,7 +518,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/supra-mb-24v/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/qMSBhrcnPQ1KgsTWA',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'SUPRA MB24V-4',
@@ -528,7 +528,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/supra-mb-24v/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/qMSBhrcnPQ1KgsTWA',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'SUPRA MB24V-3',
@@ -538,7 +538,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/supra-mb-24v/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/qMSBhrcnPQ1KgsTWA',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'SUPRA MB230V-3',
@@ -548,7 +548,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/supra-mb-230v/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/qMSBhrcnPQ1KgsTWA',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'SUPRA MAX-6',
@@ -559,7 +559,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/supra-mb-max/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/pHFhA2TYPhodquLB6',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'S MAXI',
@@ -569,7 +569,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/yLLnnrVgHQCkBWGr7',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'PROBO 80',
@@ -579,7 +579,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/probo-r/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/xWJFBWdnP8z6Yec7A',
-    categoryId: 5,
+    categoryId: 5
   },
   {
     name: 'MAXI 2 MARRON',
@@ -589,7 +589,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/QjKsnqwzVi3uDCjm8',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'KIT MAXI 4-2',
@@ -599,7 +599,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/hcVJepFBACDfwDvd7',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'ANT',
@@ -609,7 +609,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://photos.app.goo.gl/vQv8dj1ckBUz3vP79',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/vQv8dj1ckBUz3vP79',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'AGE',
@@ -619,7 +619,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://photos.app.goo.gl/a8vtXxbGM9CQQkYW7',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/a8vtXxbGM9CQQkYW7',
-    categoryId: 8,
+    categoryId: 8
   },
   {
     name: 'BARRA 5',
@@ -629,7 +629,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://photos.app.goo.gl/SSBq53pvhMrU68f76',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/SSBq53pvhMrU68f76',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'BARRA 3',
@@ -639,7 +639,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://photos.app.goo.gl/SSBq53pvhMrU68f76',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/SSBq53pvhMrU68f76',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'SPL 230VIP',
@@ -649,7 +649,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/splendor/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/m2MMDJf9wd2FrvZB7',
-    categoryId: 8,
+    categoryId: 8
   },
   {
     name: 'FAST R4',
@@ -659,7 +659,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/gebox/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/njwiQ7MWGDND6VuD8',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'MAXI 4 AZUL',
@@ -669,7 +669,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/WSaHdijQ6sDpKW8y8',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'VISIO 12/24',
@@ -679,7 +679,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/visio-vire/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/f5pLsJU2h6usx5PW8',
-    categoryId: 10,
+    categoryId: 10
   },
   {
     name: 'WIFI',
@@ -690,7 +690,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://photos.app.goo.gl/YGzX9yH3HQLsJW149',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/YGzX9yH3HQLsJW149',
-    categoryId: 13,
+    categoryId: 13
   },
   {
     name: 'MAXI 2 ROJO',
@@ -700,7 +700,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://subirfotos3.files.wordpress.com/2023/07/rojo-2.png',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'WI',
@@ -710,7 +710,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/wi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/1QKfwDgy8JsJKbNA7',
-    categoryId: 8,
+    categoryId: 8
   },
   {
     name: 'VISIO BAT',
@@ -720,7 +720,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/visio-vire/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/X5ncHipGp3PEE8KQA',
-    categoryId: 10,
+    categoryId: 10
   },
   {
     name: 'VIS 400 DESPLAZADO/CUERDA',
@@ -731,7 +731,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/vis/',
     stock: 1,
     urlImage: 'https://photos.app.goo.gl/VrLT1CZUh1RKan1J8',
-    categoryId: 9,
+    categoryId: 9
   },
   {
     name: 'TOK',
@@ -741,7 +741,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/tok/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/WJGGmnQZm5XbEwPm8',
-    categoryId: 8,
+    categoryId: 8
   },
   {
     name: 'TENAX 160F',
@@ -751,7 +751,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/tenax/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/6aR7VS22mUxmbvNaA',
-    categoryId: 7,
+    categoryId: 7
   },
   {
     name: 'SUPRA SU 424-5',
@@ -761,7 +761,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/supra-su4-24/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/oGJqgmtX6KxGuFpz8',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'SUPRA MB230V-4',
@@ -771,7 +771,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/supra-mb-230v/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/qMSBhrcnPQ1KgsTWA',
-    categoryId: 11,
+    categoryId: 11
   },
   {
     name: 'SUNLED 230V',
@@ -781,7 +781,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/sunled/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/ejPADUoiEeSr8DtU9',
-    categoryId: 8,
+    categoryId: 8
   },
   {
     name: 'SUN R1',
@@ -791,7 +791,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/gebox/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/njwiQ7MWGDND6VuD8',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'SUN LED 24V',
@@ -801,7 +801,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/sunled/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/ejPADUoiEeSr8DtU9',
-    categoryId: 8,
+    categoryId: 8
   },
   {
     name: 'SPL 24VIP',
@@ -811,7 +811,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/splendor/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/m2MMDJf9wd2FrvZB7',
-    categoryId: 8,
+    categoryId: 8
   },
   {
     name: 'REX',
@@ -821,7 +821,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/rex/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/3tgZkFrbJiY9hvtf7',
-    categoryId: 10,
+    categoryId: 10
   },
   {
     name: 'PROBO 120-4',
@@ -831,7 +831,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/probo-xl/',
     stock: 4,
     urlImage: 'https://photos.app.goo.gl/o5QGSQTR11RNCrZX9',
-    categoryId: 5,
+    categoryId: 5
   },
   {
     name: 'MAXI 4 VERDE',
@@ -841,7 +841,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/GsVoziBaKNimmbQ3A',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'MAXI 4 MARRON',
@@ -851,7 +851,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/WJ6GysoijScAAKw77',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'MAXI 2 VERDE',
@@ -861,7 +861,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/u9UzC4vk2DqYjEby9',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'MAXI 2 AZUL',
@@ -871,7 +871,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/maxi/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/Aju2xZ1Ld5YA77odA',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'GEVIS R 220V',
@@ -882,7 +882,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/vis/',
     stock: 3,
     urlImage: 'https://photos.app.goo.gl/ri2u9xQYpaacarYK9',
-    categoryId: 9,
+    categoryId: 9
   },
   {
     name: 'PRL ',
@@ -893,7 +893,7 @@ export const postgreeProducts = [
       'https://www.homelife.it/es/producto/sistema-de-radiotransmision/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/PtJ5fnkvVnbG4Q2U7',
-    categoryId: 10,
+    categoryId: 10
   },
   {
     name: 'FAST R2',
@@ -903,7 +903,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/gebox/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/njwiQ7MWGDND6VuD8',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'FAST R1',
@@ -913,7 +913,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/gebox/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/njwiQ7MWGDND6VuD8',
-    categoryId: 12,
+    categoryId: 12
   },
   {
     name: 'ESPIRA MAGNETICA',
@@ -923,7 +923,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/sensor-magnetico/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/8ty78Ee929mtyz4d9',
-    categoryId: 8,
+    categoryId: 8
   },
   {
     name: 'DIXES',
@@ -933,7 +933,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/dixes/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/eMZcm52eRdxDubtn9',
-    categoryId: 8,
+    categoryId: 8
   },
   {
     name: 'DES',
@@ -943,7 +943,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/des-dese/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/eXjV5TRLRbUqYin17',
-    categoryId: 8,
+    categoryId: 8
   },
   {
     name: 'BORDE SENSIBLE',
@@ -953,7 +953,7 @@ export const postgreeProducts = [
     urlMoreInfo: 'https://www.homelife.it/es/producto/borde-sensible/',
     stock: 2,
     urlImage: 'https://photos.app.goo.gl/PKg1FAAL2LtoHFRS8',
-    categoryId: 10,
+    categoryId: 10
   },
   {
     name: 'VIS 400 CUERDA',
@@ -965,9 +965,9 @@ export const postgreeProducts = [
       'https://subirfotos3.files.wordpress.com/2023/07/vis-400-industriali-life-768x660-1.png',
     stock: 1,
     urlImage: 'https://photos.app.goo.gl/VrLT1CZUh1RKan1J8',
-    categoryId: 9,
-  },
-];
+    categoryId: 9
+  }
+]
 
 export const CATEGORIES = {
   1: '64cf739065d4623d2cf6db41',
@@ -982,5 +982,5 @@ export const CATEGORIES = {
   10: '64cf739065d4623d2cf6db42',
   11: '64cf739065d4623d2cf6db43',
   12: '64cf739065d4623d2cf6db40',
-  13: '64cf739065d4623d2cf6db4b',
-};
+  13: '64cf739065d4623d2cf6db4b'
+}
