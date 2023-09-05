@@ -3,7 +3,7 @@ dotenv.config()
 
 import mongoose from 'mongoose'
 import { dark, light, noSidebar } from '@adminjs/themes'
-import { AdminJSOptions } from 'adminjs'
+import { type AdminJSOptions } from 'adminjs'
 import { resources } from './resources/index.js'
 
 // import { componentLoader } from './components.bundler.js';

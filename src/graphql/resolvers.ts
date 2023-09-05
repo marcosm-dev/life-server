@@ -202,6 +202,13 @@ export const resolvers = {
 
       return 'DONE'
     },
+    removeOrderById: async (_, { orderId }) => {
+      try {
+        return await OrderModel.deleteOne({ _id: orderId })
+      } catch (error) {
+        return new GraphQLError('No se ha podido eliminar la orden')
+      }
+    },
     createOrder: async (_, { input }) => {
       const { userId, products } = input
       // Tasa de IGIC (7%)

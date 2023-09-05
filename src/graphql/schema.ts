@@ -118,6 +118,7 @@ const typeDefs = /* GraphQL */ `
     createNewPasswordFromRecovery(token: String!, password: String!): User!
     createProductsFromFacturaDirecta: String!
     createOrder(input: OrderInput!): Order!
+    removeOrderById(orderId: ID!): JSON!
     createUser(input: UserInput!): User!
     updateUser(input: UserInput!): User!
     loginUser(email: String!, password: String!): UserAuthResponse!
