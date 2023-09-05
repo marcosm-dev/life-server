@@ -14,8 +14,8 @@
   "scripts": {
     "lint": "eslint ./src/**/*",
     "dev": "npx tsc && node --watch ./dist/index.js",
-    "build": "npm run clean && npx tsc -p ./tsconfig.json",
-    "build:dev": "npm run clean && tsc && npm copy-theme",
+    "build": "yarn clean && npx tsc -p ./tsconfig.json",
+    "build:dev": "yarn clean && tsc && npm copy-theme",
     "build:watch": "tsc -w",
     "clean": "rimraf dist",
     "start:dev": "node --watch --loader  ts-node/esm   ./src/index.ts",
