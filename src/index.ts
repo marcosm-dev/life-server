@@ -21,5 +21,4 @@ const start = async () => {
     console.info(`Admin corriendo en:\nhttp://localhost:${PORT}/admin`);
   });
 };
-
-start();
+await start();
