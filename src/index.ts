@@ -6,7 +6,7 @@ import { attachExpressJS, attachAdminJS, attachGraphQLYoga } from './app.js'
 
 import './services/cloudinary/index.js'
 
-const PORT = process.env.PORT ?? 8080
+const port = process.env.PORT ?? 8080
 
 const app: Express = express()
 
@@ -15,11 +15,11 @@ async function start(): Promise<void> {
   await attachAdminJS(app)
   await attachGraphQLYoga(app)
 
-  app.listen(PORT, () => {
+  app.listen(port, () => {
     console.info(
-      `\nYogaGraphQL Express corriendo en:\nhttp://localhost:${PORT}/graphql`
+      `\nYogaGraphQL Express corriendo en:\nhttp://localhost:${port}/graphql`
     )
-    console.info(`Admin corriendo en:\nhttp://localhost:${PORT}/admin`)
+    console.info(`Admin corriendo en:\nhttp://localhost:${port}/admin`)
   })
 }
 start()
