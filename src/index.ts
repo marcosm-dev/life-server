@@ -22,5 +22,4 @@ async function start(): Promise<void> {
     console.info(`Admin corriendo en:\nhttp://localhost:${PORT}/admin`)
   })
 }
-
-await start()
+start()
