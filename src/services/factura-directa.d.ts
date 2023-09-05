@@ -1,46 +1,46 @@
-export interface IContact {
+export type IContact = {
   content: {
-    type: string;
+    type: string
     main: {
-      name: string;
-      fiscalId: string;
-      email: string;
-      currency: string;
-      country: string;
-      address: string;
-      zipcode: string;
-      city: string;
+      name: string
+      fiscalId: string
+      email: string
+      currency: string
+      country: string
+      address: string
+      zipcode: string
+      city: string
       accounts: {
-        client: string;
-        clientCredit?: string;
-      };
-    };
-  };
+        client: string
+        clientCredit?: string
+      }
+    }
+  }
 }
 
-export interface Lines {
-  document: string;
-  quantity: number;
-  tax: string[];
-  text: string;
-  unitPrice: number;
-  account: string;
+export type Lines = {
+  document: string
+  quantity: number
+  tax: string[]
+  text: string
+  unitPrice: number
+  account: string
 }
 
-export interface IInvoice {
+export type IInvoice = {
   content: {
-    type: string;
+    type: string
     main: {
       docNumber: {
-        series: string;
-      };
-      contact: string;
-      taxIncludedPrices?: boolean;
-      currency: string;
-      lines: Lines[];
-    };
-  };
+        series: string
+      }
+      contact: string
+      taxIncludedPrices?: boolean
+      currency: string
+      lines: Lines[]
+    }
+  }
 }
-export interface InvoiceTo {
-  to: [string];
+export type InvoiceTo = {
+  to: [string]
 }

@@ -1,10 +1,10 @@
-import * as mongoose from 'mongoose';
+import { Types, Schema } from 'mongoose'
 
-export interface ICartItem extends Document {
-  quantity: number;
-  amount: number;
-  TAX: number;
-  productId: mongoose.Schema.Types.ObjectId;
-  orderId: mongoose.Schema.Types.ObjectId;
-  productDeleted: mongoose.Schema.Types.Mixed;
+export type ICartItem = Document & {
+  quantity: number
+  amount: number
+  TAX: number
+  productId: Types.ObjectId
+  orderId: Types.ObjectId
+  productDeleted: Schema.Types.Mixed
 }

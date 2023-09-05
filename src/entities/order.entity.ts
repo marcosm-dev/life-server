@@ -1,39 +1,39 @@
-import { Schema, Types, model } from 'mongoose';
-import { cartItemSchema } from './cart-item.entity.js';
-import { IOrder, OrderModelType } from './order.entity.d.js';
+import { Schema, Types, model } from 'mongoose'
+import { cartItemSchema } from './cart-item.entity.js'
+import { type IOrder, type OrderModelType } from './order.entity.d.js'
 
 const orderStatusEnum: [
   'PENDING',
   'SUCCESS',
   'AUTHORIZED',
   'CANCELED',
-  'FAILURE',
-] = ['PENDING', 'SUCCESS', 'AUTHORIZED', 'CANCELED', 'FAILURE'];
+  'FAILURE'
+] = ['PENDING', 'SUCCESS', 'AUTHORIZED', 'CANCELED', 'FAILURE']
 
 export const orderSchema = new Schema<IOrder, OrderModelType>(
   {
-    _id: Types.ObjectId,
+    // _id: Types.ObjectId,
     amount: Number,
     status: {
       type: String,
       enum: orderStatusEnum,
-      default: 'PENDING',
+      default: 'PENDING'
     },
     TAX: {
-      type: Number,
+      type: Number
     },
     owner: {
       type: Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: true
     },
     uuid: {
       type: Schema.Types.UUID,
-      required: false,
+      required: false
     },
-    products: [cartItemSchema],
+    products: [cartItemSchema]
   },
   { timestamps: true }
-);
+)
 
-export const OrderModel = model<IOrder, OrderModelType>('Order', orderSchema);
+export const OrderModel = model<IOrder, OrderModelType>('Order', orderSchema)

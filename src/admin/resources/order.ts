@@ -1,7 +1,7 @@
-import { OrderModel } from '../../entities/order.entity.js';
+import { OrderModel } from '../../entities/order.entity.js'
 
 const Order = {
-  resource: OrderModel,
-};
+  resource: OrderModel
+}
 
-export default Order;
+export default Order

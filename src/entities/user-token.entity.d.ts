@@ -1,3 +1,3 @@
-import { userTokenSchema } from './user-token.entity.js';
+import { type userTokenSchema } from './user-token.entity.js'
 
-export type IUserToken = InferSchemaType<typeof userTokenSchema>;
+export type IUserToken = InferSchemaType<typeof userTokenSchema>

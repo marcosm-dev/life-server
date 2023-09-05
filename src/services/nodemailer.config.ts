@@ -1,4 +1,4 @@
-import { IUser } from '../entities/user.entity.d.js';
+import { type IUser } from '../entities/user.entity.d.js'
 
 export const RESET_PASSWORD_HTML = (link: string) => {
   return `
@@ -34,8 +34,8 @@ export const RESET_PASSWORD_HTML = (link: string) => {
         </body>
         </html>
         
-      `;
-};
+      `
+}
 
 export const ORDER_HTML = (newUser: IUser) => `
   <body>
@@ -55,4 +55,4 @@ export const ORDER_HTML = (newUser: IUser) => `
       </a>
     </ul>
   </body>
-`;
+`

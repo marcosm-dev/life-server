@@ -1,21 +1,21 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose'
 
 export const productSchema = new Schema({
   accessories: String,
   categoryId: {
     type: Types.ObjectId,
-    ref: 'Category',
+    ref: 'Category'
   },
   description: String,
   name: {
     type: String,
-    unique: true,
+    unique: true
   },
   price: Number,
   stock: Number,
   urlImage: String,
   urlMoreInfo: String,
-  uuid: Schema.Types.UUID,
-});
+  uuid: String
+})
 
-export const ProductModel = model('Product', productSchema);
+export const ProductModel = model('Product', productSchema)
