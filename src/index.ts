@@ -6,7 +6,7 @@ import { attachExpressJS, attachAdminJS, attachGraphQLYoga } from './app.js'
 import './services/cloudinary/index.js'
 dotenv.config()
 
-const PORT = process.env.PORT ?? 4000
+const PORT = process.env.PORT ?? 8080
 
 const app: Express = express()
 
