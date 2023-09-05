@@ -3,11 +3,15 @@
 import axios from 'axios'
 
 import config from './config.js'
-import { IContact, IInvoice, InvoiceTo } from './factura-directa.d.js'
+import {
+  type IContact,
+  type IInvoice,
+  type InvoiceTo
+} from './factura-directa.d.js'
 
 const CLIENT_ID = process.env.FACTURA_DIRECTA_CLIENT_ID
 const API_KEY = process.env.FACTURA_DIRECTA_API_KEY
-const API_URI = process.env.FACTURA_DIRECTA_API_URL
+const API_URI = process.env.FACTURA_DIRECTA_API_URI
 
 export const TAX = ['S_IGIC_7']
 
@@ -48,7 +52,8 @@ async function getOrCreateContact(payload: IContact) {
     const response = await axios.post(URL + '/contacts', payload, { headers })
     return response.data
   } catch (response) {
-    throw new Error(`Error al crear contacto: ${response.message}`)
+    console.log(response)
+    throw new Error(`Error al crear contacto: ${response}`)
   }
 }
 

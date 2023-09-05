@@ -1,8 +1,8 @@
-import { IUser } from '../entities/user.entity.d.js'
+import { type IUser } from '../entities/user.entity.d.js'
 import AdminJSExpress from '@adminjs/express'
-import AdminJS from 'adminjs'
+import type AdminJS from 'adminjs'
 import argon2 from 'argon2'
-import { Router } from 'express'
+import { type Router } from 'express'
 import { UserModel } from '../entities/user.entity.js'
 
 const SECRET = process.env.SECRET

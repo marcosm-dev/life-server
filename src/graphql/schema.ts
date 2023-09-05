@@ -40,7 +40,7 @@ const typeDefs = /* GraphQL */ `
     stock: Int!
     urlImage: String
     categoryId: ID!
-    uuid: String
+    uuid: ID!
   }
 
   type User {

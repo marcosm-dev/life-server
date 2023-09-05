@@ -1,6 +1,6 @@
 import { Schema, Types, model } from 'mongoose'
 import { cartItemSchema } from './cart-item.entity.js'
-import { IOrder, OrderModelType } from './order.entity.d.js'
+import { type IOrder, type OrderModelType } from './order.entity.d.js'
 
 const orderStatusEnum: [
   'PENDING',
@@ -12,7 +12,7 @@ const orderStatusEnum: [
 
 export const orderSchema = new Schema<IOrder, OrderModelType>(
   {
-    _id: Types.ObjectId,
+    // _id: Types.ObjectId,
     amount: Number,
     status: {
       type: String,

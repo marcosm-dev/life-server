@@ -1,5 +1,5 @@
-import { Model, Schema, model } from 'mongoose'
-import { IUser, UserModelType } from './user.entity.d.js'
+import { type Model, Schema, model } from 'mongoose'
+import { type IUser, type UserModelType } from './user.entity.d.js'
 
 export const userSchema = new Schema<IUser, Model<IUser>>(
   {

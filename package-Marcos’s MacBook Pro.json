@@ -14,8 +14,8 @@
   "scripts": {
     "lint": "eslint ./src/**/*",
     "dev": "npx tsc && node --watch ./dist/index.js",
-    "build": "npm run clean && npx tsc -p ./tsconfig.json",
-    "build:dev": "npm run clean && npx tsc",
+    "build": "yarn clean && npx tsc -p ./tsconfig.json",
+    "build:dev": "yarn clean && tsc && yarn copy-theme",
     "build:watch": "tsc -w",
     "clean": "rimraf dist",
     "start:dev": "node --watch --loader  ts-node/esm   ./src/index.ts",
@@ -32,9 +32,7 @@
     "parserOptions": {
       "project": "./ts.config.json"
     },
-    "extends": [
-      "./node_module/ts-standard/tsconfig.json"
-    ]
+    "extends": ["./node_module/ts-standard/tsconfig.json"]
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
@@ -72,8 +70,7 @@
     "ts-node-dev": "2.0.0",
     "ts-standard": "^12.0.2",
     "tslib": "^2.6.2",
-    "typescript": "^5.1.6",
-    "volar-service-vetur": "latest"
+    "typescript": "^5.1.6"
   },
   "peerDependencies": {
     "adminjs": "^7.0.0"
@@ -106,6 +103,6 @@
     "winston": "3.10.0"
   },
   "engines": {
-    "node": ">=20.5.1 || 19.9.0"
+    "node": ">=20.5.1"
   }
 }

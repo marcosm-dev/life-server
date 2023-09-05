@@ -20,6 +20,6 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*.ts", "../src/**/*"],
+  "include": ["./src/**/*.ts", "../src/**/*", ".eslintrc.cjs"],
   "exclude": ["node_modules"]
 }

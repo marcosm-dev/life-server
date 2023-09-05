@@ -1,5 +1,5 @@
 import * as nodemailer from 'nodemailer'
-import { MailOptions } from 'nodemailer/lib/json-transport/index.js'
+import { type MailOptions } from 'nodemailer/lib/json-transport/index.js'
 
 // const transporter = nodemailer.createTransport(transport[, defaults])
 
