@@ -11,6 +11,7 @@ export const productSchema = new Schema({
     type: String,
     unique: true
   },
+  imagen: String,
   price: Number,
   stock: Number,
   urlImage: String,

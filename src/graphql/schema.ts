@@ -38,6 +38,7 @@ const typeDefs = /* GraphQL */ `
     accessories: String
     urlMoreInfo: String
     stock: Int!
+    imagen: String
     urlImage: String
     categoryId: ID!
     uuid: ID!
@@ -108,6 +109,7 @@ const typeDefs = /* GraphQL */ `
     getAllCategories(limit: Int, skip: Int): [Category!]!
     getProductsByCategory(categoryId: ID!): [Product!]!
     getAllProducts: [Product!]!
+    getProductById(id: ID!): Product!
     getAllOrders: [Order!]
     getMyOrders: [Order!]
     getOrderById(id: ID!): Order!
