@@ -176,7 +176,10 @@ export const resolvers = {
       { categoryId }: { categoryId: string }
     ) => {
       try {
-        const products = await ProductModel.find({ categoryId })
+        const products = await ProductModel.find({ categoryId }).sort({
+          price: 1
+        })
+
         return products
       } catch (error) {
         console.log(error)
