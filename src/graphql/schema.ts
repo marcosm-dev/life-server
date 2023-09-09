@@ -113,6 +113,8 @@ const typeDefs = /* GraphQL */ `
     getAllOrders: [Order!]
     getMyOrders: [Order!]
     getOrderById(id: ID!): Order!
+    getInvoicesById(id: ID!): JSON
+    getInvoices: JSON
   }
 
   type Mutation {

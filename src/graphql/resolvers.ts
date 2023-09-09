@@ -17,6 +17,8 @@ import {
 import type { InvoiceTo } from '../services/factura-directa.d.js'
 import {
   createInvoice,
+  getInvoices,
+  getInvoiceListById,
   // getAllProducts,
   getOrCreateContact,
   sendInvoice
@@ -216,6 +218,24 @@ export const resolvers = {
       } catch (error) {
         return new GraphQLError(`Error al encontrar la orden: ${error.message}`)
       }
+    },
+    getInvoicesById: async (_, { id }) => {
+      try {
+        const resp = await getInvoiceListById(id)
+        console.log(resp)
+
+        return resp
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    getInvoices: async () => {
+      try {
+        const resp = await getInvoices()
+        return resp
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
   Mutation: {
@@ -339,7 +359,8 @@ export const resolvers = {
         const { content } = await getOrCreateContact(contact)
         const { uuid } = content
 
-        if (uuid !== currentUser.uuid) {
+        if (content.uuid !== currentUser.uuid) {
+          const [, uuid] = content.uuid.split('_')
           await UserModel.findOneAndUpdate({ _id: currentUser.id }, { uuid })
         }
 

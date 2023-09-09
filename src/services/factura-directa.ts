@@ -96,6 +96,15 @@ async function getInvoiceListById(id: string) {
   }
 }
 
+async function getInvoices() {
+  try {
+    const { data } = await axios(URL + '/invoices', { headers })
+    return data
+  } catch (error) {
+    throw new Error(`Ha ocurrido algún problema al crear la factura: ${error}`)
+  }
+}
+
 async function createProduct(product) {
   try {
     const { data } = await axios.post(URL + '/products', product, { headers })
@@ -133,5 +142,6 @@ export {
   getContactById,
   getOrCreateContact,
   createInvoice,
+  getInvoices,
   getInvoiceListById
 }
