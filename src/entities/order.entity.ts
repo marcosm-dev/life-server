@@ -3,12 +3,12 @@ import { cartItemSchema } from './cart-item.entity.js'
 import { type IOrder, type OrderModelType } from './order.entity.d.js'
 
 const orderStatusEnum: [
-  'PENDING',
-  'SUCCESS',
+  'PENDIENTE',
+  'COMPLETADA',
   'AUTHORIZED',
-  'CANCELED',
-  'FAILURE'
-] = ['PENDING', 'SUCCESS', 'AUTHORIZED', 'CANCELED', 'FAILURE']
+  'CANCELADA',
+  'FALLO'
+] = ['PENDIENTE', 'COMPLETADA', 'AUTHORIZED', 'CANCELADA', 'FALLO']
 
 export const orderSchema = new Schema<IOrder, OrderModelType>(
   {
@@ -17,7 +17,7 @@ export const orderSchema = new Schema<IOrder, OrderModelType>(
     status: {
       type: String,
       enum: orderStatusEnum,
-      default: 'PENDING'
+      default: 'PENDIENTE'
     },
     TAX: {
       type: Number

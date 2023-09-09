@@ -19,6 +19,7 @@
     "build:watch": "tsc -w",
     "clean": "rimraf dist",
     "start:dev": "node --watch --loader  ts-node/esm  ./src/index.ts",
+    "start:dist": "npx tsc && node dist/index.js",
     "watch": "node --watch --trace-warnings --loader  ts-node/esm   ./src/index.ts",
     "start": "node dist/index.js",
     "prepare": "husky install ./husky",

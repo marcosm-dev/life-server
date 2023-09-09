@@ -300,7 +300,7 @@ export const resolvers = {
         const order = await OrderModel.create({
           amount: totalAmount,
           owner: userId,
-          status: 'PENDING',
+          status: 'PENDIENTE',
           products: generateItemsWithProducts
         })
 
@@ -366,7 +366,7 @@ export const resolvers = {
         const item = await createInvoice(invoice)
 
         if (item && order) {
-          order.status = 'SUCCESS'
+          // order.status = 'SUCCESS'
           await order.save()
         }
 
@@ -381,7 +381,6 @@ export const resolvers = {
             // PRINTER_EMAIL,
           ]
         }
-
         await sendInvoice(item.content.uuid, to)
 
         return item
@@ -395,12 +394,11 @@ export const resolvers = {
     },
     logoutUser: async (_, args, { currentUser }) => {
       const token = currentUser?.token
+      if (!token) return new GraphQLError('unauthorized')
 
-      if (!token) return new GraphQLError('No estás identificado')
       try {
         const response = await UserTokenModel.findOneAndRemove({ token })
-
-        if (!response) return { deleted: 0, error: 'No estás identificado' }
+        if (!response) return { deleted: 1, error: 'No estás identificado' }
 
         return { deleted: 1 }
       } catch (error) {

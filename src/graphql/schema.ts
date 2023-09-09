@@ -94,11 +94,11 @@ const typeDefs = /* GraphQL */ `
   }
 
   enum OrderStatus {
-    PENDING
-    SUCCESS
-    AUTHORIZED
-    CANCELED
-    FAILURE
+    PENDIENTE
+    COMPLETADA
+    AUTORIZADO
+    CANCELADA
+    FALLO
   }
 
   type Query {
