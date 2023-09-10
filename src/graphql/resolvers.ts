@@ -559,6 +559,14 @@ export const resolvers = {
           `Error al crear el token de usuario: ${error.message}`
         )
       }
+    },
+    sendEmail: async (_, { input }) => {
+      try {
+        await sendEmail(input)
+        return 'OK'
+      } catch (error) {
+        throw new GraphQLError(`Error al enviar el email: ${error}`)
+      }
     }
   }
 }

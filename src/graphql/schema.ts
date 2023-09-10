@@ -93,6 +93,11 @@ const typeDefs = /* GraphQL */ `
     INSTALADOR
   }
 
+  enum ResponseStatus {
+    OK
+    KO
+  }
+
   enum OrderStatus {
     PENDIENTE
     COMPLETADA
@@ -129,6 +134,13 @@ const typeDefs = /* GraphQL */ `
     logoutUser: JSON!
     signUp(input: UserInput!): UserAuthResponse!
     recoveryPassword(email: String): UserToken!
+    sendEmail(input: MailOptionsInput!): ResponseStatus!
+  }
+
+  input MailOptionsInput {
+    to: String!
+    subject: String!
+    html: String!
   }
 
   input OrderLines {

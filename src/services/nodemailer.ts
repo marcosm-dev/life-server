@@ -32,8 +32,10 @@ export const sendEmail = ({ to, subject, html }: MailOptions) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log('Error al enviar el correo:', error)
+      return error
     } else {
       console.log('Correo enviado:', info.response)
+      return info.response
     }
   })
 }

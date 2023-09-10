@@ -85,14 +85,16 @@ async function sendInvoice(uuid: string, to: InvoiceTo) {
 
 async function getInvoiceListById(id: string) {
   try {
-    const { data } = await axios(URL + '/invoices', { headers })
+    const { data } = await axios(`${URL}/invoices/?contact=${id}`, {
+      headers
+    })
     const invoices = data.items.filter(
       ({ content }: IInvoice) => content.main.contact === id
     ) as IInvoice[]
 
     return invoices
   } catch (error) {
-    throw new Error(`Ha ocurrido algún problema al crear la factura: ${error}`)
+    throw new Error(`Ha ocurrido algo al recuperar las facturas: ${error}`)
   }
 }
 
