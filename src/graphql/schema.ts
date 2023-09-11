@@ -13,9 +13,15 @@ const typeDefs = /* GraphQL */ `
     expiresAt: String!
   }
 
+  type Brand {
+    id: ID!
+    name: String!
+    image: String
+  }
+
   type Order {
     id: ID!
-    amount: Int!
+    amount: Float!
     owner: User!
     status: OrderStatus!
     products: [CartItem!]!
@@ -32,6 +38,7 @@ const typeDefs = /* GraphQL */ `
 
   type Product {
     id: ID!
+    amount: Float!
     name: String!
     description: String
     price: Float
@@ -40,8 +47,10 @@ const typeDefs = /* GraphQL */ `
     stock: Int!
     imagen: String
     urlImage: String
+    brand: Brand
     categoryId: ID!
     uuid: ID!
+    wishes: [User]
   }
 
   type User {
@@ -53,6 +62,7 @@ const typeDefs = /* GraphQL */ `
     phone: String!
     address: String!
     zipCode: String!
+    wishes: [Product]
     city: String!
     email: String!
     role: Role!
@@ -66,7 +76,7 @@ const typeDefs = /* GraphQL */ `
 
   type CartItem {
     quantity: Int!
-    amount: Int!
+    amount: Float!
     TAX: Float!
     product: Product
     orderId: ID!
@@ -107,6 +117,8 @@ const typeDefs = /* GraphQL */ `
   }
 
   type Query {
+    brandsUpdate: JSON!
+    getAllBrands: [Brand]
     me: User
     getUser(id: ID!): User
     getCategoryById(id: ID!): Category!
@@ -123,6 +135,7 @@ const typeDefs = /* GraphQL */ `
   }
 
   type Mutation {
+    addProductToWishes(productId: ID!): User!
     sendFacturaDirectaOrder(input: FacturaInput!): JSON!
     createNewPasswordFromRecovery(token: String!, password: String!): User!
     createProductsFromFacturaDirecta: String!
@@ -146,10 +159,10 @@ const typeDefs = /* GraphQL */ `
   input OrderLines {
     account: String
     document: String
-    quantity: Int
+    quantity: Float
     tax: [TAX]
     text: String
-    unitPrice: Int
+    unitPrice: Float
   }
 
   input FacturaInput {

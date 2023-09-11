@@ -9,6 +9,7 @@ import { UserModel } from '../entities/user.entity.js'
 import { ProductModel } from '../entities/product.entity.js'
 import { OrderModel } from '../entities/order.entity.js'
 import { CategoryModel } from '../entities/category.entity.js'
+import { BrandModel } from '../entities/brand.entity.js'
 
 import {
   ORDER_HTML,
@@ -68,7 +69,7 @@ export const resolvers = {
     // Resolver para obtener un usuario por su id
     getUser: async (_, { id }) => {
       try {
-        const user = await UserModel.findById(id)
+        const user = await UserModel.findById(id).populate('wishes')
         return user
       } catch (error) {
         throw new GraphQLError(
@@ -76,11 +77,19 @@ export const resolvers = {
         )
       }
     },
-
+    getAllBrands: async () => {
+      try {
+        const brands = await BrandModel.find()
+        console.log(brands)
+        return brands
+      } catch (error) {
+        throw new GraphQLError(`Error al recuperar las marcas: ${error}`)
+      }
+    },
     // Resolver para obtener todos los usuarios
     getAllUsers: async () => {
       try {
-        const users = await UserModel.find().populate('orders')
+        const users = await UserModel.find().populate('wishes')
 
         return users
       } catch (error) {
@@ -120,7 +129,9 @@ export const resolvers = {
     },
     getProductById: async (_, { id }) => {
       try {
-        const product = await ProductModel.findById({ _id: id })
+        const product = await ProductModel.findById({ _id: id }).populate(
+          'brand'
+        )
         return product
       } catch (error) {
         throw new GraphQLError(`Error al encontrar el producto: ${error}`)
@@ -128,7 +139,7 @@ export const resolvers = {
     },
     getAllProducts: async () => {
       try {
-        const products = await ProductModel.find()
+        const products = await ProductModel.find().populate('brand')
         if (!products || products.length === 0) {
           return []
         }
@@ -236,9 +247,33 @@ export const resolvers = {
       } catch (error) {
         console.log(error)
       }
+    },
+    brandsUpdate: async () => {
+      try {
+        const result = await ProductModel.updateMany({
+          brand: '64ff271a61e6a959738e47c6'
+        })
+
+        console.log(result)
+        return result // Devuelve la cantidad de documentos actualizados
+      } catch (error) {
+        throw new Error('Error al actualizar productos: ' + error.message)
+      }
     }
   },
   Mutation: {
+    addProductToWishes: async (_, { productId }, { currentUser }) => {
+      try {
+        const user = await UserModel.findById({ _id: currentUser.id })
+        user.wishes.addToSet(productId)
+        user.save()
+        return user
+      } catch (error) {
+        throw new GraphQLError(
+          `Error al añadir producto a lista de deseos de usuario: ${error}`
+        )
+      }
+    },
     createProductsFromFacturaDirecta: async () => {
       // const facturaDirectaProducts = await getAllProducts();
 
@@ -316,6 +351,7 @@ export const resolvers = {
             }
           }
         })
+
         // Crear la orden en la base de datos
         const order = await OrderModel.create({
           amount: totalAmount,

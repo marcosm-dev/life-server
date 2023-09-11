@@ -36,6 +36,7 @@ export const userSchema = new Schema<IUser, Model<IUser>>(
       type: String,
       required: false
     },
+    wishes: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
     orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
     access: {
       type: Boolean,

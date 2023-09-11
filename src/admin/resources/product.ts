@@ -6,6 +6,10 @@ const Product = {
       categoryId: {
         type: 'ID',
         reference: 'Category'
+      },
+      brand: {
+        type: 'ID',
+        reference: 'Brand'
       }
     }
   }

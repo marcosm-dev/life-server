@@ -11,6 +11,11 @@ export const productSchema = new Schema({
     type: String,
     unique: true
   },
+  wishes: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+  brand: {
+    type: Types.ObjectId,
+    ref: 'Brand'
+  },
   imagen: String,
   price: Number,
   stock: Number,

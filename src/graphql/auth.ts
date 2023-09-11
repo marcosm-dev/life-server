@@ -16,16 +16,18 @@ export async function authenticateUser(request: Request) {
     const [, token] = header.split(' ')
     if (!token) return new GraphQLError('No hay ninguna sesión iniciada')
     const tokenPayload = jwt.verify(token, SECRET) as jwt.JwtPayload
-
     const userId = tokenPayload.userId
-
     try {
       const [userResponse, tokenResponse] = await Promise.all([
-        UserModel.findById(userId), // Supongamos que User es el modelo de mongoose
+        UserModel.findById(userId).populate([
+          { path: 'orders' },
+          { path: 'wishes' }
+        ]), // Supongamos que User es el modelo de mongoose
         UserTokenModel.findOne({ token })
       ])
 
       const user: IUser | null = userResponse
+
       const tokenData: IUserToken | null = tokenResponse
 
       if (typeof tokenResponse === 'undefined' || !userResponse) {
