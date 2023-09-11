@@ -49,7 +49,7 @@ const typeDefs = /* GraphQL */ `
     urlImage: String
     brand: Brand
     categoryId: ID!
-    uuid: ID!
+    uuid: ID
     wishes: [User]
   }
 
