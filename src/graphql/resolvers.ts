@@ -128,9 +128,9 @@ export const resolvers = {
     },
     getProductById: async (_, { id }) => {
       try {
-        const product = await ProductModel.findById({ _id: id }).populate(
-          'brand'
-        )
+        const product = await ProductModel.findById({ _id: id })
+          .populate('brand')
+          .populate('categoryId')
         return product
       } catch (error) {
         throw new GraphQLError(`Error al encontrar el producto: ${error}`)
@@ -138,7 +138,9 @@ export const resolvers = {
     },
     getAllProducts: async () => {
       try {
-        const products = await ProductModel.find().populate('brand')
+        const products = await ProductModel.find()
+          .populate('brand')
+          .populate('categoryId')
         if (!products || products.length === 0) {
           return []
         }
@@ -188,9 +190,11 @@ export const resolvers = {
       { categoryId }: { categoryId: string }
     ) => {
       try {
-        const products = await ProductModel.find({ categoryId }).sort({
-          price: 1
-        })
+        const products = await ProductModel.find({ categoryId })
+          .sort({
+            price: 1
+          })
+          .populate('categoryId')
 
         return products
       } catch (error) {

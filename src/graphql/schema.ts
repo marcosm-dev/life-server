@@ -48,7 +48,7 @@ const typeDefs = /* GraphQL */ `
     imagen: String
     urlImage: String
     brand: Brand
-    categoryId: ID!
+    categoryId: Category!
     uuid: ID
     wishes: [User]
   }
