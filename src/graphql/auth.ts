@@ -25,7 +25,7 @@ export async function authenticateUser(request: Request) {
         ]), // Supongamos que User es el modelo de mongoose
         UserTokenModel.findOne({ token })
       ])
-
+      console.log(token)
       const user: IUser | null = userResponse
 
       const tokenData: IUserToken | null = tokenResponse
@@ -42,7 +42,6 @@ export async function authenticateUser(request: Request) {
       }
       return userResponse?.access ? userResponse : null
     } catch (error) {
-      console.log(error)
       return new GraphQLError(
         `No estas autenticado, por favor, inicia sesión: ${error}`
       )

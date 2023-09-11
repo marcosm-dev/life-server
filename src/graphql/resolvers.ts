@@ -35,7 +35,6 @@ const expiresIn = 604800 // Segundos
 export const resolvers = {
   User: {
     orders: async (parent, args, { currentUser }) => {
-      console.log(parent.name === currentUser)
       try {
         const isOwer = parent.name === currentUser?.id
         const orders = await OrderModel.find(
