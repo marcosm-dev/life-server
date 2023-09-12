@@ -24,6 +24,7 @@ const typeDefs = /* GraphQL */ `
     amount: Float!
     owner: User!
     status: OrderStatus!
+    refund: Boolean!
     products: [CartItem!]!
     uuid: ID!
     createdAt: String!
@@ -117,6 +118,7 @@ const typeDefs = /* GraphQL */ `
   }
 
   type Query {
+    searchProductsByText(text: String): [Product]
     brandsUpdate: JSON!
     getAllBrands: [Brand]
     me: User

@@ -27,6 +27,10 @@ export const orderSchema = new Schema<IOrder, OrderModelType>(
       ref: 'User',
       required: true
     },
+    refund: {
+      type: Boolean,
+      default: false
+    },
     uuid: {
       type: Schema.Types.UUID,
       required: false

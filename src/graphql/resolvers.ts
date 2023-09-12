@@ -76,10 +76,26 @@ export const resolvers = {
         )
       }
     },
+    searchProductsByText: async (_, { text }) => {
+      try {
+        const products = await ProductModel.find({
+          $or: [
+            { name: { $regex: text, $options: 'i' } }, // "i" hace que la búsqueda sea insensible a mayúsculas/minúsculas
+            { description: { $regex: text, $options: 'i' } },
+            { category: { $regex: text, $options: 'i' } }
+          ]
+        })
+          .populate('categoryId')
+          .populate('brand')
+
+        return products
+      } catch (error) {
+        throw new GraphQLError(`Error al buscar: ${error}`)
+      }
+    },
     getAllBrands: async () => {
       try {
         const brands = await BrandModel.find()
-        console.log(brands)
         return brands
       } catch (error) {
         throw new GraphQLError(`Error al recuperar las marcas: ${error}`)
