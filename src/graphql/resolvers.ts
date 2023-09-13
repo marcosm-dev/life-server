@@ -211,6 +211,7 @@ export const resolvers = {
             price: 1
           })
           .populate('categoryId')
+          .populate('brand')
 
         return products
       } catch (error) {

@@ -10,11 +10,13 @@ import { UserModel } from '../entities/user.entity.js'
 dotenv.config()
 
 export async function authenticateUser(request: Request) {
+  console.log(request)
   const SECRET = process.env.SECRET ?? ''
-  const header = request.headers.get('Authorization')
-  if (header !== null) {
+  const header = request.headers.get('authorization')
+
+  if (header) {
     const [, token] = header.split(' ')
-    if (!token) return new GraphQLError('No hay ninguna sesión iniciada')
+    if (!token) return new GraphQLError('unauthorized')
     const tokenPayload = jwt.verify(token, SECRET) as jwt.JwtPayload
     const userId = tokenPayload.userId
     try {
@@ -25,15 +27,12 @@ export async function authenticateUser(request: Request) {
         ]), // Supongamos que User es el modelo de mongoose
         UserTokenModel.findOne({ token })
       ])
-      console.log(token)
       const user: IUser | null = userResponse
 
       const tokenData: IUserToken | null = tokenResponse
 
       if (typeof tokenResponse === 'undefined' || !userResponse) {
-        return new GraphQLError(
-          'Tu sesión ha caducado, por favor, vuelve a iniciar sesión'
-        )
+        return new GraphQLError('unauthorized')
       }
 
       if (user) {
@@ -48,4 +47,9 @@ export async function authenticateUser(request: Request) {
     }
   }
   return null
+}
+
+export const authMiddleWare = (req, res, next) => {
+  console.log(req)
+  next()
 }
