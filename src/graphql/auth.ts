@@ -61,7 +61,8 @@ const unauthenticatedQuerys = [
   'phone',
   'address',
   'VATIN',
-  'uuid'
+  'uuid',
+  'recoveryPassword'
 ]
 
 export const authMiddleWare = async (resolve, parent, args, context, info) => {

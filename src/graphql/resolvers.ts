@@ -590,25 +590,25 @@ export const resolvers = {
 
         const expiresDate = calcExpiresDate(new Date(), expiresIn)
 
-        const createdTokenUser = await UserTokenModel.create({
+        await UserTokenModel.create({
           token,
           user: user.id,
           expiresDate,
           type: 'RECOVERY'
         })
 
-        const link = `${process.env.APP_URL}/#/recovery-password/${token}`
+        const link = `${process.env.APP_URL}/#/auth/sign-in?token=${token}`
         const html = RESET_PASSWORD_HTML(link)
 
         const options = {
           to: email,
-          subject: 'Correo de recuperación de contraseña LIFE',
+          subject: 'Serpica canarias: recuperar contraseña',
           html
         }
 
         sendEmail(options)
 
-        return createdTokenUser
+        return user.id
       } catch (error) {
         return new GraphQLError(
           `Error al crear el token de usuario: ${error.message}`

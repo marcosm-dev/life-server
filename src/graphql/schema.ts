@@ -150,7 +150,7 @@ const typeDefs = /* GraphQL */ `
     loginUser(email: String!, password: String!): UserAuthResponse!
     logoutUser: JSON!
     signUp(input: UserInput!): UserAuthResponse!
-    recoveryPassword(email: String): UserToken!
+    recoveryPassword(email: String): ID!
     sendEmail(input: MailOptionsInput!): ResponseStatus!
   }
 
