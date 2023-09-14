@@ -10,8 +10,10 @@ export async function createContext(
   initialContext: YogaInitialContext
 ): Promise<GraphQLContext> {
   const currentUser = await authenticateUser(initialContext.request)
+
   const userContext: GraphQLContext | null = {
     currentUser
   }
+
   return userContext
 }

@@ -1,6 +1,8 @@
 import GraphQLJSON from 'graphql-type-json'
 import { resolvers } from './resolvers.js'
 import { makeExecutableSchema } from '@graphql-tools/schema'
+import { applyMiddleware } from 'graphql-middleware'
+import { authMiddleWare } from './auth.js'
 
 const typeDefs = /* GraphQL */ `
   scalar JSON
@@ -214,7 +216,9 @@ const customResolvers = {
   JSON: GraphQLJSON
 }
 
-export const schema = makeExecutableSchema({
+export const mySchema = makeExecutableSchema({
   resolvers: [resolvers, customResolvers],
   typeDefs: [typeDefs]
 })
+
+export const schema = applyMiddleware(mySchema, authMiddleWare)

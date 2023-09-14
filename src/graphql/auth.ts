@@ -10,13 +10,12 @@ import { UserModel } from '../entities/user.entity.js'
 dotenv.config()
 
 export async function authenticateUser(request: Request) {
-  console.log(request)
   const SECRET = process.env.SECRET ?? ''
   const header = request.headers.get('authorization')
 
   if (header) {
     const [, token] = header.split(' ')
-    if (!token) return new GraphQLError('unauthorized')
+    // if (!token) return new GraphQLError('unauthorized')
     const tokenPayload = jwt.verify(token, SECRET) as jwt.JwtPayload
     const userId = tokenPayload.userId
     try {
@@ -24,7 +23,7 @@ export async function authenticateUser(request: Request) {
         UserModel.findById(userId).populate([
           { path: 'orders' },
           { path: 'wishes' }
-        ]), // Supongamos que User es el modelo de mongoose
+        ]),
         UserTokenModel.findOne({ token })
       ])
       const user: IUser | null = userResponse
@@ -39,17 +38,38 @@ export async function authenticateUser(request: Request) {
         const userToken = tokenData?.token || ''
         userResponse.token = userToken
       }
-      return userResponse?.access ? userResponse : null
+      return userResponse?.access ? user : null
     } catch (error) {
-      return new GraphQLError(
-        `No estas autenticado, por favor, inicia sesión: ${error}`
-      )
+      return new GraphQLError('unauthorized')
     }
   }
   return null
 }
 
-export const authMiddleWare = (req, res, next) => {
-  console.log(req)
-  next()
+const unauthenticatedQuerys = [
+  'me',
+  'loginUser',
+  'signUp',
+  'user',
+  'token',
+  'id',
+  'email',
+  'name',
+  'lastName',
+  'zipCode',
+  'city',
+  'phone',
+  'address',
+  'VATIN',
+  'uuid'
+]
+
+export const authMiddleWare = async (resolve, parent, args, context, info) => {
+  const result = await resolve(parent, args, context, info)
+  if (context.currentUser) return result
+  else if (unauthenticatedQuerys.includes(info.fieldName)) {
+    return result
+  } else {
+    throw new GraphQLError('unauthorized')
+  }
 }
