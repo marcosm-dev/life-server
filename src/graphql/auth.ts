@@ -19,13 +19,13 @@ export async function authenticateUser(request: Request) {
     const tokenPayload = jwt.verify(token, SECRET) as jwt.JwtPayload
     const userId = tokenPayload.userId
     try {
-      const [userResponse, tokenResponse] = await Promise.all([
+      const [userResponse, tokenResponse] = (await Promise.all([
         UserModel.findById(userId).populate([
           { path: 'orders' },
           { path: 'wishes' }
         ]),
         UserTokenModel.findOne({ token })
-      ])
+      ])) as [IUser, IUserToken]
       const user: IUser | null = userResponse
 
       const tokenData: IUserToken | null = tokenResponse

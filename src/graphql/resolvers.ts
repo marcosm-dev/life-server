@@ -540,13 +540,16 @@ export const resolvers = {
       }
     },
     updateUser: async (_, { input }, { currentUser }) => {
-      const { id, token } = currentUser
+      const { id, token, password } = currentUser
+      const { oldPassword } = input
 
       try {
         // Construye un objeto con los campos del input para actualizar
         const updateFields = {}
         for (const field in input) {
           if (field === 'password') {
+            await argon2.verify(password, oldPassword)
+
             updateFields[field] = await argon2.hash(input.password)
           } else {
             // updateFields[field] = input[field]

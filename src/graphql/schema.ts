@@ -60,13 +60,14 @@ const typeDefs = /* GraphQL */ `
     id: ID!
     token: String
     name: String!
-    lastName: String!
-    VATIN: String!
-    phone: String!
-    address: String!
-    zipCode: String!
+    lastName: String
+    VATIN: String
+    phone: String
+    businessName: String
+    address: String
+    zipCode: String
     wishes: [Product]
-    city: String!
+    city: String
     email: String!
     role: Role!
     password: String
@@ -197,6 +198,7 @@ const typeDefs = /* GraphQL */ `
     email: String
     role: Role
     password: String
+    oldPassword: String
     access: Boolean
   }
 

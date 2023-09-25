@@ -11,6 +11,10 @@ export const userSchema = new Schema<IUser, Model<IUser>>(
       unique: true,
       required: true
     },
+    businessName: {
+      type: String,
+      unique: true
+    },
     VATIN: {
       type: String,
       unique: true,
