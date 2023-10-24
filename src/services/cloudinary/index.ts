@@ -43,6 +43,8 @@ export async function getImagesFromCloudinaryFolder(
     console.log(images)
     return images
   } catch (error) {
-    return new Error('No se han encontrado imagenes:', error)
+    return new Error(
+      `No se han encontrado imagenes: ${(error as Error).message}`
+    )
   }
 }

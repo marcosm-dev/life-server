@@ -45,32 +45,3 @@ export async function authenticateUser(request: Request) {
   }
   return null
 }
-
-const unauthenticatedQuerys = [
-  'me',
-  'loginUser',
-  'signUp',
-  'user',
-  'token',
-  'id',
-  'email',
-  'name',
-  'lastName',
-  'zipCode',
-  'city',
-  'phone',
-  'address',
-  'VATIN',
-  'uuid',
-  'recoveryPassword'
-]
-
-export const authMiddleWare = async (resolve, parent, args, context, info) => {
-  const result = await resolve(parent, args, context, info)
-  if (context.currentUser) return result
-  else if (unauthenticatedQuerys.includes(info.fieldName)) {
-    return result
-  } else {
-    throw new GraphQLError('unauthorized')
-  }
-}

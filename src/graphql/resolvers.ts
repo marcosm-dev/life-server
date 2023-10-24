@@ -27,10 +27,13 @@ import {
 import { calcExpiresDate } from '../utils/transformers.js'
 import { sendEmail } from '../services/nodemailer.js'
 import { type IProduct } from '../entities/product.entity.d.js'
+import { formatContact, generateInvoceData } from '../utils/format.js'
+import { IOrder } from 'src/entities/order.entity.d.js'
 dotenv.config()
 
 const SECRET = process.env.SECRET ?? ''
 const expiresIn = 604800 // Segundos
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? ''
 
 export const resolvers = {
   User: {
@@ -71,7 +74,7 @@ export const resolvers = {
         return user
       } catch (error) {
         throw new GraphQLError(
-          `No se pudo obtener el usuario: ${error.message}`
+          `No se pudo obtener el usuario: ${(error as Error).message}`
         )
       }
     },
@@ -109,7 +112,7 @@ export const resolvers = {
       } catch (error) {
         console.log(error)
         throw new GraphQLError(
-          `No se pudieron obtener los usuarios ${error.message}`
+          `No se pudieron obtener los usuarios ${(error as Error).message}`
         )
       }
     },
@@ -138,7 +141,9 @@ export const resolvers = {
 
         return categories
       } catch (error) {
-        throw new GraphQLError(`Error al obtener categorías: ${error.message}`)
+        throw new GraphQLError(
+          `Error al obtener categorías: ${(error as Error).message}`
+        )
       }
     },
     getProductById: async (_, { id }) => {
@@ -197,7 +202,9 @@ export const resolvers = {
 
         return products
       } catch (error) {
-        throw new GraphQLError(`Error al obtener productos: ${error.message}`)
+        throw new GraphQLError(
+          `Error al obtener productos: ${(error as Error).message}`
+        )
       }
     },
     getProductsByCategory: async (
@@ -216,7 +223,9 @@ export const resolvers = {
       } catch (error) {
         console.log(error)
         throw new GraphQLError(
-          `Error al obtener productos por categoría: ${error.message}`
+          `Error al obtener productos por categoría: ${
+            (error as Error).message
+          }`
         )
       }
     },
@@ -227,7 +236,7 @@ export const resolvers = {
         return orders
       } catch (error) {
         throw new GraphQLError(
-          `Error al recuperar los pedidos: ${error.message}`
+          `Error al recuperar los pedidos: ${(error as Error).message}`
         )
       }
     },
@@ -237,7 +246,7 @@ export const resolvers = {
         return orders
       } catch (error) {
         return new GraphQLError(
-          `Error al encontrar las órdenes: ${error.message}`
+          `Error al encontrar las órdenes: ${(error as Error).message}`
         )
       }
     },
@@ -246,7 +255,9 @@ export const resolvers = {
         const order = await OrderModel.findById(id)
         return order
       } catch (error) {
-        return new GraphQLError(`Error al encontrar la orden: ${error.message}`)
+        return new GraphQLError(
+          `Error al encontrar la orden: ${(error as Error).message}`
+        )
       }
     },
     getInvoicesById: async (_, { id }) => {
@@ -276,7 +287,9 @@ export const resolvers = {
         console.log(result)
         return result // Devuelve la cantidad de documentos actualizados
       } catch (error) {
-        throw new Error('Error al actualizar productos: ' + error.message)
+        throw new Error(
+          `Error al actualizar productos: ${(error as Error).message}`
+        )
       }
     }
   },
@@ -353,6 +366,9 @@ export const resolvers = {
         products.forEach((p: string) => {
           productObject[p] = (productObject[p] || 0) + 1
         })
+
+        console.log(productObject)
+
         const generateItemsWithProducts = productsInStock.map((pro) => {
           if (!resume[pro.id]) {
             totalAmount += pro?.price
@@ -379,37 +395,23 @@ export const resolvers = {
           products: generateItemsWithProducts
         })
 
+        // updateProductsStock(products)
         user.orders.push(order.id)
         user.save()
 
         return order
       } catch (error) {
         console.log(error)
-        throw new GraphQLError(`Error al crear la orden: ${error.message}`)
+        throw new GraphQLError(
+          `Error al crear la orden: ${(error as Error).message}`
+        )
       }
     },
     sendFacturaDirectaOrder: async (_, { input }, ctx) => {
       const { lines } = input
       const { currentUser } = ctx
+      const contact = formatContact(currentUser)
 
-      const contact = {
-        content: {
-          type: 'contact',
-          main: {
-            name: currentUser.name,
-            fiscalId: currentUser.VATIN,
-            currency: 'EUR',
-            country: 'ES',
-            email: currentUser.email,
-            address: currentUser.address,
-            zipcode: currentUser.zipCode,
-            city: currentUser.city,
-            accounts: {
-              client: '430000'
-            }
-          }
-        }
-      }
       try {
         const { content } = await getOrCreateContact(contact)
         const { uuid } = content
@@ -419,32 +421,14 @@ export const resolvers = {
           await UserModel.findOneAndUpdate({ _id: currentUser.id }, { uuid })
         }
 
-        const order = await OrderModel.findById(input.orderId).populate(
+        const order = (await OrderModel.findById(input.orderId).populate(
           'products'
-        )
-
+        )) as IOrder
         // Crear factura en factura directa
-        const invoice = {
-          content: {
-            type: 'invoice',
-            main: {
-              docNumber: {
-                series: 'F'
-              },
-              // taxIncludedPrices: true,
-              contact: uuid,
-              currency: 'EUR',
-              lines
-            }
-          }
-        }
+        const invoice = generateInvoceData(uuid, lines)
         // Crear factura en factura directa
         const item = await createInvoice(invoice)
-
-        if (item && order) {
-          // order.status = 'SUCCESS'
-          await order.save()
-        }
+        if (item && order) await order.save()
 
         // setTimeout(async() => {
         // 	await Order.deleteMany({ _id: { $ne: order.id } })
@@ -453,7 +437,6 @@ export const resolvers = {
         const to: InvoiceTo = {
           to: [
             currentUser.email
-            // ADMIN_EMAIL,
             // PRINTER_EMAIL,
           ]
         }
@@ -464,7 +447,7 @@ export const resolvers = {
         console.log(error)
 
         throw new GraphQLError(
-          `Error al la crear o enviar factura: ${error.message}`
+          `Error al la crear o enviar factura: ${(error as Error).message}`
         )
       }
     },
@@ -527,7 +510,7 @@ export const resolvers = {
         const html = ORDER_HTML(newUser)
 
         const mailOptions = {
-          to: process.env.ADMIN_EMAIL,
+          to: ADMIN_EMAIL,
           subject: 'Nuevo usuario registrado',
           text: 'Solicito autorización como instalador para comprar material en su aplicación',
           html
@@ -536,7 +519,9 @@ export const resolvers = {
 
         return { user: newUser }
       } catch (error) {
-        throw new GraphQLError('Error al crear el usuario:' + error.message)
+        throw new GraphQLError(
+          `Error al crear el usuario: ${(error as Error).message}`
+        )
       }
     },
     updateUser: async (_, { input }, { currentUser }) => {
@@ -614,13 +599,13 @@ export const resolvers = {
         return user.id
       } catch (error) {
         return new GraphQLError(
-          `Error al crear el token de usuario: ${error.message}`
+          `Error al crear el token de usuario: ${(error as Error).message}`
         )
       }
     },
-    sendEmail: async (_, { input }) => {
+    sendEmail: (_, { input }) => {
       try {
-        await sendEmail(input)
+        sendEmail(input)
         return 'OK'
       } catch (error) {
         throw new GraphQLError(`Error al enviar el email: ${error}`)

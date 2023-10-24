@@ -19,10 +19,10 @@ export type IContact = {
 }
 
 export type Lines = {
-  document: string
+  document?: string
   quantity: number
   tax: string[]
-  text: string
+  text?: string
   unitPrice: number
   account: string
 }

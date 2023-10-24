@@ -31,7 +31,9 @@ async function getContactById(contactId: string) {
     const { data } = await axios.get(URL + path, { headers })
     return data
   } catch (error) {
-    throw new Error(`Error al buscar o crear el contacto: ${error.message}`)
+    throw new Error(
+      `Error al buscar o crear el contacto: ${(error as Error).message}`
+    )
   }
 }
 
@@ -77,9 +79,7 @@ async function sendInvoice(uuid: string, to: InvoiceTo) {
 
     return data
   } catch (error) {
-    throw new Error(
-      `Ha ocurrido algo an enviar la factura email: ${error.message}`
-    )
+    throw new Error(`Ha ocurrido algo an enviar la factura email: ${error}`)
   }
 }
 
