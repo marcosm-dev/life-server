@@ -1,6 +1,7 @@
 import { Document } from 'mongoose'
 
-type ICategory = Document & {
+export type ICategory = Document & {
   name: string
   urlImage: string
+  productsCount: number
 }

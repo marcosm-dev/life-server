@@ -139,7 +139,17 @@ export const resolvers = {
           return []
         }
 
-        return categories
+        const categoriesWithCount = await Promise.all(
+          categories.map(async (category) => {
+            const productsCount = await ProductModel.countDocuments({
+              categoryId: category._id
+            })
+
+            return { ...category.toObject(), id: category._id, productsCount }
+          })
+        )
+
+        return categoriesWithCount
       } catch (error) {
         throw new GraphQLError(
           `Error al obtener categorías: ${(error as Error).message}`

@@ -35,6 +35,7 @@ const typeDefs = /* GraphQL */ `
     id: ID!
     name: String!
     urlImage: String
+    productsCount: Int
   }
 
   type Product {
