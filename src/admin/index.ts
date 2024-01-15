@@ -13,7 +13,6 @@ const MONGO_URI = process.env.MONGO_URI ?? ''
 export const generateAdminJSConfig: () => Promise<AdminJSOptions> =
   async () => {
     const connection = await mongoose.connect(`${MONGO_URI}`)
-    console.log(MONGO_URI)
     return {
       locale: {
         language: 'es',

@@ -478,6 +478,8 @@ export const resolvers = {
       try {
         const user = await UserModel.findOne({ email })
 
+        console.log(user)
+
         if (!user) {
           return new GraphQLError(
             'No existe ningún usuario con ese correo electrónico'

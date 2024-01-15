@@ -18,7 +18,7 @@ export const userSchema = new Schema<IUser, Model<IUser>>(
     VATIN: {
       type: String,
       unique: true,
-      required: true
+      required: false
     },
     phone: {
       type: String,
@@ -30,7 +30,7 @@ export const userSchema = new Schema<IUser, Model<IUser>>(
     },
     city: {
       type: String,
-      required: true
+      required: false
     },
     role: {
       type: String,
