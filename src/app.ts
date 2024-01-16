@@ -22,7 +22,7 @@ const sessionOptions: SessionOptions = {
   secret: process.env.SECRET ?? 'secretpassword',
   resave: false,
   saveUninitialized: false
-}
+} 
 
 export const attachAdminJS = async (app: Express) => {
   const config = await generateAdminJSConfig()

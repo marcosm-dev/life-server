@@ -79,7 +79,7 @@
     "ts-standard": "^12.0.2",
     "tslib": "^2.6.2",
     "typescript": "^5.1.6",
-    "volar-service-vetur": "latest"
+    "volar-service-vetur": "^0.0.17"
   },
   "peerDependencies": {
     "adminjs": "^7.0.0"
