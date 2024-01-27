@@ -461,7 +461,7 @@ export const resolvers = {
       if (!token) return new GraphQLError('unauthorized')
 
       try {
-        const response = await UserTokenModel.findOneAndRemove({ token })
+        const response = await UserTokenModel.findOneAndDelete({ token })
         if (!response) return { deleted: 1, error: 'No estás identificado' }
 
         return { deleted: 1 }
