@@ -189,6 +189,7 @@ const typeDefs = /* GraphQL */ `
   input UserInput {
     name: String
     lastName: String
+    businessName: String
     VATIN: String
     phone: String
     address: String

@@ -418,6 +418,9 @@ export const resolvers = {
       }
     },
     sendFacturaDirectaOrder: async (_, { input }, ctx) => {
+      const PRINTER_EMAIL: string = 'serpica@hpeprint.com'
+      const OWNER_EMAIL: string = 'serpica.sa@hotmail.com'
+
       const { lines } = input
       const { currentUser } = ctx
       const contact = formatContact(currentUser)
@@ -439,16 +442,8 @@ export const resolvers = {
         // Crear factura en factura directa
         const item = await createInvoice(invoice)
         if (item && order) await order.save()
-
-        // setTimeout(async() => {
-        // 	await Order.deleteMany({ _id: { $ne: order.id } })
-        // }, 4000)
-
         const to: InvoiceTo = {
-          to: [
-            currentUser.email
-            // PRINTER_EMAIL,
-          ]
+          to: [currentUser.email, PRINTER_EMAIL, OWNER_EMAIL]
         }
         await sendInvoice(item.content.uuid, to)
 
@@ -530,29 +525,40 @@ export const resolvers = {
         sendEmail(mailOptions)
 
         return { user: newUser }
-      } catch (error) {
-        throw new GraphQLError(
-          `Error al crear el usuario: ${(error as Error).message}`
-        )
+      } catch (error: unknown) {
+        // ts-ignore
+        const errorString = (error as Error)?.message.toString() ?? ''
+        let errorMessage = ''
+
+        if (errorString.includes('VATIN'))
+          errorMessage = 'DNI duplicado o incorrecto'
+        else if (errorString.includes('phone'))
+          errorMessage = 'Teléfono duplicado o incorrecto'
+        else if (errorString.includes('password'))
+          errorMessage = 'Por favor, el inserte una contraseña válida'
+        throw new GraphQLError(`Error al crear el usuario: ${errorMessage}`)
       }
     },
     updateUser: async (_, { input }, { currentUser }) => {
       const { id, token, password } = currentUser
       const { oldPassword } = input
+      console.log('INPPUT: ', input)
 
       try {
         // Construye un objeto con los campos del input para actualizar
         const updateFields = {}
+        console.log(input)
         for (const field in input) {
           if (field === 'password') {
             await argon2.verify(password, oldPassword)
 
             updateFields[field] = await argon2.hash(input.password)
           } else {
-            // updateFields[field] = input[field]
+            updateFields[field] = input[field]
           }
         }
 
+        console.log('updatedFields:', updateFields)
         // Actualiza el usuario solo con los campos proporcionados en el input
         const updatedUser = await UserModel.findByIdAndUpdate(
           id,
@@ -562,6 +568,7 @@ export const resolvers = {
             fields: { id: true, name: true, lastName: true, email: true }
           }
         )
+        console.log(updatedUser)
 
         if (!input?.id) {
           await UserTokenModel.deleteOne({ token })

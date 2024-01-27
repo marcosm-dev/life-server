@@ -42,5 +42,5 @@ export type IInvoice = {
   }
 }
 export type InvoiceTo = {
-  to: [string]
+  to: string[]
 }
