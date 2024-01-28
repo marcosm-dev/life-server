@@ -25,9 +25,9 @@ export const generateAdminJSConfig: () => Promise<AdminJSOptions> =
       logoutPath: '/admin/exit',
       loginPath: '/admin/sign-in',
       branding: {
-        companyName: 'LIFE',
-        logo: '/static/logo.svg',
-        favicon: '/static/life-logo-color.png'
+        companyName: 'SERPICA CANARIAS',
+        logo: '/static/aprimatic_logo.png',
+        favicon: '/static/aprimatic_logo.png'
       },
       // componentLoader,
       resources,
