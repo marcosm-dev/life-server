@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "jsx": "preserve",
     "baseUrl": "./",
     // "paths": {
-    //   "@/*":  ["./src/*"],
+    //   "@/*":  ["./src/*"]
     // },
     "outDir": "./dist",
     "target": "esnext",
@@ -20,6 +21,6 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "include": ["./src/**/*.ts", "../src/**/*", ".eslintrc.cjs"],
+  "include": ["./src/**/*.ts", "./src/**/*.mts", "../src/**/*", ".eslintrc.cjs", "src/brands/resolvers/brand.resolver.ts"],
   "exclude": ["node_modules"]
 }

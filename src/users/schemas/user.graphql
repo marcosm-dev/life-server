@@ -45,6 +45,7 @@ type UserAuthResponse {
 type Query {
   me: User
   getUser(id: ID!): User
+  getAllUsers: [User]
 }
 
 type Mutation {

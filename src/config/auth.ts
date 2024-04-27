@@ -7,7 +7,7 @@ export interface AuthTokenPayload {
   usuario: any
 }
 
-export function decodeAuthHeader(authHeader: String): AuthTokenPayload {
+export function decodeAuthHeader(authHeader: string): AuthTokenPayload {
   const token = authHeader.replace('Bearer ', '')
   if (!APP_SECRET) {
     throw new Error('APP_SECRET is not defined')

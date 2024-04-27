@@ -1,7 +1,7 @@
 import { UserModel } from '../../users/models/User.js'
 
 const User = {
-  resource: UserModel
+  resource: UserModel,
 }
 
 export default User

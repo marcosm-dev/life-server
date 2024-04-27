@@ -9,8 +9,8 @@ const transporter = nodemailer.createTransport({
   secure: true,
   auth: {
     user: 'serpica.sl@gmail.com',
-    pass: process.env.NODEMAILER_SECRET
-  }
+    pass: process.env.NODEMAILER_SECRET,
+  },
 })
 
 // Verificar transport 'No necesario'
@@ -26,7 +26,7 @@ export const sendEmail = ({ to, subject, html }: MailOptions) => {
     from: process.env.ADMIN_EMAIL,
     to,
     subject,
-    html
+    html,
   }
 
   transporter.sendMail(mailOptions, (error, info) => {

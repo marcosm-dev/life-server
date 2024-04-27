@@ -6,14 +6,14 @@ const Product = {
     properties: {
       categoryId: {
         type: 'ID',
-        reference: 'Category'
+        reference: 'Category',
       },
       brand: {
         type: 'ID',
-        reference: 'Brand'
-      }
-    }
-  }
+        reference: 'Brand',
+      },
+    },
+  },
 }
 
 export default Product

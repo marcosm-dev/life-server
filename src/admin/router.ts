@@ -10,7 +10,7 @@ const NODE = process.env.NODE_ENV
 // const IS_DEV = process.env.DEV;
 
 const authenticateUser = async (email: string, password: string) => {
-  const user = (await UserModel.findOne({ email })) as IUser | null
+  const user = await UserModel.findOne({ email })
   if (user) {
     const isTrusted = await argon2.verify(user.password, password)
     const { role } = user
@@ -30,7 +30,7 @@ export const adminJSRouter = (
     {
       authenticate: authenticateUser,
       cookieName: 'adminjs',
-      cookiePassword: SECRET ?? 'sessionsecret'
+      cookiePassword: SECRET ?? 'sessionsecret',
     },
     router,
     {
@@ -39,9 +39,9 @@ export const adminJSRouter = (
       secret: SECRET ?? 'sessionsecret',
       cookie: {
         httpOnly: true,
-        secure: NODE === 'production'
+        secure: NODE === 'production',
       },
-      name: 'adminjs'
+      name: 'adminjs',
     }
   )
 }

@@ -3,7 +3,7 @@ import { IProduct } from '../../products/interfaces/product.interface.js'
 
 export enum UserRole {
   Admin = 'ADMIN',
-  User = 'INSTALADOR'
+  User = 'INSTALADOR',
 }
 export interface IUser {
   id: string

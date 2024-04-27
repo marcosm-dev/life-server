@@ -6,9 +6,9 @@ export const cartItemSchema = new Schema({
   TAX: Number,
   productId: {
     type: Types.ObjectId,
-    ref: 'Product'
+    ref: 'Product',
   },
-  productDeleted: Schema.Types.Mixed
+  productDeleted: Schema.Types.Mixed,
 })
 
 export const CartItemNidek = model('CartItem', cartItemSchema)

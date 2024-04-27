@@ -11,7 +11,6 @@ dotenv.config()
 
 export async function authenticateUser(request: Request) {
   const header = request.headers.get('authorization')
-  console.log(header)
 
   if (header) {
     const [, token] = header.split(' ')
@@ -22,9 +21,9 @@ export async function authenticateUser(request: Request) {
       const [userResponse, tokenResponse] = (await Promise.all([
         UserModel.findById(userId).populate([
           { path: 'orders' },
-          { path: 'wishes' }
+          { path: 'wishes' },
         ]),
-        UserTokenModel.findOne({ token })
+        UserTokenModel.findOne({ token }),
       ])) as [IUser, IUserToken]
       const user: IUser | null = userResponse
 

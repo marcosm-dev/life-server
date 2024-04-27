@@ -9,9 +9,9 @@ const Brand = {
       },
       image: {
         type: 'string',
-      }
-    }
-  }
+      },
+    },
+  },
 }
 
 export default Brand

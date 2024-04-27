@@ -6,7 +6,7 @@ const orderStatusEnum: [
   'COMPLETADA',
   'AUTHORIZED',
   'CANCELADA',
-  'FALLO'
+  'FALLO',
 ] = ['PENDIENTE', 'COMPLETADA', 'AUTHORIZED', 'CANCELADA', 'FALLO']
 
 export const orderSchema = new Schema(
@@ -16,25 +16,25 @@ export const orderSchema = new Schema(
     status: {
       type: String,
       enum: orderStatusEnum,
-      default: 'PENDIENTE'
+      default: 'PENDIENTE',
     },
     TAX: {
-      type: Number
+      type: Number,
     },
     owner: {
       type: Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     refund: {
       type: Boolean,
-      default: false
+      default: false,
     },
     uuid: {
       type: Schema.Types.UUID,
-      required: false
+      required: false,
     },
-    products: [cartItemSchema]
+    products: [cartItemSchema],
   },
   { timestamps: true }
 )

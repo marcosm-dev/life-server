@@ -17,7 +17,9 @@ async function startServer(): Promise<void> {
     await buildAdmin(app, db)
 
     app.listen(port, () => {
-      console.info(`\nYogaGraphQL Express corriendo en:\nhttp://localhost:${port}/graphql`)
+      console.info(
+        `\nYogaGraphQL Express corriendo en:\nhttp://localhost:${port}/graphql`
+      )
       console.info(`Admin corriendo en:\nhttp://localhost:${port}/admin`)
     })
   } catch (error) {

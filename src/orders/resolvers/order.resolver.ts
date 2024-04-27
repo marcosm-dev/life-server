@@ -3,16 +3,19 @@ import { UserModel } from '../../users/models/User.js'
 import { OrderModel } from '../models/Order.js'
 import { ProductModel } from '../../products/models/Product.js'
 import { IProduct } from '../../products/interfaces/product.interface.js'
-import { MutationCreateOrderArgs, MutationRemoveOrderByIdArgs, QueryGetOrderByIdArgs, Resolvers } from '../../generated/graphql.js'
+import {
+  MutationCreateOrderArgs,
+  MutationRemoveOrderByIdArgs,
+  QueryGetOrderByIdArgs,
+  Resolvers,
+} from '../../generated/graphql.js'
 
 export const resolvers: Resolvers = {
   Order: {
-    owner: async (
-      _parent: any,
-    ): Promise<any> => {
+    owner: async (_parent: any): Promise<any> => {
       const owner = await UserModel.findById(_parent.owner)
       return owner
-    }
+    },
   },
   Query: {
     getMyOrders: async (
@@ -23,7 +26,7 @@ export const resolvers: Resolvers = {
       const { currentUser } = context
       try {
         const orders = await OrderModel.find({ owner: currentUser.id })
-  
+
         return orders
       } catch (error) {
         throw new GraphQLError(
@@ -47,7 +50,7 @@ export const resolvers: Resolvers = {
       context: any
     ): Promise<any> => {
       const { id } = params
-      
+
       try {
         const order = await OrderModel.findById(id)
         return order
@@ -67,28 +70,28 @@ export const resolvers: Resolvers = {
       const { userId, products } = input
       // Tasa de IGIC (7%)
       const IGIC = 0.07
-  
+
       const resume = {} as any
       let totalAmount = 0
-  
+
       try {
         // Verificar si el usuario existe
         const user = await UserModel.findById(userId)
         if (!user) throw new GraphQLError('El usuario no existe.')
-  
+
         // Verificar stock de productos
-        const productsInStock = await ProductModel.find({
+        const productsInStock = (await ProductModel.find({
           _id: { $in: products },
-          stock: { $gt: 0 }
-        }) as IProduct[] | []
-  
+          stock: { $gt: 0 },
+        })) as IProduct[] | []
+
         const productObject: Record<string, number> = {}
-  
+
         products.forEach((p: string) => {
           productObject[p] = (productObject[p] || 0) + 1
         })
-  
-        const generateItemsWithProducts = productsInStock.map((pro) => {
+
+        const generateItemsWithProducts = productsInStock.map(pro => {
           const id = String(pro.id)
           if (!resume[id]) {
             totalAmount += pro?.price
@@ -96,28 +99,28 @@ export const resolvers: Resolvers = {
             const amount = quantity * pro?.price
             const TAX = (amount * IGIC).toFixed(2)
             resume[id] = true
-  
+
             return {
               TAX,
               quantity,
               amount,
-              productId: id
+              productId: id,
             }
           }
         })
-  
+
         // Crear la orden en la base de datos
         const order = await OrderModel.create({
           amount: totalAmount,
           owner: userId,
           status: 'PENDIENTE',
-          products: generateItemsWithProducts
+          products: generateItemsWithProducts,
         })
-  
+
         // updateProductsStock(products)
         user.orders.push(order.id)
         user.save()
-  
+
         return order
       } catch (error) {
         console.log(error)
@@ -126,7 +129,7 @@ export const resolvers: Resolvers = {
         )
       }
     },
-    removeOrderById: async(
+    removeOrderById: async (
       _parent: any,
       { orderId }: MutationRemoveOrderByIdArgs,
       context: any
@@ -137,5 +140,5 @@ export const resolvers: Resolvers = {
         return new GraphQLError('No se ha podido eliminar la orden')
       }
     },
-  }
+  },
 }

@@ -72,7 +72,6 @@ export type FacturaInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   addProductToWishes: User;
-  brandsUpdate: Scalars['JSON']['output'];
   createOrder: Order;
   createProductsFromFacturaDirecta: Scalars['String']['output'];
   createUser: User;
@@ -201,6 +200,7 @@ export type Query = {
   getAllCategories: Array<Category>;
   getAllOrders?: Maybe<Array<Order>>;
   getAllProducts: Array<Product>;
+  getAllUsers?: Maybe<Array<Maybe<User>>>;
   getCategoryById: Category;
   getInvoices?: Maybe<Scalars['JSON']['output']>;
   getInvoicesById?: Maybe<Scalars['JSON']['output']>;
@@ -488,7 +488,6 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   addProductToWishes?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddProductToWishesArgs, 'productId'>>;
-  brandsUpdate?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   createOrder?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<MutationCreateOrderArgs, 'input'>>;
   createProductsFromFacturaDirecta?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
@@ -537,6 +536,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getAllCategories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType, Partial<QueryGetAllCategoriesArgs>>;
   getAllOrders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>;
   getAllProducts?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
+  getAllUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   getCategoryById?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<QueryGetCategoryByIdArgs, 'id'>>;
   getInvoices?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   getInvoicesById?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType, RequireFields<QueryGetInvoicesByIdArgs, 'id'>>;

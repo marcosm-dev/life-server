@@ -10,5 +10,5 @@ export const resources: AdminJSOptions['resources'] = [
   CategoryModel,
   ProductModel,
   OrderModel,
-  UserModel
+  UserModel,
 ]

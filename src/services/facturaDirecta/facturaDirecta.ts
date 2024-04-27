@@ -5,7 +5,7 @@ import axios from 'axios'
 import {
   type IContact,
   type IInvoice,
-  type InvoiceTo
+  type InvoiceTo,
 } from './factura-directa.js'
 
 const CLIENT_ID = process.env.FACTURA_DIRECTA_CLIENT_ID
@@ -20,7 +20,7 @@ const URL = `${API_URI}/${CLIENT_ID}`
 // Función para realizar una solicitud a la API de facturadirecta
 
 const headers = {
-  'facturadirecta-api-key': `${API_KEY}`
+  'facturadirecta-api-key': `${API_KEY}`,
 }
 
 async function getContactById(contactId: string) {
@@ -38,13 +38,13 @@ async function getContactById(contactId: string) {
 
 async function getOrCreateContact(payload: IContact) {
   const {
-    content: { main }
+    content: { main },
   } = payload
 
   try {
     // Comprobar si existe ya el usuario en Factura Directa
     const { data } = await axios.get(URL + `/contacts?search=${main.email}`, {
-      headers
+      headers,
     })
     if (data?.items.length) {
       return data.items[0]
@@ -73,7 +73,7 @@ async function createInvoice(payload: IInvoice) {
 async function sendInvoice(uuid: string, to: InvoiceTo) {
   try {
     const { data } = await axios.put(`${URL}/invoices/${uuid}/send`, to, {
-      headers
+      headers,
     })
 
     return data
@@ -85,7 +85,7 @@ async function sendInvoice(uuid: string, to: InvoiceTo) {
 async function getInvoiceListById(id: string) {
   try {
     const { data } = await axios(`${URL}/invoices/?contact=${id}`, {
-      headers
+      headers,
     })
     const invoices = data.items.filter(
       ({ content }: IInvoice) => content.main.contact === id
@@ -144,5 +144,5 @@ export {
   getOrCreateContact,
   createInvoice,
   getInvoices,
-  getInvoiceListById
+  getInvoiceListById,
 }

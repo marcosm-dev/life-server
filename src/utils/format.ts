@@ -16,28 +16,31 @@ export const formatContact = (user: IUser) => {
         zipcode: user.zipCode,
         city: user.city,
         accounts: {
-          client: '430000'
-        }
-      }
-    }
+          client: '430000',
+        },
+      },
+    },
   }
   return contact
 }
 
-export const generateInvoceData = (uuid: string, lines: OrderLines[]): IInvoice => {
+export const generateInvoceData = (
+  uuid: string,
+  lines: OrderLines[]
+): IInvoice => {
   const invoice = {
     content: {
       type: 'invoice',
       main: {
         docNumber: {
-          series: 'F'
+          series: 'F',
         },
         // taxIncludedPrices: true,
         contact: uuid,
         currency: 'EUR',
-        lines
-      }
-    }
+        lines,
+      },
+    },
   }
   return invoice
 }

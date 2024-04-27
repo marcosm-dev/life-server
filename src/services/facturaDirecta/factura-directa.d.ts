@@ -1,6 +1,6 @@
 import { OrderLines } from '../generated/graphql'
 
-export type IContact = {
+export interface IContact {
   content: {
     type: string
     main: {
@@ -20,7 +20,7 @@ export type IContact = {
   }
 }
 
-export type Lines = {
+export interface Lines {
   document?: string
   quantity: number
   tax: string[]
@@ -29,7 +29,7 @@ export type Lines = {
   account: string
 }
 
-export type IInvoice = {
+export interface IInvoice {
   content: {
     type: string
     main: {
@@ -43,6 +43,6 @@ export type IInvoice = {
     }
   }
 }
-export type InvoiceTo = {
+export interface InvoiceTo {
   to: string[]
 }

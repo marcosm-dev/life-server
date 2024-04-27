@@ -1,4 +1,4 @@
-import { type Model, Schema, model } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import { type IUser } from '../interfaces/user.inteface.js'
 import validator from 'validator'
 
@@ -10,42 +10,42 @@ export const userSchema = new Schema<IUser>(
     email: {
       type: String,
       unique: true,
-      required: true
+      required: true,
     },
     businessName: {
       type: String,
-      unique: true
+      unique: true,
     },
     VATIN: {
       type: String,
       unique: true,
-      required: false
+      required: false,
     },
     phone: {
       type: String,
-      unique: true
+      unique: true,
     },
     address: String,
     zipCode: {
-      type: String
+      type: String,
     },
     city: {
       type: String,
-      required: false
+      required: false,
     },
     role: {
       type: String,
-      enum: ['ADMIN', 'USER']
+      enum: ['ADMIN', 'USER'],
     },
     password: {
       type: String,
-      required: false
+      required: false,
     },
     wishes: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
     orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
     access: {
       type: Boolean,
-      default: false
+      default: false,
     },
     uuid: {
       type: String,
@@ -53,13 +53,13 @@ export const userSchema = new Schema<IUser>(
       validate: {
         validator: (value: any) => {
           if (typeof value !== 'string') {
-            return false;
+            return false
           }
-          return validator.isUUID(value);
+          return validator.isUUID(value)
         },
-        message: 'El valor ingresado no es un UUID válido'
+        message: 'El valor ingresado no es un UUID válido',
       },
-    }
+    },
   },
   { timestamps: true }
 )

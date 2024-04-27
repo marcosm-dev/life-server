@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose'
 export const brandSchema = new Schema(
   {
     name: String,
-    image: String
+    image: String,
   },
   { timestamps: true }
 )

@@ -1,4 +1,4 @@
-import { createYoga } from 'graphql-yoga'
+import { createSchema, createYoga } from 'graphql-yoga'
 import { logger } from './logger.js'
 import { schema } from './schema.js'
 import { createContext, GraphQLContext } from './context.js'
@@ -15,7 +15,7 @@ export const yoga = createYoga<{} | GraphQLContext>({
           name
         }
       }
-    `
+    `,
   },
   logging: {
     debug(...args) {
@@ -30,7 +30,6 @@ export const yoga = createYoga<{} | GraphQLContext>({
     },
     error(...args) {
       logger.error([...args])
-    }
-  }
+    },
+  },
 })
-

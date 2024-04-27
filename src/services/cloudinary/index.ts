@@ -5,7 +5,7 @@ import * as path from 'path'
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 export async function uploadFilesToCloudinary(
   folderPath: string
@@ -21,7 +21,7 @@ export async function uploadFilesToCloudinary(
       const result = await cloudinary.v2.uploader.upload(filePath, {
         folder: 'catetorias',
         public_id: file,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
 
       console.log(`Archivo subido: ${result.url}`)

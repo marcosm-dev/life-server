@@ -7,6 +7,6 @@ type Query {
   getAllBrands: [Brand]
 }
 
-type Mutation {
-  brandsUpdate: JSON!
-}
+# type Mutation {
+#   brandsUpdate: JSON!
+# }

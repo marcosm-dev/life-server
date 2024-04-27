@@ -1,6 +1,9 @@
 import { GraphQLError } from 'graphql'
 import { ProductModel } from '../models/Product.js'
-import { QueryGetProductByIdArgs, QuerySearchProductsByTextArgs } from 'src/generated/graphql.js'
+import {
+  QueryGetProductByIdArgs,
+  QuerySearchProductsByTextArgs,
+} from '../../generated/graphql.js'
 import { QueryGetProductsByCategoryArgs } from '../../generated/graphql.js'
 
 export const resolvers = {
@@ -16,12 +19,12 @@ export const resolvers = {
           $or: [
             { name: { $regex: text, $options: 'i' } }, // 'i' hace que la búsqueda sea insensible a mayúsculas/minúsculas
             { description: { $regex: text, $options: 'i' } },
-            { category: { $regex: text, $options: 'i' } }
-          ]
+            { category: { $regex: text, $options: 'i' } },
+          ],
         })
           .populate('categoryId')
           .populate('brand')
-  
+
         return products
       } catch (error) {
         throw new GraphQLError(`Error al buscar: ${error}`)
@@ -50,7 +53,7 @@ export const resolvers = {
         if (!products || products.length === 0) {
           return []
         }
-  
+
         // ProductModel.updateMany({}, { $unset: { urlImage: 1 } }, (err, result) => {
         //   console.log(result)
         //   if (err) {
@@ -59,12 +62,12 @@ export const resolvers = {
         //     console.log('Campo urlImage eliminado con éxito en todos los productos.')
         //   }
         // })
-  
+
         // const limpiarNombre = (nombre) => {
         //   // Reemplazar espacios y caracteres especiales por _
         //   return nombre.toLowerCa se().replace(/[^\w]/g, '_') + '.png'
         // }
-  
+
         // if (products) {
         //   products.forEach(async (producto) => {
         //     // Genera el nombre de la imagen en minúsculas y separado por '_'
@@ -85,7 +88,7 @@ export const resolvers = {
         //     }
         //   })
         // }
-  
+
         return products
       } catch (error) {
         throw new GraphQLError(
@@ -102,11 +105,11 @@ export const resolvers = {
       try {
         const products = await ProductModel.find({ categoryId })
           .sort({
-            price: 1
+            price: 1,
           })
           .populate('categoryId')
           .populate('brand')
-  
+
         return products
       } catch (error) {
         console.log(error)
@@ -117,5 +120,5 @@ export const resolvers = {
         )
       }
     },
-  }
+  },
 }
