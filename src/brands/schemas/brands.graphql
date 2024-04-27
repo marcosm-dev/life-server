@@ -1,0 +1,9 @@
+type Brand {
+  id: ID!
+  name: String!
+  image: String
+}
+type Query {
+  brandsUpdate: JSON!
+  getAllBrands: [Brand]
+}

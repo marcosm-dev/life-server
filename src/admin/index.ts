@@ -1,5 +1,4 @@
 // import i18next from 'i18next'
-import mongoose from 'mongoose'
 import { dark, light, noSidebar } from '@adminjs/themes'
 import { type AdminJSOptions } from 'adminjs'
 import { resources } from './resources/index.js'
@@ -8,18 +7,15 @@ dotenv.config()
 
 // import { componentLoader } from './components.bundler.js';
 
-const MONGO_URI = process.env.MONGO_URI ?? ''
-
-export const generateAdminJSConfig: () => Promise<AdminJSOptions> =
-  async () => {
-    const connection = await mongoose.connect(`${MONGO_URI}`)
+export const generateAdminJSConfig: (db: any) => Promise<AdminJSOptions> =
+  async (db) => {
     return {
       locale: {
         language: 'es',
         availableLanguages: ['es', 'it', 'en'],
         localeDetection: true
       },
-      databases: [connection],
+      databases: [db],
       version: { admin: true, app: '1.0.0' },
       rootPath: '/admin',
       logoutPath: '/admin/exit',

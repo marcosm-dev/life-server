@@ -1,9 +1,9 @@
-import { type IUser } from '../entities/user.entity.d.js'
-import AdminJSExpress from '@adminjs/express'
-import type AdminJS from 'adminjs'
 import argon2 from 'argon2'
+import AdminJSExpress from '@adminjs/express'
+import { UserModel } from '../users/models/User.js'
+import type AdminJS from 'adminjs'
 import { type Router } from 'express'
-import { UserModel } from '../entities/user.entity.js'
+import { IUser, UserRole } from '../users/interfaces/user.inteface.js'
 
 const SECRET = process.env.SECRET
 const NODE = process.env.NODE_ENV
@@ -14,7 +14,7 @@ const authenticateUser = async (email: string, password: string) => {
   if (user) {
     const isTrusted = await argon2.verify(user.password, password)
     const { role } = user
-    if (isTrusted && user && role === 'ADMIN') {
+    if (isTrusted && user && role === UserRole.Admin) {
       return user
     }
   }

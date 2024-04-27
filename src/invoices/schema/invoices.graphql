@@ -1,0 +1,13 @@
+type Query {
+  getInvoicesById(id: ID!): JSON
+  getInvoices: JSON
+}
+
+type Mutation {
+  sendFacturaDirectaOrder(input: FacturaInput!): JSON!
+}
+
+input FacturaInput {
+  orderId: ID
+  lines: [OrderLines!]!
+}

@@ -1,0 +1,13 @@
+scalar JSON
+
+enum ResponseStatus {
+  OK
+  KO
+}
+
+enum TAX {
+  S_IGIC_7
+  S_IVA_21
+}
+
+

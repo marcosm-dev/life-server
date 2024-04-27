@@ -1,0 +1,40 @@
+
+type Product {
+  id: ID!
+  amount: Float!
+  name: String!
+  description: String
+  price: Float
+  accessories: String
+  urlMoreInfo: String
+  stock: Int!
+  imagen: String
+  urlImage: String
+  brand: Brand
+  categoryId: Category!
+  uuid: ID
+  wishes: [User]
+}
+
+type Query {
+  searchProductsByText(text: String): [Product]
+  getProductsByCategory(categoryId: ID!): [Product!]!
+  getAllProducts: [Product!]!
+  getProductById(id: ID!): Product!
+}
+
+type Mutation {
+  addProductToWishes(productId: ID!): User!
+  createProductsFromFacturaDirecta: String!
+}
+
+input ProductInput {
+  name: String!
+  description: String
+  price: Float
+  accessories: String
+  urlMoreInfo: String
+  stock: Int!
+  urlImage: String
+  categoryId: ID!
+}

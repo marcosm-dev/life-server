@@ -1,32 +1,20 @@
+// @ts-check
+
 module.exports = {
-  env: {
-    browser: true,
-    es2021: true
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    project: "./tsconfig.json"
+  },
+  rules: {
+    "@typescript-eslint/dot-notation": "error"
   },
   extends: [
-    'prettier',
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended-type-checked',
+    'plugin:@typescript-eslint/stylistic-type-checked',
+    'prettier',
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended'
+    'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/strict'
   ],
-  overrides: [
-    {
-      env: {
-        node: true
-      },
-      files: ['.eslintrc.{js,cjs}'],
-      parserOptions: {
-        sourceType: 'script'
-      }
-    }
-  ],
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module'
-  },
-  plugins: ['prettier', '@typescript-eslint'],
-  rules: {
-    'prettier/prettier': 'error'
-  }
-}
+};

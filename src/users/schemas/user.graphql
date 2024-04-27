@@ -1,0 +1,72 @@
+enum Role {
+  ADMIN
+  INSTALADOR
+}
+
+enum TokenState {
+  SIGN_IN
+  RECOVERY
+}
+
+type User {
+  id: ID!
+  token: String
+  name: String!
+  lastName: String
+  VATIN: String
+  phone: String!
+  businessName: String
+  address: String
+  zipCode: String
+  wishes: [Product]
+  city: String
+  email: String!
+  role: Role!
+  password: String!
+  access: Boolean!
+  orders: [Order]
+  createdAt: String!
+  updatedAt: String!
+  uuid: ID
+}
+
+type UserToken {
+  token: String!
+  user: ID!
+  type: TokenState!
+  createdAt: String!
+  expiresAt: String!
+}
+type UserAuthResponse {
+  user: User
+  error: String
+  token: String
+}
+type Query {
+  me: User
+  getUser(id: ID!): User
+}
+
+type Mutation {
+  createUser(input: UserInput!): User!
+  updateUser(input: UserInput!): User!
+  loginUser(email: String!, password: String!): UserAuthResponse!
+  logoutUser: JSON!
+  signUp(input: UserInput!): UserAuthResponse!
+  recoveryPassword(email: String): ID!
+}
+input UserInput {
+  name: String
+  lastName: String
+  businessName: String
+  VATIN: String
+  phone: String
+  address: String
+  zipCode: String
+  city: String
+  email: String
+  role: Role
+  password: String
+  oldPassword: String
+  access: Boolean
+}

@@ -1,9 +1,8 @@
 import { type AdminJSOptions } from 'adminjs'
-
-import { CategoryModel } from '../../entities/category.entity.js'
-import { ProductModel } from '../../entities/product.entity.js'
-import { OrderModel } from '../../entities/order.entity.js'
-import { UserModel } from '../../entities/user.entity.js'
+import { CategoryModel } from '../../categories/models/Category.js'
+import { OrderModel } from '../../orders/models/Order.js'
+import { ProductModel } from '../../products/models/Product.js'
+import { UserModel } from '../../users/models/User.js'
 
 export const resources: AdminJSOptions['resources'] = [
   CategoryModel,

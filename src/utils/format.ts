@@ -1,5 +1,5 @@
-import { IInvoice, Lines } from '../services/factura-directa.d.js'
-import { IUser } from '../entities/user.entity.d.js'
+import { IUser } from '../users/interfaces/user.inteface.js'
+import { IInvoice, Lines } from '../services/facturaDirecta/factura-directa.js'
 
 export const formatContact = (user: IUser) => {
   const contact = {

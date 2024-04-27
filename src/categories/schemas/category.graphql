@@ -1,0 +1,11 @@
+type Category {
+  id: ID!
+  name: String!
+  urlImage: String
+  productsCount: Int
+}
+
+type Query {
+  getCategoryById(id: ID!): Category!
+  getAllCategories(limit: Int, skip: Int): [Category!]!
+}

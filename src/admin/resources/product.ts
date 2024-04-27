@@ -1,4 +1,5 @@
-import { ProductModel } from '../../entities/product.entity.js'
+import { ProductModel } from "../../products/models/Product.js"
+
 const Product = {
   resource: ProductModel,
   options: {

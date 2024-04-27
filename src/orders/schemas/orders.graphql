@@ -1,0 +1,60 @@
+enum OrderStatus {
+  PENDIENTE
+  COMPLETADA
+  AUTORIZADO
+  CANCELADA
+  FALLO
+}
+
+type CartItem {
+  quantity: Int!
+  amount: Float!
+  TAX: Float!
+  product: Product
+  orderId: ID!
+}
+
+type Order {
+  id: ID!
+  amount: Float!
+  owner: User!
+  status: OrderStatus!
+  refund: Boolean!
+  products: [CartItem!]!
+  uuid: ID!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Query {
+  getAllOrders: [Order!]
+  getMyOrders: [Order!]
+  getOrderById(id: ID!): Order!
+}
+
+type Mutation {
+  sendFacturaDirectaOrder(input: FacturaInput!): JSON!
+  createOrder(input: OrderInput!): Order!
+  removeOrderById(orderId: ID!): JSON!
+}
+
+input CartItemInput {
+  quantity: Int!
+  amount: Int!
+  productId: ID!
+  orderId: ID!
+}
+
+input OrderInput {
+  userId: ID!
+  products: [ID!]!
+}
+
+input OrderLines {
+  account: String
+  document: String
+  quantity: Float
+  tax: [TAX]
+  text: String
+  unitPrice: Float
+}

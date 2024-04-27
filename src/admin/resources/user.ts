@@ -1,4 +1,4 @@
-import { UserModel } from '../../entities/user.entity.js'
+import { UserModel } from "../../users/models/User.js"
 
 const User = {
   resource: UserModel
