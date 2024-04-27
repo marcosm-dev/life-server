@@ -1,3 +1,5 @@
+import { OrderLines } from '../generated/graphql'
+
 export type IContact = {
   content: {
     type: string
@@ -37,7 +39,7 @@ export type IInvoice = {
       contact: string
       taxIncludedPrices?: boolean
       currency: string
-      lines: Lines[]
+      lines: OrderLines[]
     }
   }
 }

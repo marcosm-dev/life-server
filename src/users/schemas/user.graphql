@@ -48,14 +48,31 @@ type Query {
 }
 
 type Mutation {
-  createUser(input: UserInput!): User!
-  updateUser(input: UserInput!): User!
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
   loginUser(email: String!, password: String!): UserAuthResponse!
   logoutUser: JSON!
-  signUp(input: UserInput!): UserAuthResponse!
+  signUp(input: CreateUserInput!): UserAuthResponse!
   recoveryPassword(email: String): ID!
 }
-input UserInput {
+
+input CreateUserInput {
+  name: String
+  lastName: String
+  businessName: String
+  VATIN: String
+  phone: String
+  address: String
+  zipCode: String
+  city: String
+  email: String
+  role: Role
+  password: String
+  oldPassword: String
+  access: Boolean
+}
+
+input UpdateUserInput {
   name: String
   lastName: String
   businessName: String

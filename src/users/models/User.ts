@@ -51,7 +51,7 @@ export const userSchema = new Schema<IUser>(
       type: String,
       required: false,
       validate: {
-        validator: (value) => {
+        validator: (value: any) => {
           if (typeof value !== 'string') {
             return false;
           }

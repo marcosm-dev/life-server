@@ -1,8 +1,8 @@
 // import i18next from 'i18next'
-import { dark, light, noSidebar } from '@adminjs/themes'
 import { type AdminJSOptions } from 'adminjs'
 import { resources } from './resources/index.js'
 import * as dotenv from 'dotenv'
+import { dark, light, noSidebar } from '@adminjs/themes'
 dotenv.config()
 
 // import { componentLoader } from './components.bundler.js';

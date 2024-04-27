@@ -106,7 +106,7 @@ async function getInvoices() {
   }
 }
 
-async function createProduct(product) {
+async function createProduct(product: any) {
   try {
     const { data } = await axios.post(URL + '/products', product, { headers })
     console.log(data)

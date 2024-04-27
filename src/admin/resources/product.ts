@@ -1,4 +1,4 @@
-import { ProductModel } from "../../products/models/Product.js"
+import { ProductModel } from '../../products/models/Product.js'
 
 const Product = {
   resource: ProductModel,

@@ -4,6 +4,9 @@ type Brand {
   image: String
 }
 type Query {
-  brandsUpdate: JSON!
   getAllBrands: [Brand]
+}
+
+type Mutation {
+  brandsUpdate: JSON!
 }

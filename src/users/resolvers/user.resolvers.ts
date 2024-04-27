@@ -6,15 +6,23 @@ import * as dotenv from 'dotenv'
 import { calcExpiresDate } from '../../utils/transformers.js'
 import { UserTokenModel } from '../models/UserToken.js'
 import { OrderModel } from '../../orders/models/Order.js'
+import { MutationRecoveryPasswordArgs, MutationUpdateUserArgs, QueryGetUserArgs, Resolvers, UpdateUserInput } from '../../generated/graphql.js'
+import { GraphQLContext } from '../../config/context.js'
+import { IUser } from '../interfaces/user.inteface.js'
 
 dotenv.config()
 
 const secret = process.env.SECRET ?? ''
 // const appUrl = process.env.APP_URL ?? ''
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   User: {
-    orders: async (parent, args, { currentUser }) => {
+    orders: async (
+      _parent: any,
+      _args: any,
+      context: GraphQLContext
+    ): Promise<any> => {
+      const { currentUser } = context
       try {
         const isOwer = parent.name === currentUser?.id
         const orders = await OrderModel.find(
@@ -28,11 +36,21 @@ export const resolvers = {
       }
     }
   },
-  me: async (parent, args, { currentUser }) => {
+  me: async (
+    _parent: any,
+    _args: any,
+    context: GraphQLContext
+  ): Promise<any> => {
+    const { currentUser } = context
     return currentUser
   },
   // Resolver para obtener un usuario por su id
-  getUser: async (_, { id }) => {
+  getUser: async (
+    _parent: any,
+    _args: QueryGetUserArgs,
+    context: GraphQLContext
+  ): Promise<any> => {
+    const { id } = _args
     try {
       const user = await UserModel.findById(id).populate('wishes')
       return user
@@ -54,98 +72,104 @@ export const resolvers = {
       )
     }
   },
-  updateUser: async (_, { input }, { currentUser }) => {
-    const { id, token, password } = currentUser
-    const { oldPassword } = input
-    console.log('INPPUT: ', input)
-
-    try {
-      // Construye un objeto con los campos del input para actualizar
-      const updateFields = {}
-      console.log(input)
-      for (const field in input) {
-        if (field === 'password') {
-          await argon2.verify(password, oldPassword)
-
-          updateFields[field] = await argon2.hash(input.password)
-        } else {
-          updateFields[field] = input[field]
+  Mutation: {
+    updateUser: async (
+      _parent: any,
+      { input }: MutationUpdateUserArgs,
+      { currentUser }: GraphQLContext
+    ): Promise<any> => {
+      const { id, token, password } = currentUser as IUser
+      const { oldPassword } = input
+  
+      try {
+        // Construye un objeto con los campos del input para actualizar
+        const updateFields = {} as any
+        for (const field in input) {
+          if (field === 'password') {
+            await argon2.verify(password, String(oldPassword))
+            updateFields[field] = await argon2.hash(String(input.password))
+          } else if (field) {
+            updateFields[field as keyof UpdateUserInput] = input[field as keyof UpdateUserInput]
+          }
         }
+  
+        console.log('updatedFields:', updateFields)
+        // Actualiza el usuario solo con los campos proporcionados en el input
+        const updatedUser = await UserModel.findByIdAndUpdate(
+          id,
+          { $set: updateFields },
+          {
+            new: true,
+            fields: { id: true, name: true, lastName: true, email: true }
+          }
+        )
+  
+        // if (!input?.id) {
+        //   await UserTokenModel.deleteOne({ token })
+        // }
+  
+        return updatedUser
+      } catch (error) {
+        throw new GraphQLError('No se pudo actualizar el usuario')
       }
-
-      console.log('updatedFields:', updateFields)
-      // Actualiza el usuario solo con los campos proporcionados en el input
-      const updatedUser = await UserModel.findByIdAndUpdate(
-        id,
-        { $set: updateFields },
-        {
-          new: true,
-          fields: { id: true, name: true, lastName: true, email: true }
+    },
+    recoveryPassword: async (
+      _parent: any,
+      { email }: MutationRecoveryPasswordArgs,
+      { currentUser }: GraphQLContext
+    ): Promise<any> => {
+      const expiresIn = 3600
+  
+      try {
+        const user = await UserModel.findOne({ email })
+  
+        if (user === null) {
+          return new GraphQLError(
+            'No existe un usuario con el email proporcionado'
+          )
         }
-      )
-      console.log(updatedUser)
-
-      if (!input?.id) {
-        await UserTokenModel.deleteOne({ token })
-      }
-
-      return updatedUser
-    } catch (error) {
-      throw new GraphQLError('No se pudo actualizar el usuario')
-    }
-  },
-  recoveryPassword: async (_, { email }: { email: string }) => {
-    const expiresIn = 3600
-
-    try {
-      const user = await UserModel.findOne({ email })
-
-      if (user === null) {
+  
+        const token = jwt.sign({ userId: user.id }, secret, {
+          expiresIn: '1h'
+        })
+  
+        const expiresDate = calcExpiresDate(new Date(), expiresIn)
+  
+        await UserTokenModel.create({
+          token,
+          user: user.id,
+          expiresDate,
+          type: 'RECOVERY'
+        })
+  
+        // const html = RESET_PASSWORD_HTML(link)
+  
+        // const options = {
+        //   to: email,
+        //   subject: 'Serpica canarias: recuperar contraseña',
+        //   html
+        // }
+  
+        // sendEmail(options)
+  
+        return user.id
+      } catch (error) {
         return new GraphQLError(
-          'No existe un usuario con el email proporcionado'
+          `Error al crear el token de usuario: ${(error as Error).message}`
         )
       }
-
-      const token = jwt.sign({ userId: user.id }, secret, {
-        expiresIn: '1h'
-      })
-
-      const expiresDate = calcExpiresDate(new Date(), expiresIn)
-
-      await UserTokenModel.create({
-        token,
-        user: user.id,
-        expiresDate,
-        type: 'RECOVERY'
-      })
-
-      // const html = RESET_PASSWORD_HTML(link)
-
-      // const options = {
-      //   to: email,
-      //   subject: 'Serpica canarias: recuperar contraseña',
-      //   html
-      // }
-
-      // sendEmail(options)
-
-      return user.id
-    } catch (error) {
-      return new GraphQLError(
-        `Error al crear el token de usuario: ${(error as Error).message}`
-      )
-    }
-  },
-  addProductToWishes: async (_, { productId }, { currentUser }) => {
-    try {
-      const user: any = await UserModel.findById({ _id: currentUser.id })
-      user.wishes.addToSet(productId)
-      user.save()
-      return user
-    } catch (error) {
-      throw new GraphQLError(
-        `Error al añadir producto a lista de deseos de usuario: ${error}`
-      )
-    }
-  },
+    },
+    addProductToWishes: async (_, { productId }, { currentUser }) => {
+      try {
+        const user: any = await UserModel.findById({ _id: currentUser.id })
+        user.wishes.addToSet(productId)
+        user.save()
+        return user
+      } catch (error) {
+        throw new GraphQLError(
+          `Error al añadir producto a lista de deseos de usuario: ${error}`
+        )
+      }
+    },
+  }
 }

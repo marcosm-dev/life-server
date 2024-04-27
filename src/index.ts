@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv'
+import dotenv from 'dotenv'
 import express, { type Express } from 'express'
 dotenv.config()
 
@@ -11,10 +11,10 @@ const port = process.env.PORT ?? 4000
 const app: Express = express()
 
 async function startServer(): Promise<void> {
-  const db = await connectDB()
   try {
-    await buildAdmin(db)
+    const db = await connectDB()
     await attachExpressJS(app)
+    await buildAdmin(app, db)
 
     app.listen(port, () => {
       console.info(`\nYogaGraphQL Express corriendo en:\nhttp://localhost:${port}/graphql`)

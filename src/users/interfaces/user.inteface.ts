@@ -1,11 +1,12 @@
 import { IOrder } from '../../orders/interfaces/order.interface.js'
-import { IProduct } from '../../products/interfaces/prodcut.interface.js'
+import { IProduct } from '../../products/interfaces/product.interface.js'
 
 export enum UserRole {
   Admin = 'ADMIN',
   User = 'INSTALADOR'
 }
 export interface IUser {
+  id: string
   token: string
   name: string
   lastName: string

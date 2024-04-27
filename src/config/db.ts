@@ -8,7 +8,7 @@ const connectDB = async () => {
   let url: string = `${DB_MONGO_URI}`
     try {
         const connection = await mongoose.connect(url)
-        console.log('DB Conectada')
+        console.log('DB Conectada correctamente')
         return connection
     } catch (error) {
         console.log('Hubo un error')
@@ -17,4 +17,5 @@ const connectDB = async () => {
   // Log de errores en base de datos
   mongoose.connection.on('error', (error) => console.error(error))
 }
+
 export default connectDB

@@ -48,6 +48,22 @@ export type Category = {
   urlImage?: Maybe<Scalars['String']['output']>;
 };
 
+export type CreateUserInput = {
+  VATIN?: InputMaybe<Scalars['String']['input']>;
+  access?: InputMaybe<Scalars['Boolean']['input']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  businessName?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  oldPassword?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<Role>;
+  zipCode?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type FacturaInput = {
   lines: Array<OrderLines>;
   orderId?: InputMaybe<Scalars['ID']['input']>;
@@ -56,6 +72,7 @@ export type FacturaInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   addProductToWishes: User;
+  brandsUpdate: Scalars['JSON']['output'];
   createOrder: Order;
   createProductsFromFacturaDirecta: Scalars['String']['output'];
   createUser: User;
@@ -80,7 +97,7 @@ export type MutationCreateOrderArgs = {
 
 
 export type MutationCreateUserArgs = {
-  input: UserInput;
+  input: CreateUserInput;
 };
 
 
@@ -106,12 +123,12 @@ export type MutationSendFacturaDirectaOrderArgs = {
 
 
 export type MutationSignUpArgs = {
-  input: UserInput;
+  input: CreateUserInput;
 };
 
 
 export type MutationUpdateUserArgs = {
-  input: UserInput;
+  input: UpdateUserInput;
 };
 
 export type Order = {
@@ -180,7 +197,6 @@ export type ProductInput = {
 
 export type Query = {
   __typename?: 'Query';
-  brandsUpdate: Scalars['JSON']['output'];
   getAllBrands?: Maybe<Array<Maybe<Brand>>>;
   getAllCategories: Array<Category>;
   getAllOrders?: Maybe<Array<Order>>;
@@ -258,6 +274,22 @@ export enum TokenState {
   SignIn = 'SIGN_IN'
 }
 
+export type UpdateUserInput = {
+  VATIN?: InputMaybe<Scalars['String']['input']>;
+  access?: InputMaybe<Scalars['Boolean']['input']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  businessName?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  oldPassword?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<Role>;
+  zipCode?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type User = {
   __typename?: 'User';
   VATIN?: Maybe<Scalars['String']['output']>;
@@ -286,22 +318,6 @@ export type UserAuthResponse = {
   error?: Maybe<Scalars['String']['output']>;
   token?: Maybe<Scalars['String']['output']>;
   user?: Maybe<User>;
-};
-
-export type UserInput = {
-  VATIN?: InputMaybe<Scalars['String']['input']>;
-  access?: InputMaybe<Scalars['Boolean']['input']>;
-  address?: InputMaybe<Scalars['String']['input']>;
-  businessName?: InputMaybe<Scalars['String']['input']>;
-  city?: InputMaybe<Scalars['String']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  lastName?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  oldPassword?: InputMaybe<Scalars['String']['input']>;
-  password?: InputMaybe<Scalars['String']['input']>;
-  phone?: InputMaybe<Scalars['String']['input']>;
-  role?: InputMaybe<Role>;
-  zipCode?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserToken = {
@@ -390,6 +406,7 @@ export type ResolversTypes = ResolversObject<{
   CartItem: ResolverTypeWrapper<CartItem>;
   CartItemInput: CartItemInput;
   Category: ResolverTypeWrapper<Category>;
+  CreateUserInput: CreateUserInput;
   FacturaInput: FacturaInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
@@ -408,9 +425,9 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   TAX: Tax;
   TokenState: TokenState;
+  UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
   UserAuthResponse: ResolverTypeWrapper<UserAuthResponse>;
-  UserInput: UserInput;
   UserToken: ResolverTypeWrapper<UserToken>;
 }>;
 
@@ -421,6 +438,7 @@ export type ResolversParentTypes = ResolversObject<{
   CartItem: CartItem;
   CartItemInput: CartItemInput;
   Category: Category;
+  CreateUserInput: CreateUserInput;
   FacturaInput: FacturaInput;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
@@ -434,9 +452,9 @@ export type ResolversParentTypes = ResolversObject<{
   ProductInput: ProductInput;
   Query: {};
   String: Scalars['String']['output'];
+  UpdateUserInput: UpdateUserInput;
   User: User;
   UserAuthResponse: UserAuthResponse;
-  UserInput: UserInput;
   UserToken: UserToken;
 }>;
 
@@ -470,6 +488,7 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   addProductToWishes?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddProductToWishesArgs, 'productId'>>;
+  brandsUpdate?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   createOrder?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<MutationCreateOrderArgs, 'input'>>;
   createProductsFromFacturaDirecta?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
@@ -514,7 +533,6 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  brandsUpdate?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   getAllBrands?: Resolver<Maybe<Array<Maybe<ResolversTypes['Brand']>>>, ParentType, ContextType>;
   getAllCategories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType, Partial<QueryGetAllCategoriesArgs>>;
   getAllOrders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>;
