@@ -17,12 +17,15 @@ export async function createContext(
   console.log(params)
   const isAuth = ['loginUser', 'signUp', 'recoveryPassword', 'resetPassword'].includes(params.operationName as string)
   // const isAuth = ['loginUser', 'signUp', 'recoveryPassword', 'resetPassword'].includes(params.operationName as string) || params.query?.includes('resetPassword') || params.query?.includes('loginUser') || params.query?.includes('signUp')
-  if (isAuth) return userContext
+  if (isAuth) {
+    console.log('user: null')
+    return userContext
+  }
   const token = request.headers.get('authorization')
   const userId = await decodeAuthHeader(token as string) as any
   if (!userId) throw new GraphQLError('unauthorized')
 
-  userContext.userId = "65a5d1636f849f3e3c8ade9c"
+  userContext.userId = userId
 
   return userContext
 }
