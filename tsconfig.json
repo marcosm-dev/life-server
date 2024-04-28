@@ -6,7 +6,7 @@
       "*": ["node_modules/*", "*"],
       "@/*": ["./src/*"]
     },
-    "outDir": "./dist",
+    "outDir": "dist",
     "target": "esnext",
     "module": "nodenext",
     "moduleResolution": "nodenext",
