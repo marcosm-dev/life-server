@@ -15,7 +15,7 @@
   "scripts": {
     "lint": "eslint ./src/**/*",
     "dev": "npx tsc && node --watch ./dist/index.js",
-    "build": "npx tsc && copyfiles -u 1 src/**/*.graphql dist/src",
+    "build": "npm run clean && npx tsc -p ./tsconfig.json",
     "build:dev": "npm run clean && tsc",
     "build:watch": "tsc -w",
     "clean": "rimraf dist",
@@ -59,7 +59,6 @@
     "@types/validator": "13.11.9",
     "@typescript-eslint/eslint-plugin": "6.4.0",
     "@typescript-eslint/parser": "6.4.0",
-    "copyfiles": "^2.4.1",
     "cross-env": "7.0.3",
     "eslint": "8.0.1",
     "eslint-config-prettier": "9.0.0",
