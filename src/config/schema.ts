@@ -9,9 +9,12 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 async function buildSchema() {
   const typeDefsArray = loadFilesSync(join(__dirname, '../**/*.graphql'))
-  const resolversArray = await loadFiles(join(__dirname, '../**/*.resolver.' + envExtension))
+  const resolversArray = await loadFiles(join(__dirname, '../**/*.resolver.' + 'js'))
   const typeDefs = mergeTypeDefs(typeDefsArray)
   const resolvers = mergeResolvers(resolversArray)
+  console.log(typeDefs)
+
+  console.log(resolvers)
 
   return createSchema({ typeDefs, resolvers })
 }

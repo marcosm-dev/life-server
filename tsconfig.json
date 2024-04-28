@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "jsx": "preserve",
-    "baseUrl": "./",
+    "rootDir": ".",
+    "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*", "*"],
       "@/*": ["./src/*"]

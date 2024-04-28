@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import { GraphQLError } from 'graphql'
 dotenv.config()
 
-export const APP_SECRET = process.env.APP_SECRET ?? 'AKIA2GTITX4MLOXNRCAF'
+export const APP_SECRET = process.env.APP_SECRET ?? ''
 export interface AuthTokenPayload {
   userId: string
   iat: number
