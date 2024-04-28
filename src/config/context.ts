@@ -22,7 +22,7 @@ export async function createContext(
   const userId = await decodeAuthHeader(token as string) as any
   if (!userId) throw new GraphQLError('unauthorized')
 
-  userContext.userId = userId
+  userContext.userId = "65a5d1636f849f3e3c8ade9c"
 
   return userContext
 }
