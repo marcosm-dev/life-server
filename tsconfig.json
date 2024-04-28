@@ -23,5 +23,5 @@
     "strict": true
   },
   "include": ["./src/**/*.ts", "./src/**/*.mts", "../src/**/*", ".eslintrc.cjs"],
-  "exclude": ["node_modules"]
+  "exclude": ["generated", "node_modules"],
 }
