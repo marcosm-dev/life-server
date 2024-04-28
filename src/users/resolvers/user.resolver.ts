@@ -8,6 +8,7 @@ import { UserTokenModel } from '../models/UserToken.js'
 import { OrderModel } from '../../orders/models/Order.js'
 import {
   MutationRecoveryPasswordArgs,
+  MutationResetPasswordArgs,
   MutationUpdateUserArgs,
   QueryGetUserArgs,
   Resolvers,
@@ -15,7 +16,7 @@ import {
 } from '../../generated/graphql.js'
 import { GraphQLContext } from '../../config/context.js'
 import { recoveryPassword } from '../../services/nodemailer/nodemailer.js'
-import { APP_SECRET } from '../../config/auth.js'
+import { APP_SECRET, decodeAuthHeader } from '../../config/auth.js'
 
 dotenv.config()
 
@@ -85,40 +86,61 @@ export const resolvers: Resolvers = {
       { input }: MutationUpdateUserArgs,
       { userId }: GraphQLContext
     ): Promise<any> => {
-      const { oldPassword } = input
+      const { password, oldPassword } = input
 
-      // try {
-      //   // Construye un objeto con los campos del input para actualizar
-      //   const updateFields = {} as any
-      //   for (const field in input) {
-      //     if (field === 'password') {
-      //       await argon2.verify(password, String(oldPassword))
-      //       updateFields[field] = await argon2.hash(String(input.password))
-      //     } else if (field) {
-      //       updateFields[field as keyof UpdateUserInput] =
-      //         input[field as keyof UpdateUserInput]
-      //     }
-      //   }
+      try {
+        // Construye un objeto con los campos del input para actualizar
+        const updateFields = {} as any
+        for (const field in input) {
+          if (field === 'password') {
+            await argon2.verify(String(password), String(oldPassword))
+            updateFields[field] = await argon2.hash(String(input.password))
+          } else if (field) {
+            updateFields[field as keyof UpdateUserInput] =
+              input[field as keyof UpdateUserInput]
+          }
+        }
+        // Actualiza el usuario solo con los campos proporcionados en el input
+        const updatedUser = await UserModel.findByIdAndUpdate(
+          userId,
+          { $set: updateFields },
+          {
+            new: true,
+            fields: { id: true, name: true, lastName: true, email: true },
+          }
+        )
 
-      //   console.log('updatedFields:', updateFields)
-      //   // Actualiza el usuario solo con los campos proporcionados en el input
-      //   const updatedUser = await UserModel.findByIdAndUpdate(
-      //     id,
-      //     { $set: updateFields },
-      //     {
-      //       new: true,
-      //       fields: { id: true, name: true, lastName: true, email: true },
-      //     }
-      //   )
+        return updatedUser
+      } catch (error) {
+        throw new GraphQLError('No se pudo actualizar el usuario')
+      }
+    },
+    resetPassword: async (
+      _parent: any,
+      { input }: any,
+    ): Promise<any> => {
+      const { token, password } = input
+      try {
+        const userId = await decodeAuthHeader(`Bearer ${token}`)
+        const user = await UserModel.findById(userId)
 
-        // if (!input?.id) {
-        //   await UserTokenModel.deleteOne({ token })
-        // }
+        if (!user) {
+          return new GraphQLError('No se ha encontrado el usuario')
+        }
 
-        // return null
-      // } catch (error) {
-      //   throw new GraphQLError('No se pudo actualizar el usuario')
-      // }
+        user.password = await argon2.hash(password)
+        user.save()
+
+        return {
+          user: user.id,
+          error: null,
+          token
+        }
+      } catch (error) {
+        console.log(error)
+        throw new GraphQLError('Error al resetear las contraseña')
+      }
+
     },
     recoveryPassword: async (
       _parent: any,
@@ -128,12 +150,9 @@ export const resolvers: Resolvers = {
 
       try {
         const user = await UserModel.findOne({ email })
-        console.log(user)
 
         if (user === null) {
-          return new GraphQLError(
-            'No existe un usuario con el email proporcionado'
-          )
+          return new GraphQLError('No existe un usuario con el email proporcionado')
         }
 
         const token = jwt.sign({ userId: user.id }, APP_SECRET, {
@@ -154,12 +173,9 @@ export const resolvers: Resolvers = {
         } catch (error) {
           console.log('Error al enviar email: ', error)
         }
-        console.log(user)
         return user.id
       } catch (error) {
-        return new GraphQLError(
-          `Error al crear el token de usuario: ${(error as Error).message}`
-        )
+        return new GraphQLError(`Error al crear el token de usuario: ${(error as Error).message}`)
       }
     },
     addProductToWishes: async (_, { productId }, { userId }) => {

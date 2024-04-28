@@ -55,6 +55,12 @@ type Mutation {
   logoutUser: JSON!
   signUp(input: CreateUserInput!): UserAuthResponse!
   recoveryPassword(email: String): ID!
+  resetPassword(input: ResetPasswordInput!): UserAuthResponse!
+}
+
+input ResetPasswordInput {
+  token: String!
+  password: String!
 }
 
 input CreateUserInput {

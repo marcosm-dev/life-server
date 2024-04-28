@@ -79,6 +79,7 @@ export type Mutation = {
   logoutUser: Scalars['JSON']['output'];
   recoveryPassword: Scalars['ID']['output'];
   removeOrderById: Scalars['JSON']['output'];
+  resetPassword: UserAuthResponse;
   sendFacturaDirectaOrder: Scalars['JSON']['output'];
   sendOrder: Scalars['JSON']['output'];
   signUp: UserAuthResponse;
@@ -114,6 +115,11 @@ export type MutationRecoveryPasswordArgs = {
 
 export type MutationRemoveOrderByIdArgs = {
   orderId: Scalars['ID']['input'];
+};
+
+
+export type MutationResetPasswordArgs = {
+  input: ResetPasswordInput;
 };
 
 
@@ -257,6 +263,11 @@ export type QueryGetUserArgs = {
 
 export type QuerySearchProductsByTextArgs = {
   text?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ResetPasswordInput = {
+  password: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
 
 export enum ResponseStatus {
@@ -429,6 +440,7 @@ export type ResolversTypes = ResolversObject<{
   Product: ResolverTypeWrapper<Product>;
   ProductInput: ProductInput;
   Query: ResolverTypeWrapper<{}>;
+  ResetPasswordInput: ResetPasswordInput;
   ResponseStatus: ResponseStatus;
   Role: Role;
   SendOrderInput: SendOrderInput;
@@ -461,6 +473,7 @@ export type ResolversParentTypes = ResolversObject<{
   Product: Product;
   ProductInput: ProductInput;
   Query: {};
+  ResetPasswordInput: ResetPasswordInput;
   SendOrderInput: SendOrderInput;
   String: Scalars['String']['output'];
   UpdateUserInput: UpdateUserInput;
@@ -506,6 +519,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   logoutUser?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   recoveryPassword?: Resolver<ResolversTypes['ID'], ParentType, ContextType, Partial<MutationRecoveryPasswordArgs>>;
   removeOrderById?: Resolver<ResolversTypes['JSON'], ParentType, ContextType, RequireFields<MutationRemoveOrderByIdArgs, 'orderId'>>;
+  resetPassword?: Resolver<ResolversTypes['UserAuthResponse'], ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'input'>>;
   sendFacturaDirectaOrder?: Resolver<ResolversTypes['JSON'], ParentType, ContextType, RequireFields<MutationSendFacturaDirectaOrderArgs, 'input'>>;
   sendOrder?: Resolver<ResolversTypes['JSON'], ParentType, ContextType, RequireFields<MutationSendOrderArgs, 'input'>>;
   signUp?: Resolver<ResolversTypes['UserAuthResponse'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'input'>>;

@@ -96,7 +96,7 @@ export async function recoveryPassword({ email, name, token }: RecoveryArgs) {
     companyUrl: COMPANY_URL,
     companyLogo: COMPANY_LOGO,
     user: name,
-    url: `${COMPANY_APP}/recovery-password/${token}`,
+    url: `${COMPANY_APP}/#/auth/sign-in?token=${token}`,
   }
 
   try {
