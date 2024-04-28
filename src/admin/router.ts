@@ -5,7 +5,7 @@ import type AdminJS from 'adminjs'
 import { type Router } from 'express'
 import { IUser, UserRole } from '../users/interfaces/user.inteface.js'
 
-const SECRET = process.env.SECRET
+const SECRET = process.env.APP_SECRET
 const NODE = process.env.NODE_ENV
 // const IS_DEV = process.env.DEV;
 
