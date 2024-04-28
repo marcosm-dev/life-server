@@ -104,7 +104,17 @@ export const resolvers: Resolvers = {
         const to: SendTo = {
           to: [user.email],
         }
-        await sendEstimate(estimate.content.uuid, to)
+        
+        if (estimate) {
+          order.uuid = estimate.content.uuid.split('_')[1]
+          await order.save()
+        }
+        
+        try {
+          await sendEstimate(estimate.content.uuid, to)
+        } catch (error) {
+          console.log('Error al enviar la factura')
+        }
 
         return estimate
       } catch (error) {
@@ -117,7 +127,7 @@ export const resolvers: Resolvers = {
       context: any
     ): Promise<any> => {
       const { userId } = context
-      const { productsIds } = input
+      const { productIds } = input
       // Tasa de IGIC (7%)
       const IGIC = 0.07
 
@@ -130,23 +140,24 @@ export const resolvers: Resolvers = {
         if (!user) throw new GraphQLError('El usuario no existe.')
 
         // Verificar stock de productos
-        const productsInStock = (await ProductModel.find({
-          _id: { $in: productsIds },
-          stock: { $gt: 0 },
-        })) as IProduct[] | []
+        const products = await ProductModel.find({ _id: { $in: productIds } })
+
+        if (!products) {
+          throw new Error('No hay productos disponibles')
+        }
 
         const productObject: Record<string, number> = {}
-
-        productsIds.forEach((p: string) => {
+        productIds.forEach((p: string) => {
           productObject[p] = (productObject[p] || 0) + 1
         })
 
-        const generateItemsWithProducts = productsInStock.map(pro => {
+        const generateItemsWithProducts = products.map((pro) => {
           const id = String(pro.id)
+          const price = pro?.price || 0
           if (!resume[id]) {
-            totalAmount += pro?.price
+            totalAmount += price || 0
             const quantity = productObject[id] || 0
-            const amount = quantity * pro?.price
+            const amount = quantity * price
             const TAX = (amount * IGIC).toFixed(2)
             resume[id] = true
 
@@ -154,7 +165,7 @@ export const resolvers: Resolvers = {
               TAX,
               quantity,
               amount,
-              productId: id,
+              product: id,
             }
           }
         })

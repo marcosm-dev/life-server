@@ -46,7 +46,7 @@ input CartItemInput {
 }
 
 input OrderInput {
-  productsIds: [ID!]!
+  productIds: [ID!]!
 }
 
 input SendOrderInput {

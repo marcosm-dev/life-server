@@ -50,6 +50,7 @@ export type to = string[]
 
 export interface SendTo {
   to: to
+  html?: string
 }
 
-export type ContentType = 'estimate' | 'invoice'
+export type ContentType = 'estimate' | 'invoice' | 'deliveryNote'

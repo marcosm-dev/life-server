@@ -52,21 +52,20 @@ export const resolvers: Resolvers = {
     logoutUser: async (
       _parent: any,
       _args: any,
-      context: GraphQLContext
+      context: any
     ): Promise<any> => {
-      const { userId } = context
-      console.log(_parent)
-      // const token = userId?.token
-      // if (!token) return new GraphQLError('unauthorized')
+      const bearerToken = context?.request.headers.get('authorization')
+      const [, token] = bearerToken?.split('Bearer ')
+      if (!token) return new GraphQLError('unauthorized')
 
-      // try {
-      //   const response = await UserTokenModel.findOneAndDelete({ token })
-      //   if (!response) return { deleted: 1, error: 'No estás identificado' }
+      try {
+        const deleted = await UserTokenModel.findOneAndDelete({ token })
+        if (!deleted) return { deleted: 1, error: 'No estás identificado' }
 
-      //   return { deleted: 1 }
-      // } catch (error) {
-      //   throw new GraphQLError(`No se encuentra token de usuario: ${error}`)
-      // }
+        return { deleted }
+      } catch (error) {
+        throw new GraphQLError(`No se encuentra token de usuario: ${error}`)
+      }
     },
     signUp: async (
       _parent: any,

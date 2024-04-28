@@ -14,12 +14,10 @@ import {
   UpdateUserInput,
 } from '../../generated/graphql.js'
 import { GraphQLContext } from '../../config/context.js'
-import { IUser } from '../interfaces/user.inteface.js'
+import { recoveryPassword } from '../../services/nodemailer/nodemailer.js'
+import { APP_SECRET } from '../../config/auth.js'
 
 dotenv.config()
-
-const secret = process.env.SECRET ?? ''
-// const appUrl = process.env.APP_URL ?? ''
 
 export const resolvers: Resolvers = {
   User: {
@@ -125,12 +123,12 @@ export const resolvers: Resolvers = {
     recoveryPassword: async (
       _parent: any,
       { email }: MutationRecoveryPasswordArgs,
-      { userId }: GraphQLContext
     ): Promise<any> => {
       const expiresIn = 3600
 
       try {
         const user = await UserModel.findOne({ email })
+        console.log(user)
 
         if (user === null) {
           return new GraphQLError(
@@ -138,7 +136,7 @@ export const resolvers: Resolvers = {
           )
         }
 
-        const token = jwt.sign({ userId: user.id }, secret, {
+        const token = jwt.sign({ userId: user.id }, APP_SECRET, {
           expiresIn: '1h',
         })
 
@@ -151,16 +149,12 @@ export const resolvers: Resolvers = {
           type: 'RECOVERY',
         })
 
-        // const html = RESET_PASSWORD_HTML(link)
-
-        // const options = {
-        //   to: email,
-        //   subject: 'Serpica canarias: recuperar contraseña',
-        //   html
-        // }
-
-        // sendEmail(options)
-
+        try {
+          await recoveryPassword({ email: user.email, name: user.name, token })
+        } catch (error) {
+          console.log('Error al enviar email: ', error)
+        }
+        console.log(user)
         return user.id
       } catch (error) {
         return new GraphQLError(

@@ -19,7 +19,6 @@ export const yoga = createYoga<{} | GraphQLContext>({
   },
   logging: {
     debug(...args) {
-      console.log(args)
       logger.debug([...args])
     },
     info(...args) {

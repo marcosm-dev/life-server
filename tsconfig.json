@@ -2,9 +2,10 @@
   "compilerOptions": {
     "jsx": "preserve",
     "baseUrl": "./",
-    // "paths": {
-    //   "@/*":  ["./src/*"]
-    // },
+    "paths": {
+      "*": ["node_modules/*", "*"],
+      "@/*": ["./src/*"]
+    },
     "outDir": "./dist",
     "target": "esnext",
     "module": "nodenext",
@@ -21,6 +22,6 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "include": ["./src/**/*.ts", "./src/**/*.mts", "../src/**/*", ".eslintrc.cjs", "src/brands/resolvers/brand.resolver.ts"],
+  "include": ["./src/**/*.ts", "./src/**/*.mts", "../src/**/*", ".eslintrc.cjs", "src/brands/resolvers/brand.resolver.ts", "ordersVerify.ts"],
   "exclude": ["node_modules"]
 }

@@ -30,15 +30,13 @@ const headers = {
 
 const getItems = (items: CartItem[]) => {
   return items.map((item) => {
-    console.log(item)
     const line = {
       account: '700000',
       quantity: item.quantity,
       unitPrice: item.product.price,
-      text: item.product.description,
+      text: item.product.name,
       tax: TAX
     } as OrderLines
-    console.log(line)
     if (item.product.uuid) line.document = `pro_${item.product.uuid}`
     return line
   })
@@ -47,7 +45,6 @@ const getItems = (items: CartItem[]) => {
 async function sendEstimate(uuid: string, receivers: SendTo)  {
   receivers.to = [...receivers.to, ADMIN_EMAIL, PRINTER_EMAIL, OWNER_EMAIL] as to
 
-  console.log(receivers)
   try {
     const { data } = await axios.put(`${URL}/estimates/${uuid}/send`, receivers, {
       headers,

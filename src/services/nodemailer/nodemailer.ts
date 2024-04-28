@@ -1,12 +1,15 @@
 import * as nodemailer from 'nodemailer'
-import { type MailOptions } from 'nodemailer/lib/json-transport'
 import { create } from 'express-handlebars'
 import hbs from 'nodemailer-express-handlebars' // Asegúrate de importar la biblioteca correcta
-import path from 'path'
-import { GraphQLError } from 'graphql'
+import { fileURLToPath } from 'url'
 // const transporter = nodemailer.createTransport(transport[, defaults])
 
-const { SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_AUTH_USER, SMTP_AUTH_PASS, COMPANY_LOGO, COMPANY_URL, COMPANY_NAME } = process.env as { [key: string]: string | number }
+const { SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_AUTH_USER, SMTP_AUTH_PASS, COMPANY_LOGO, COMPANY_URL, COMPANY_NAME, COMPANY_APP } = process.env as { [key: string]: string | number }
+import path, { dirname, join } from 'path'
+import { GraphQLError } from 'graphql'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
@@ -83,4 +86,29 @@ export const sendEmail = async (params: EmailParams): Promise<boolean> => {
     const { message } = error as Error
     throw new GraphQLError(message)
   }
+}
+
+type RecoveryArgs = { email: string, name: string , token: string}
+
+export async function recoveryPassword({ email, name, token }: RecoveryArgs) {
+  const vars = {
+    companyName: COMPANY_NAME,
+    companyUrl: COMPANY_URL,
+    companyLogo: COMPANY_LOGO,
+    user: name,
+    url: `${COMPANY_APP}/recovery-password/${token}`,
+  }
+
+  try {
+      await sendEmail({
+        content: 'Recuperar contraseña',
+        to: email,
+        subject: 'Recuperar contraseña',
+        template: 'userForgot',
+        vars,
+      })
+  } catch (error) {
+    console.log(error)
+  }
+  
 }

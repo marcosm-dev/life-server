@@ -150,7 +150,7 @@ export type Order = {
 };
 
 export type OrderInput = {
-  productsIds: Array<Scalars['ID']['input']>;
+  productIds: Array<Scalars['ID']['input']>;
 };
 
 export type OrderLines = {
