@@ -34,6 +34,9 @@ export const resolvers: Resolvers = {
         const isValid = await argon2.verify(user.password, password)
 
         if (!isValid) return new GraphQLError('Contraseña incorrecta')
+
+          console.log('secret: ', APP_SECRET)
+          console.log('user: ', user)
         const token = jwt.sign({ userId: user.id }, APP_SECRET)
         const expiresDate = calcExpiresDate(new Date(), expiresIn)
 
