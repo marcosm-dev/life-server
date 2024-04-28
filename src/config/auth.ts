@@ -1,19 +1,25 @@
 import jwt from 'jsonwebtoken'
+import argon2 from 'argon2'
 import dotenv from 'dotenv'
+import { GraphQLError } from 'graphql'
 dotenv.config()
 
 export const APP_SECRET = process.env.APP_SECRET ?? ''
 export interface AuthTokenPayload {
-  usuario: any
+  userId: string
+  iat: number
 }
 
-export function decodeAuthHeader(authHeader: string): AuthTokenPayload {
-  const token = authHeader.replace('Bearer ', '')
-  if (!APP_SECRET) {
+export async function decodeAuthHeader(authHeader: string): Promise<string> {
+  if (!authHeader) {
+    throw new GraphQLError('unauthorized')
+  } else if (!APP_SECRET) {
     throw new Error('APP_SECRET is not defined')
   }
-  if (!token) {
-    throw new Error('No token found')
-  }
-  return jwt.verify(token, APP_SECRET) as AuthTokenPayload
+  const token = authHeader.replace('Bearer ', '')
+
+  const jwtData = jwt.verify(token, APP_SECRET) as AuthTokenPayload
+  if (!jwtData) throw new GraphQLError("unauthorized")
+  
+  return jwtData.userId
 }

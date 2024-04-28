@@ -23,9 +23,9 @@ export const resolvers: Resolvers = {
       params: any,
       context: any
     ): Promise<any> => {
-      const { currentUser } = context
+      const { userId } = context
       try {
-        const orders = await OrderModel.find({ owner: currentUser.id })
+        const orders = await OrderModel.find({ owner: userId })
 
         return orders
       } catch (error) {

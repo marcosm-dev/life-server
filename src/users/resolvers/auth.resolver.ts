@@ -25,10 +25,6 @@ export const resolvers: Resolvers = {
       context: GraphQLContext
     ): Promise<any> => {
 
-      console.log({
-        email,
-        password
-      })
       try {
         const user = await UserModel.findOne({ email })
 
@@ -58,18 +54,19 @@ export const resolvers: Resolvers = {
       _args: any,
       context: GraphQLContext
     ): Promise<any> => {
-      const { currentUser } = context
-      const token = currentUser?.token
-      if (!token) return new GraphQLError('unauthorized')
+      const { userId } = context
+      console.log(_parent)
+      // const token = userId?.token
+      // if (!token) return new GraphQLError('unauthorized')
 
-      try {
-        const response = await UserTokenModel.findOneAndDelete({ token })
-        if (!response) return { deleted: 1, error: 'No estás identificado' }
+      // try {
+      //   const response = await UserTokenModel.findOneAndDelete({ token })
+      //   if (!response) return { deleted: 1, error: 'No estás identificado' }
 
-        return { deleted: 1 }
-      } catch (error) {
-        throw new GraphQLError(`No se encuentra token de usuario: ${error}`)
-      }
+      //   return { deleted: 1 }
+      // } catch (error) {
+      //   throw new GraphQLError(`No se encuentra token de usuario: ${error}`)
+      // }
     },
     signUp: async (
       _parent: any,
@@ -99,7 +96,8 @@ export const resolvers: Resolvers = {
           text: 'Solicito autorización como instalador para comprar material en su aplicación',
           html,
         }
-        sendEmail(mailOptions)
+        // TODO:
+        // sendEmail(mailOptions)
 
         return { user: newUser }
       } catch (error: unknown) {

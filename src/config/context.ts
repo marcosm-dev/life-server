@@ -1,26 +1,27 @@
 import { type YogaInitialContext } from 'graphql-yoga'
 import { GraphQLError } from 'graphql'
-import { authenticateUser } from '../yoga/auth.js'
 import { IUser } from '../users/interfaces/user.inteface.js'
+import { decodeAuthHeader } from './auth.js';
 // import { GraphQLError } from 'graphql'
 
 export interface GraphQLContext {
-  currentUser: IUser
+  userId: string | null
+}
+const userContext: GraphQLContext = {
+  userId: null,
 }
 
 export async function createContext(
-  initialContext: YogaInitialContext
+  { request, params  }: YogaInitialContext
 ): Promise<GraphQLContext> {
-  const currentUser = (await authenticateUser(initialContext.request)) as any
-  // if (!currentUser) throw new GraphQLError('unauthorized')
-  const { params } = initialContext
+  const isAuth = ['loginUser', 'signUp'].includes(params.operationName as string)
+  if (isAuth) return userContext
 
-  const isAuth = ['loginUser', 'signUp'].includes(params.operationName ?? '')
+  const token = request.headers.get('authorization')
+  const userId = await decodeAuthHeader(token as string) as any
+  if (!userId) throw new GraphQLError('unauthorized')
 
-  const userContext: GraphQLContext = {
-    currentUser,
-  }
-  if (!currentUser && !isAuth) throw new GraphQLError('unauthorized')
+  userContext.userId = userId
 
   return userContext
 }

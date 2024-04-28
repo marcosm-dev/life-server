@@ -28,11 +28,11 @@ export const resolvers: Resolvers = {
       _args: any,
       context: GraphQLContext
     ): Promise<any> => {
-      const { currentUser } = context
+      const { userId } = context
       try {
-        const isOwer = parent.name === currentUser?.id
+        const isOwer = parent.name === userId
         const orders = await OrderModel.find(
-          isOwer ? { id: currentUser.id } : {}
+          isOwer ? { id: userId } : {}
         )
         return orders
       } catch (error) {
@@ -48,9 +48,9 @@ export const resolvers: Resolvers = {
       _args: any,
       context: GraphQLContext
     ): Promise<any> => {
-      console.log(context)
-      const { currentUser } = context
-      return currentUser
+      const { userId } = context
+      const user = await UserModel.findById(userId)
+      return user
     },
     // Resolver para obtener un usuario por su id
     getUser: async (
@@ -85,48 +85,47 @@ export const resolvers: Resolvers = {
     updateUser: async (
       _parent: any,
       { input }: MutationUpdateUserArgs,
-      { currentUser }: GraphQLContext
+      { userId }: GraphQLContext
     ): Promise<any> => {
-      const { id, token, password } = currentUser
       const { oldPassword } = input
 
-      try {
-        // Construye un objeto con los campos del input para actualizar
-        const updateFields = {} as any
-        for (const field in input) {
-          if (field === 'password') {
-            await argon2.verify(password, String(oldPassword))
-            updateFields[field] = await argon2.hash(String(input.password))
-          } else if (field) {
-            updateFields[field as keyof UpdateUserInput] =
-              input[field as keyof UpdateUserInput]
-          }
-        }
+      // try {
+      //   // Construye un objeto con los campos del input para actualizar
+      //   const updateFields = {} as any
+      //   for (const field in input) {
+      //     if (field === 'password') {
+      //       await argon2.verify(password, String(oldPassword))
+      //       updateFields[field] = await argon2.hash(String(input.password))
+      //     } else if (field) {
+      //       updateFields[field as keyof UpdateUserInput] =
+      //         input[field as keyof UpdateUserInput]
+      //     }
+      //   }
 
-        console.log('updatedFields:', updateFields)
-        // Actualiza el usuario solo con los campos proporcionados en el input
-        const updatedUser = await UserModel.findByIdAndUpdate(
-          id,
-          { $set: updateFields },
-          {
-            new: true,
-            fields: { id: true, name: true, lastName: true, email: true },
-          }
-        )
+      //   console.log('updatedFields:', updateFields)
+      //   // Actualiza el usuario solo con los campos proporcionados en el input
+      //   const updatedUser = await UserModel.findByIdAndUpdate(
+      //     id,
+      //     { $set: updateFields },
+      //     {
+      //       new: true,
+      //       fields: { id: true, name: true, lastName: true, email: true },
+      //     }
+      //   )
 
         // if (!input?.id) {
         //   await UserTokenModel.deleteOne({ token })
         // }
 
-        return updatedUser
-      } catch (error) {
-        throw new GraphQLError('No se pudo actualizar el usuario')
-      }
+        // return null
+      // } catch (error) {
+      //   throw new GraphQLError('No se pudo actualizar el usuario')
+      // }
     },
     recoveryPassword: async (
       _parent: any,
       { email }: MutationRecoveryPasswordArgs,
-      { currentUser }: GraphQLContext
+      { userId }: GraphQLContext
     ): Promise<any> => {
       const expiresIn = 3600
 
@@ -169,9 +168,9 @@ export const resolvers: Resolvers = {
         )
       }
     },
-    addProductToWishes: async (_, { productId }, { currentUser }) => {
+    addProductToWishes: async (_, { productId }, { userId }) => {
       try {
-        const user: any = await UserModel.findById({ _id: currentUser.id })
+        const user: any = await UserModel.findById({ _id: userId.id })
         user.wishes.addToSet(productId)
         user.save()
         return user

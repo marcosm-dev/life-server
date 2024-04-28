@@ -14,8 +14,6 @@ async function buildSchema() {
   const typeDefs = mergeTypeDefs(typeDefsArray)
   const resolvers = mergeResolvers(resolversArray)
 
-  console.log(resolvers)
-
   return createSchema({ typeDefs, resolvers })
 }
 export const schema = buildSchema()

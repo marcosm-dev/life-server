@@ -58,16 +58,16 @@ export const resolvers: Resolvers = {
       const populate = ['products']
 
       const { lines } = input
-      const { currentUser } = context
-      const contact = formatContact(currentUser)
+      const { userId } = context
+      const contact = formatContact(userId)
 
       try {
         const { content } = await getOrCreateContact(contact)
         const { uuid } = content
 
-        if (content.uuid !== currentUser.uuid) {
+        if (content.uuid !== userId.uuid) {
           const [, uuid] = content.uuid.split('_')
-          await UserModel.findOneAndUpdate({ _id: currentUser.id }, { uuid })
+          await UserModel.findOneAndUpdate({ _id: userId.id }, { uuid })
         }
 
         const order: any = (await OrderModel.findById(input.orderId).populate([
@@ -79,7 +79,7 @@ export const resolvers: Resolvers = {
         const item = await createInvoice(invoice)
         if (item && order) await order.save()
         const to: InvoiceTo = {
-          to: [currentUser.email, PRINTER_EMAIL, OWNER_EMAIL],
+          to: [userId.email, PRINTER_EMAIL, OWNER_EMAIL],
         }
         await sendInvoice(item.content.uuid, to)
 

@@ -24,7 +24,6 @@
     "generate": "graphql-codegen --config codegen.ts",
     "watch": "node --watch --trace-warnings --loader ts-node/esm ./src/index.ts",
     "start": "node dist/index.js",
-    "prepare": "husky install ./husky",
     "prettier-format": "prettier --config .prettierrc ./src/**/*.ts --write",
     "prettier-watch": "onchange 'src/**/*.ts' -- prettier --write {{changed}}"
   },
@@ -37,11 +36,6 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.2",
@@ -72,7 +66,6 @@
     "eslint-plugin-promise": "6.0.0",
     "eslint-plugin-react": "7.33.1",
     "graphql-codegen": "^0.4.0",
-    "husky": "8.0.3",
     "lint-staged": "14.0.1",
     "onchange": "7.1.0",
     "prettier": "3.0.2",
@@ -92,6 +85,7 @@
     "@adminjs/themes": "1.0.1",
     "@graphql-tools/load-files": "7.0.0",
     "@graphql-tools/schema": "10.0.3",
+    "@types/nodemailer-express-handlebars": "^4.0.5",
     "adminjs": "7.0.0",
     "argon2": "0.30.3",
     "axios": "1.4.0",
@@ -101,6 +95,7 @@
     "dotenv": "16.3.1",
     "express": "4.18.2",
     "express-formidable": "1.2.0",
+    "express-handlebars": "^7.1.2",
     "express-session": "1.17.3",
     "glob": "10.3.12",
     "graphql": "16.8.1",
@@ -110,6 +105,7 @@
     "jsonwebtoken": "9.0.1",
     "mongoose": "7.4.5",
     "nodemailer": "6.9.13",
+    "nodemailer-express-handlebars": "^6.1.2",
     "react-feather": "2.0.10",
     "react-redux": "8.1.1",
     "rxjs": "7.8.1",
