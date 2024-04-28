@@ -11,7 +11,6 @@ export interface AuthTokenPayload {
 }
 
 export async function decodeAuthHeader(authHeader: string): Promise<string> {
-  console.log(authHeader)
   if (!authHeader) {
     throw new GraphQLError('unauthorized')
   } else if (!APP_SECRET) {
