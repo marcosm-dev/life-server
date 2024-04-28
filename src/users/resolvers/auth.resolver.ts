@@ -22,7 +22,6 @@ export const resolvers: Resolvers = {
     loginUser: async (
       _parent: any,
       { email, password }: MutationLoginUserArgs,
-      context: GraphQLContext
     ): Promise<any> => {
 
       try {
