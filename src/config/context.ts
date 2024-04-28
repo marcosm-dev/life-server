@@ -19,6 +19,8 @@ export async function createContext(
   // const isAuth = ['loginUser', 'signUp', 'recoveryPassword', 'resetPassword'].includes(params.operationName as string) || params.query?.includes('resetPassword') || params.query?.includes('loginUser') || params.query?.includes('signUp')
   if (isAuth) return userContext
 
+  console.log(isAuth)
+
   const token = request.headers.get('authorization')
   const userId = await decodeAuthHeader(token as string) as any
   if (!userId) throw new GraphQLError('unauthorized')
