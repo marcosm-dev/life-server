@@ -1,8 +1,8 @@
 import { GraphQLError } from 'graphql'
 import { OrderModel } from '../../../orders/models/Order.js'
-import { IOrder } from '../../../orders/interfaces/order.interface.js'
-import { formatContact, generateInvoceData } from '../../../utils/format.js'
+import { formatContact, generateContentData } from '../../../utils/format.js'
 import { UserModel } from '../../../users/models/User.js'
+
 import {
   createInvoice,
   getInvoiceListById,
@@ -10,12 +10,12 @@ import {
   getOrCreateContact,
   sendInvoice,
 } from '../../../services/facturaDirecta/facturaDirecta.js'
-import { InvoiceTo } from '../../../services/facturaDirecta/factura-directa.js'
 import {
   MutationSendFacturaDirectaOrderArgs,
   QueryGetInvoicesByIdArgs,
   Resolvers,
 } from '../../../generated/graphql.js'
+import { SendTo } from 'src/services/facturaDirecta/facturaDirecta.d.js'
 
 export const resolvers: Resolvers = {
   Query: {
@@ -59,6 +59,7 @@ export const resolvers: Resolvers = {
 
       const { lines } = input
       const { userId } = context
+      
       const contact = formatContact(userId)
 
       try {
@@ -70,15 +71,15 @@ export const resolvers: Resolvers = {
           await UserModel.findOneAndUpdate({ _id: userId.id }, { uuid })
         }
 
-        const order: any = (await OrderModel.findById(input.orderId).populate([
+        const order = await OrderModel.findById(input.orderId).populate([
           ...populate,
-        ])) as IOrder
+        ])
         // Crear factura en factura directa
-        const invoice = generateInvoceData(uuid, lines)
+        const invoice = generateContentData(uuid, lines)
         // Crear factura en factura directa
         const item = await createInvoice(invoice)
         if (item && order) await order.save()
-        const to: InvoiceTo = {
+        const to: SendTo = {
           to: [userId.email, PRINTER_EMAIL, OWNER_EMAIL],
         }
         await sendInvoice(item.content.uuid, to)

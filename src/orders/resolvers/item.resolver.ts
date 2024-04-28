@@ -4,7 +4,7 @@ import { ProductModel } from '../../products/models/Product.js'
 export const resolvers: Resolvers = {
   CartItem: {
     product: async (_parent: any, params: any, context: any): Promise<any> => {
-      const product = await ProductModel.findById(_parent.productId)
+      const product = await ProductModel.findById(_parent.product)
       return product
     },
   },

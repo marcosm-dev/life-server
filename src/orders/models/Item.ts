@@ -4,11 +4,11 @@ export const cartItemSchema = new Schema({
   quantity: Number,
   amount: Number,
   TAX: Number,
-  productId: {
+  product: {
     type: Types.ObjectId,
     ref: 'Product',
   },
   productDeleted: Schema.Types.Mixed,
 })
 
-export const CartItemNidek = model('CartItem', cartItemSchema)
+export const CartItemModel = model('CartItem', cartItemSchema)

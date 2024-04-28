@@ -1,4 +1,6 @@
-import { OrderLines } from '../generated/graphql'
+import { IProduct } from '../../products/interfaces/product.interface.ts'
+import { OrderLines } from '../../generated/graphql'
+import { ICartItem } from '../../orders/interfaces/item.interface.ts'
 
 export interface IContact {
   content: {
@@ -29,7 +31,7 @@ export interface Lines {
   account: string
 }
 
-export interface IInvoice {
+export interface FacturaDirectaContent {
   content: {
     type: string
     main: {
@@ -43,6 +45,11 @@ export interface IInvoice {
     }
   }
 }
-export interface InvoiceTo {
-  to: string[]
+
+export type to = string[]
+
+export interface SendTo {
+  to: to
 }
+
+export type ContentType = 'estimate' | 'invoice'

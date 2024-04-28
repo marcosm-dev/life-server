@@ -1,10 +1,10 @@
 import { Types, Schema } from 'mongoose'
 
-export type ICartItem = Document & {
+export interface ICartItem {
   quantity: number
   amount: number
   TAX: number
-  productId: Types.ObjectId
+  product: Types.ObjectId
   orderId: Types.ObjectId
   productDeleted: Schema.Types.Mixed
 }

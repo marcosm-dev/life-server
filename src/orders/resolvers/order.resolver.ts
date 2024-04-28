@@ -6,9 +6,13 @@ import { IProduct } from '../../products/interfaces/product.interface.js'
 import {
   MutationCreateOrderArgs,
   MutationRemoveOrderByIdArgs,
+  MutationSendOrderArgs,
   QueryGetOrderByIdArgs,
   Resolvers,
 } from '../../generated/graphql.js'
+import { formatContact, generateFacturaDirectaContent } from '../../utils/format.js'
+import { createEstimate, getItems, getOrCreateContact, sendEstimate } from '../../services/facturaDirecta/facturaDirecta.js'
+import { SendTo } from 'src/services/facturaDirecta/facturaDirecta.d.js'
 
 export const resolvers: Resolvers = {
   Order: {
@@ -62,12 +66,58 @@ export const resolvers: Resolvers = {
     },
   },
   Mutation: {
+    sendOrder: async (
+      _parent: any,
+      { input }: MutationSendOrderArgs,
+      context: any
+    ): Promise<any> => {
+      const { userId } = context
+      const { orderId } = input
+      try {
+        const user = await UserModel.findById(userId)
+        if (!user) {
+          throw new Error('Usuario no encontrado');
+        }
+        const contact = formatContact(user)
+        const { content } = await getOrCreateContact(contact)
+        
+        // Verificar si el usuario tiene un uuid sino,  lo actualizamos
+        if (content.uuid !== user.uuid) {
+          const [, uuid] = content.uuid.split('_')
+          user.uuid = uuid
+          await user.save()
+        }
+
+        const order = await OrderModel.findById(orderId).populate({
+          path: 'products',
+          populate: {
+            path: 'product',
+            model: 'Product'
+          }
+        })
+        if (!order) {
+          throw new Error('Error al buscar el pedido')
+        }
+        const lines = getItems(order.products as any)
+        const payload = generateFacturaDirectaContent(content.uuid, lines, 'estimate', 'P')
+        const estimate = await createEstimate(payload)
+        const to: SendTo = {
+          to: [user.email],
+        }
+        await sendEstimate(estimate.content.uuid, to)
+
+        return estimate
+      } catch (error) {
+        console.log(error)
+      }
+    },
     createOrder: async (
       _parent: any,
       { input }: MutationCreateOrderArgs,
       context: any
     ): Promise<any> => {
-      const { userId, products } = input
+      const { userId } = context
+      const { productsIds } = input
       // Tasa de IGIC (7%)
       const IGIC = 0.07
 
@@ -81,13 +131,13 @@ export const resolvers: Resolvers = {
 
         // Verificar stock de productos
         const productsInStock = (await ProductModel.find({
-          _id: { $in: products },
+          _id: { $in: productsIds },
           stock: { $gt: 0 },
         })) as IProduct[] | []
 
         const productObject: Record<string, number> = {}
 
-        products.forEach((p: string) => {
+        productsIds.forEach((p: string) => {
           productObject[p] = (productObject[p] || 0) + 1
         })
 

@@ -29,7 +29,7 @@ export type CartItem = {
   TAX: Scalars['Float']['output'];
   amount: Scalars['Float']['output'];
   orderId: Scalars['ID']['output'];
-  product?: Maybe<Product>;
+  product: Product;
   quantity: Scalars['Int']['output'];
 };
 
@@ -80,6 +80,7 @@ export type Mutation = {
   recoveryPassword: Scalars['ID']['output'];
   removeOrderById: Scalars['JSON']['output'];
   sendFacturaDirectaOrder: Scalars['JSON']['output'];
+  sendOrder: Scalars['JSON']['output'];
   signUp: UserAuthResponse;
   updateUser: User;
 };
@@ -121,6 +122,11 @@ export type MutationSendFacturaDirectaOrderArgs = {
 };
 
 
+export type MutationSendOrderArgs = {
+  input: SendOrderInput;
+};
+
+
 export type MutationSignUpArgs = {
   input: CreateUserInput;
 };
@@ -144,8 +150,7 @@ export type Order = {
 };
 
 export type OrderInput = {
-  products: Array<Scalars['ID']['input']>;
-  userId: Scalars['ID']['input'];
+  productsIds: Array<Scalars['ID']['input']>;
 };
 
 export type OrderLines = {
@@ -263,6 +268,10 @@ export enum Role {
   Admin = 'ADMIN',
   Instalador = 'INSTALADOR'
 }
+
+export type SendOrderInput = {
+  orderId: Scalars['ID']['input'];
+};
 
 export enum Tax {
   SIgic_7 = 'S_IGIC_7',
@@ -422,6 +431,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   ResponseStatus: ResponseStatus;
   Role: Role;
+  SendOrderInput: SendOrderInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   TAX: Tax;
   TokenState: TokenState;
@@ -451,6 +461,7 @@ export type ResolversParentTypes = ResolversObject<{
   Product: Product;
   ProductInput: ProductInput;
   Query: {};
+  SendOrderInput: SendOrderInput;
   String: Scalars['String']['output'];
   UpdateUserInput: UpdateUserInput;
   User: User;
@@ -469,7 +480,7 @@ export type CartItemResolvers<ContextType = any, ParentType extends ResolversPar
   TAX?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   orderId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  product?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType>;
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -496,6 +507,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   recoveryPassword?: Resolver<ResolversTypes['ID'], ParentType, ContextType, Partial<MutationRecoveryPasswordArgs>>;
   removeOrderById?: Resolver<ResolversTypes['JSON'], ParentType, ContextType, RequireFields<MutationRemoveOrderByIdArgs, 'orderId'>>;
   sendFacturaDirectaOrder?: Resolver<ResolversTypes['JSON'], ParentType, ContextType, RequireFields<MutationSendFacturaDirectaOrderArgs, 'input'>>;
+  sendOrder?: Resolver<ResolversTypes['JSON'], ParentType, ContextType, RequireFields<MutationSendOrderArgs, 'input'>>;
   signUp?: Resolver<ResolversTypes['UserAuthResponse'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'input'>>;
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 }>;

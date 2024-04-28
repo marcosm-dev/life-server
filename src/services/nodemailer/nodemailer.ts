@@ -6,34 +6,17 @@ import path from 'path'
 import { GraphQLError } from 'graphql'
 // const transporter = nodemailer.createTransport(transport[, defaults])
 
+const { SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_AUTH_USER, SMTP_AUTH_PASS, COMPANY_LOGO, COMPANY_URL, COMPANY_NAME } = process.env as { [key: string]: string | number }
+
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
+  host: SMTP_HOST,
+  port: SMTP_PORT,
+  secure: SMTP_SECURE,
   auth: {
-    user: 'serpica.sl@gmail.com',
-    pass: process.env.NODEMAILER_SECRET,
+    user: SMTP_AUTH_USER,
+    pass: SMTP_AUTH_PASS,
   },
-})
-
-// export const sendEmail = ({ to, subject, html }: MailOptions) => {
-//   const mailOptions = {
-//     from: process.env.ADMIN_EMAIL,
-//     to,
-//     subject,
-//     html,
-//   }
-
-//   transporter.sendMail(mailOptions, (error, info) => {
-//     if (error) {
-//       console.log('Error al enviar el correo:', error)
-//       return error
-//     } else {
-//       console.log('Correo enviado:', info.response)
-//       return info.response
-//     }
-//   })
-// }
+} as nodemailer.TransportOptions)
 
 interface EmailParams {
   content: string
@@ -43,37 +26,13 @@ interface EmailParams {
   template: string
   vars: Record<string, any>
 }
-
 export const sendEmail = async (params: EmailParams): Promise<boolean> => {
   const { content, to, subject, attachments, template, vars } = params
 
   try {
-    const {
-      SMTP_HOST,
-      SMTP_PORT,
-      SMTP_SECURE,
-      SMTP_AUTH_USER,
-      SMTP_AUTH_PASS,
-      SEND_MAIL_ADDRESS,
-      COMPANY_LOGO,
-      COPANY_URL,
-      COMPANY_NAME,
-    } = process.env
-    const transporter = nodemailer.createTransport({
-      port: Number(SMTP_PORT),
-      host: SMTP_HOST,
-      auth: {
-        user: SMTP_AUTH_USER,
-        pass: SMTP_AUTH_PASS,
-      },
-      tls: {
-        rejectUnauthorized: false, // Ignora errores de certificado
-      },
-      secure: SMTP_SECURE,
-    } as nodemailer.TransportOptions)
     let varUp = vars
     varUp['companyImg'] = COMPANY_LOGO
-    varUp['companyUrl'] = COPANY_URL
+    varUp['companyUrl'] = COMPANY_URL
     varUp['companyName'] = COMPANY_NAME
     varUp['companyLogo'] = COMPANY_LOGO
 

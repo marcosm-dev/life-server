@@ -10,7 +10,7 @@ type CartItem {
   quantity: Int!
   amount: Float!
   TAX: Float!
-  product: Product
+  product: Product!
   orderId: ID!
 }
 
@@ -33,7 +33,7 @@ type Query {
 }
 
 type Mutation {
-  sendFacturaDirectaOrder(input: FacturaInput!): JSON!
+  sendOrder(input: SendOrderInput!): JSON!
   createOrder(input: OrderInput!): Order!
   removeOrderById(orderId: ID!): JSON!
 }
@@ -46,8 +46,11 @@ input CartItemInput {
 }
 
 input OrderInput {
-  userId: ID!
-  products: [ID!]!
+  productsIds: [ID!]!
+}
+
+input SendOrderInput {
+  orderId: ID!
 }
 
 input OrderLines {
