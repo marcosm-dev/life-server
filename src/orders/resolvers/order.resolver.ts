@@ -107,13 +107,19 @@ export const resolvers: Resolvers = {
         
         if (estimate) {
           order.uuid = estimate.content.uuid.split('_')[1]
-          await order.save()
         }
-        
         try {
-          await sendEstimate(estimate.content.uuid, to)
+          const isSend = await sendEstimate(estimate.content.uuid, to)
+          if (isSend) {
+            order.isSend = isSend
+          } else {
+            return new GraphQLError('Error al enviar la factura')
+          }
+
         } catch (error) {
-          console.log('Error al enviar la factura')
+          return new GraphQLError('Error al enviar la factura')
+        } finally {
+          await order.save()
         }
 
         return estimate

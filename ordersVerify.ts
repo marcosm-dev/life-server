@@ -1,4 +1,4 @@
-import { fetchOrdersVerify } from './src/crons/ordersVerify.js'
+import { fetchOrdersVerify } from './src/crons/ordersVerify.js';
 
 try {
   fetchOrdersVerify()

@@ -35,9 +35,7 @@ export const resolvers: Resolvers = {
 
         if (!isValid) return new GraphQLError('Contraseña incorrecta')
 
-          console.log('user: ', user)
         const token = jwt.sign({ userId: user.id }, APP_SECRET)
-        console.log(token)
         const expiresDate = calcExpiresDate(new Date(), expiresIn)
 
         await UserTokenModel.create({

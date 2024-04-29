@@ -23,6 +23,6 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "include": ["./src/**/*.ts", "./src/**/*.mts", "../src/**/*", ".eslintrc.cjs"],
+  "include": ["./src/**/*.ts", "./src/**/*.mts", "../src/**/*", ".eslintrc.cjs", "ordersVerify.ts"],
   "exclude": ["generated", "node_modules"],
 }

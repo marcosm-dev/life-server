@@ -30,6 +30,10 @@ export const orderSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isSend: {
+      type: Number,
+      default: 0
+    },
     uuid: {
       type: Schema.Types.UUID,
       required: false,

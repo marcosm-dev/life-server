@@ -46,13 +46,13 @@ async function sendEstimate(uuid: string, receivers: SendTo)  {
   receivers.to = [...receivers.to, ADMIN_EMAIL, PRINTER_EMAIL, OWNER_EMAIL] as to
 
   try {
-    const { data } = await axios.put(`${URL}/estimates/${uuid}/send`, receivers, {
+    await axios.put(`${URL}/estimates/${uuid}/send`, receivers, {
       headers,
     })
-    //console.log('data', data)
-    return data
-  } catch (error) {
-    const { message } = error as Error
+    console.log('Factura enviada a: ', receivers.to.join(', '))
+    return 1
+  } catch (error: any) {
+    const { message } = error.response.data
     throw new Error(`Error al enviar la estimación: ${message}`)
   }
 }

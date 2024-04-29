@@ -147,6 +147,7 @@ export type Order = {
   amount: Scalars['Float']['output'];
   createdAt: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  isSend?: Maybe<Scalars['Int']['output']>;
   owner: User;
   products: Array<CartItem>;
   refund: Scalars['Boolean']['output'];
@@ -530,6 +531,7 @@ export type OrderResolvers<ContextType = any, ParentType extends ResolversParent
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isSend?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   products?: Resolver<Array<ResolversTypes['CartItem']>, ParentType, ContextType>;
   refund?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;

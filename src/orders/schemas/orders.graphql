@@ -21,6 +21,7 @@ type Order {
   status: OrderStatus!
   refund: Boolean!
   products: [CartItem!]!
+  isSend: Int
   uuid: ID!
   createdAt: String!
   updatedAt: String!
