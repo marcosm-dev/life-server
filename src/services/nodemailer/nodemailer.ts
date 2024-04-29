@@ -4,9 +4,12 @@ import hbs from 'nodemailer-express-handlebars' // Asegúrate de importar la bib
 import { fileURLToPath } from 'url'
 // const transporter = nodemailer.createTransport(transport[, defaults])
 
-const { SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_AUTH_USER, SMTP_AUTH_PASS, COMPANY_LOGO, COMPANY_URL, COMPANY_NAME, COMPANY_APP } = process.env as { [key: string]: string | number }
+const { SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_AUTH_USER, SMTP_AUTH_PASS, COMPANY_LOGO, COMPANY_URL, COMPANY_NAME, COMPANY_APP, OWNER_EMAIL } = process.env as { [key: string]: string | number }
 import path, { dirname, join } from 'path'
 import { GraphQLError } from 'graphql'
+import { IUser } from '../../users/interfaces/user.inteface.js'
+import { IOrder } from '../../orders/interfaces/order.interface.js'
+import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -23,7 +26,7 @@ const transporter = nodemailer.createTransport({
 
 interface EmailParams {
   content: string
-  to: string
+  to: string | string[]
   subject: string
   attachments?: string[]
   template: string
@@ -90,6 +93,55 @@ export const sendEmail = async (params: EmailParams): Promise<boolean> => {
 
 type RecoveryArgs = { email: string, name: string , token: string}
 
+interface SendFacturaDirectaToAdminArgs {
+  order: IOrder
+  customer: IUser
+}
+
+export async function sendFacturaDirectaToAdmin(order: IOrder, customer: IUser): Promise<Number> {
+  const vars = {
+    isSend: true,
+    company: customer.businessName ?? customer.name,
+    companyName: COMPANY_NAME,
+    companyUrl: COMPANY_URL,
+    companyLogo: COMPANY_LOGO,
+    orderId: order.uuid,
+    items: order.products.map((item: any) => ({
+      quantity: item.quantity,
+      amount: item.amount,
+      product: {
+        name: item.product.name,
+        accessories: item.product.accessories,
+        description: item.product.description,
+        price: item.product.price,
+      }
+    })),
+    amount: order.amount,
+    name: customer.name,
+    phone: customer.phone,
+    address: `${customer.address}`,
+    email: customer.email,
+    quantity: order.products.length,
+    price: order.amount
+  }
+
+  try {
+      await sendEmail({
+        content: 'Pedido recibido correctamente',
+        to: [customer.email, String(SMTP_AUTH_USER), String(OWNER_EMAIL)],
+        subject: 'Pedido recibido correctamente',
+        template: 'orderSend',
+        vars,
+      })
+
+      return 1
+  } catch (error) {
+    console.log(error)
+  }
+
+  return 1
+}
+
 export async function recoveryPassword({ email, name, token }: RecoveryArgs) {
   const vars = {
     companyName: COMPANY_NAME,
@@ -110,5 +162,4 @@ export async function recoveryPassword({ email, name, token }: RecoveryArgs) {
   } catch (error) {
     console.log(error)
   }
-  
 }

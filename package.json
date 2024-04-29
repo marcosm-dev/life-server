@@ -89,6 +89,7 @@
     "@adminjs/themes": "1.0.1",
     "@graphql-tools/load-files": "7.0.0",
     "@graphql-tools/schema": "10.0.3",
+    "@handlebars/allow-prototype-access": "^1.0.5",
     "@types/nodemailer-express-handlebars": "^4.0.5",
     "adminjs": "7.0.0",
     "argon2": "0.30.3",

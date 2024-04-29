@@ -12,7 +12,8 @@ import {
 } from '../../generated/graphql.js'
 import { formatContact, generateFacturaDirectaContent } from '../../utils/format.js'
 import { createEstimate, getItems, getOrCreateContact, sendEstimate } from '../../services/facturaDirecta/facturaDirecta.js'
-import { SendTo } from 'src/services/facturaDirecta/facturaDirecta.d.js'
+import { SendTo } from '../../services/facturaDirecta/facturaDirecta.d.js'
+import { sendFacturaDirectaToAdmin } from '../../services/nodemailer/nodemailer.js'
 
 export const resolvers: Resolvers = {
   Order: {
@@ -109,13 +110,13 @@ export const resolvers: Resolvers = {
           order.uuid = estimate.content.uuid.split('_')[1]
         }
         try {
-          const isSend = await sendEstimate(estimate.content.uuid, to)
-          if (isSend) {
-            order.isSend = isSend
-          } else {
-            return new GraphQLError('Error al enviar la factura')
-          }
-
+          // const isSend = await sendEstimate(estimate.content.uuid, to)
+          // if (isSend) {
+          //   order.isSend = isSend
+          // } else {
+          //   return new GraphQLError('Error al enviar la factura')
+          // }
+          sendFacturaDirectaToAdmin(order, user)
         } catch (error) {
           return new GraphQLError('Error al enviar la factura')
         } finally {

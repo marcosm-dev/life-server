@@ -1,13 +1,12 @@
-import { ProductModel } from '../../products/models/Product.js';
 import { OrderModel } from '../../orders/models/Order.js'
-import { UserModel } from '../../users/models/User.js';
 
-export async function ordersVerify() {
+export async function ordersVerify(): Promise<void> {
   
   try {
-    const ordersDeleted = await OrderModel.deleteMany({ uuid: { $exists: false } })
+    // const ordersDeleted = await OrderModel.deleteMany({ uuid: { $exists: false } })
     console.log('Eliminados pedidos sin uuid')
-
+    
+    const orders = await OrderModel.find({ isSend: { $eq: 0 } })
     // await UserModel.updateMany(
     //   {}, 
     //   { $set: { orders: [] } }
@@ -18,8 +17,30 @@ export async function ordersVerify() {
     //   console.error('Error al actualizar los documentos:', err);
     // });
   
+    
+  } catch (error) {
+    throw new Error(`No se han podido eliminar los pedidos: ${error}`)  }
+  
+}
 
-    return ordersDeleted
+export async function verifySendedOrders(): Promise<void> {
+  
+  try {
+    
+    const orders = await OrderModel.find({ isSend: { $eq: 0 } })
+
+    console.log('Pedidos sin enviar:', orders)
+    // await UserModel.updateMany(
+    //   {}, 
+    //   { $set: { orders: [] } }
+    // ).then(result => {
+    //   console.log('Número de documentos modificados:', result.modifiedCount);
+    //   // Cerrar la conexión después de la actualización
+    // }).catch(err => {
+    //   console.error('Error al actualizar los documentos:', err);
+    // });
+  
+    
   } catch (error) {
     throw new Error(`No se han podido eliminar los pedidos: ${error}`)  }
   

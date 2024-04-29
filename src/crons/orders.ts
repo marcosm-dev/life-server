@@ -7,7 +7,7 @@ export async function fetchData() {
     await connectDB()
    
     console.log('Actualizando pedidos...')
-    await ordersVerify()
+    // await ordersVerify()
     console.log('Fín.')
   } catch (error) {
     console.error(error)

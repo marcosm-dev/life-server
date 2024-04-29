@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Pedido {{orderId}}</title>
+</head>
+<body style="font-family: 'Arial', sans-serif; background-color: #f4f4f4; color: #333; margin: 0; padding: 20px;">
+  {{> header }}
+
+  <div style="max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <h2 style="color: #1a1a1a;">Hemos recibido un pedido con la id: {{orderId}}!</h2>
+    <ul style="list-style: none; padding: 0;">
+      {{#eq isSend 0}}
+        <li>El pedido ha sido enviado a la dirección: {{address}}</li>
+      {{/eq}}
+      {{#eq isSend 1}}
+        <li><h3 style="color: #cc0000;">ATENCIÓN,</h3><strong>hay ENVIAR presupuesto al cliente desde factura directa</strong></li>
+      {{/eq}}
+      <li>Empresa: {{company}}</li>
+      <li>Contacto: {{name}}</li>
+      <li>El email de contacto es: <b>{{email}}</b></li>
+      <li>El teléfono de contacto es: <a href="tel:+34{{phone}}" style="color: #007bff; text-decoration: none;">{{phone}}</a></li>
+    </ul>
+
+    <h2 style="color: #1a1a1a;">El pedido contiene los siguientes productos:</h2>
+    <ul style="list-style: none; padding: 0;">
+      {{#each items}}
+        <li style="margin-bottom: 10px; padding: 10px; border-bottom: 1px solid #eee;">
+          <div>Cantidad: {{quantity}}</div>
+          <div>Precio: {{amount}}</div>
+          <ul style="display: flex; flex-direction: column; gap: 5px; list-style: none; padding: 0;">
+            <li>Producto: {{product.name}}</li>
+            <li>Accesorios: {{product.accessories}}</li>
+            <li>Descripción: {{product.description}}</li>
+            <li>Precio unitario: {{product.price}}</li>
+          </ul>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</body>
+</html>
