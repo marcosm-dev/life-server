@@ -20,10 +20,11 @@ export async function createContext(
   try {
     const token = request.headers.get('authorization')
     const userId = await decodeAuthHeader(token as string) as any
-    if (!userId) throw new GraphQLError('unauthorized')
+   
     userContext.userId = userId
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    console.log(error.message)
+    throw new GraphQLError(error.message)
   }
 
 

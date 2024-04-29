@@ -18,7 +18,7 @@ export async function decodeAuthHeader(authHeader: string): Promise<string> {
   const token = authHeader?.replace('Bearer ', '')
 
   const jwtData = jwt.verify(token, APP_SECRET) as AuthTokenPayload
-  if (!jwtData) throw new GraphQLError("unauthorized")
+  if (!jwtData) throw new GraphQLError('unauthorized')
   
   return jwtData.userId
 }
