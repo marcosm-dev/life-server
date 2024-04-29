@@ -110,12 +110,12 @@ export const resolvers: Resolvers = {
           order.uuid = estimate.content.uuid.split('_')[1]
         }
         try {
-          // const isSend = await sendEstimate(estimate.content.uuid, to)
-          // if (isSend) {
-          //   order.isSend = isSend
-          // } else {
-          //   return new GraphQLError('Error al enviar la factura')
-          // }
+          const isSend = await sendEstimate(estimate.content.uuid, to)
+          if (isSend) {
+            order.isSend = isSend
+          } else {
+            return new GraphQLError('Error al enviar la factura')
+          }
           sendFacturaDirectaToAdmin(order, user)
         } catch (error) {
           return new GraphQLError('Error al enviar la factura')
