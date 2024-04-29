@@ -44,7 +44,7 @@ const getItems = (items: CartItem[]) => {
 
 async function sendEstimate(uuid: string, receivers: SendTo)  {
   receivers.to = [...receivers.to, ADMIN_EMAIL, PRINTER_EMAIL, OWNER_EMAIL] as to
-
+  console.log(receivers.to.join(', '))
   try {
     await axios.put(`${URL}/estimates/${uuid}/send`, receivers, {
       headers,
@@ -53,6 +53,7 @@ async function sendEstimate(uuid: string, receivers: SendTo)  {
     return 1
   } catch (error: any) {
     const { message } = error.response.data
+    console.log(message)
     throw new Error(`Error al enviar la estimación: ${message}`)
   }
 }
