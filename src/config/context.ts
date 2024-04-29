@@ -13,9 +13,8 @@ const userContext: GraphQLContext = {
 export async function createContext(
   { request, params  }: YogaInitialContext
 ): Promise<GraphQLContext> {
-  const isAuth = ['loginUser', 'signUp', 'recoveryPassword', 'resetPassword'].includes(params.operationName as string)
+  const isAuth = ['loginUser', 'logoutUser', 'signUp', 'recoveryPassword', 'resetPassword'].includes(params.operationName as string)
   if (isAuth) {
-    console.log('user: null')
     return userContext
   }
   try {
