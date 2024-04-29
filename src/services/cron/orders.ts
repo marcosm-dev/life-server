@@ -8,15 +8,15 @@ export async function ordersVerify() {
     const ordersDeleted = await OrderModel.deleteMany({ uuid: { $exists: false } })
     console.log('Eliminados pedidos sin uuid')
 
-    await UserModel.updateMany(
-      {}, 
-      { $set: { orders: [] } }
-    ).then(result => {
-      console.log('Número de documentos modificados:', result.modifiedCount);
-      // Cerrar la conexión después de la actualización
-    }).catch(err => {
-      console.error('Error al actualizar los documentos:', err);
-    });
+    // await UserModel.updateMany(
+    //   {}, 
+    //   { $set: { orders: [] } }
+    // ).then(result => {
+    //   console.log('Número de documentos modificados:', result.modifiedCount);
+    //   // Cerrar la conexión después de la actualización
+    // }).catch(err => {
+    //   console.error('Error al actualizar los documentos:', err);
+    // });
   
 
     return ordersDeleted
