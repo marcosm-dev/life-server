@@ -6,6 +6,25 @@ import { dark, light, noSidebar } from '@adminjs/themes'
 dotenv.config()
 
 // import { componentLoader } from './components.bundler.js';
+console.log(resources)
+
+import { Filter } from "adminjs";
+
+export const convertFilter = (filter: Filter) => {
+  const filters: Record<
+    string | number | symbol,
+    { from: string; to: string } | RegExp
+  > = {};
+  Object.entries(filter.filters).forEach(([key, value]) => {
+    if (typeof value.value === "string") {
+      const regexPattern = new RegExp(`${value.value}`, "i");
+      filters[value.path] = regexPattern;
+    } else {
+      filters[key] = value.value;
+    }
+  });
+  return filters;
+};
 
 export const generateAdminJSConfig: (
   db: any
