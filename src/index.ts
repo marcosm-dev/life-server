@@ -7,7 +7,6 @@ import { attachExpressJS } from './app.js'
 import { buildAdmin } from './config/admin.js'
 import connectDB from './config/db.js'
 import { scheduleCronJobs } from './crons/cronRunner.js'
-import { engine } from 'express-handlebars'
 
 const port = process.env.PORT ?? 4000
 const app: Express = express()
@@ -25,7 +24,7 @@ async function startServer(): Promise<void> {
       console.info(
         `\nYogaGraphQL Express corriendo en:\nhttp://localhost:${port}/graphql`
       )
-      console.info(`Admin corriendo en:\nhttp://localhost:${port}/admin`)
+      console.info(`Serpica CMS corriendo en:\nhttp://localhost:${port}`)
     })
   } catch (error) {
     console.error('Error al iniciar el servidor: ', error)

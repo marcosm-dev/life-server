@@ -17,9 +17,9 @@ export const generateAdminJSConfig: (
     },
     databases: [db],
     version: { admin: true, app: '1.0.0' },
-    rootPath: '/admin',
-    logoutPath: '/admin/exit',
-    loginPath: '/admin/sign-in',
+    rootPath: '/',
+    logoutPath: '/exit',
+    loginPath: '/sign-in',
     branding: {
       companyName: 'SERPICA CANARIAS',
       logo: '/static/aprimatic_logo.png',

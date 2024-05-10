@@ -18,6 +18,6 @@ export const attachExpressJS = async (app: Express) => {
     .use(compression())
     .use(express.static('files'))
     .use('/static', express.static('public'))
-    .get('/', (_, res) => res.send('Serpica API'))
+    // .get('/', (_, res) => res.send('Serpica API'))
     .use(yoga.graphqlEndpoint, yoga)
 }

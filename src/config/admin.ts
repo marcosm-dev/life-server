@@ -13,5 +13,5 @@ export const buildAdmin = async (app: any, db: any) => {
   if (environment !== 'production') await adminJS.initialize()
   else await adminJS.watch()
   const adminRouter = adminJSRouter(adminJS)
-  app.use(adminJS.options.rootPath, adminRouter)
+  app.use('/', adminRouter)
 }
