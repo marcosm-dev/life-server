@@ -15,7 +15,8 @@
   "scripts": {
     "lint": "eslint ./src/**/*",
     "dev": "npx tsc && node --watch ./dist/index.js",
-    "build": "rimraf dist && npx tsc && copyfiles -u 1 ./src/**/*.graphql dist/src",
+    "start": "node dist/src/index.js",
+    "build": "rimraf dist && npx tsc && copyfiles -u 1 ./src/**/*.graphql ./dist/src",
     "build:dev": "npm run clean && tsc",
     "build:watch": "tsc -w",
     "clean": "rimraf dist",
@@ -23,7 +24,6 @@
     "start:dist": "npx tsc && node dist/index.js",
     "generate": "graphql-codegen --config codegen.ts",
     "watch": "node --watch --trace-warnings --loader ts-node/esm ./src/index.ts",
-    "start": "node dist/src/index.js",
     "prettier-format": "prettier --config .prettierrc ./src/**/*.ts --write",
     "prettier-watch": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "ordersVerify": "tsc && node dist/ordersVerify.js"
