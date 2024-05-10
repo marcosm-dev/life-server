@@ -15,7 +15,7 @@
   "scripts": {
     "lint": "eslint ./src/**/*",
     "dev": "npx tsc && node --watch ./dist/index.js",
-    "start": "node dist/src/index.js",
+    "start": "node index.js",
     "start:dev": "node --watch --loader ts-node/esm ./src/index.ts",
     "start:dist": "npx tsc && node dist/index.js",
     "build": "rimraf dist && npx tsc && copyfiles -u 1 ./src/**/*.graphql ./dist/src",
