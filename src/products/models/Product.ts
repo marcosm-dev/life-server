@@ -22,6 +22,10 @@ export const productSchema = new Schema({
   urlImage: String,
   urlMoreInfo: String,
   uuid: String,
+  enable: {
+    type: Boolean,
+    default: true,
+  }
 })
 
 export const ProductModel = model('Product', productSchema)

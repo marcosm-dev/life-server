@@ -184,6 +184,7 @@ export type Product = {
   brand?: Maybe<Brand>;
   categoryId: Category;
   description?: Maybe<Scalars['String']['output']>;
+  enable?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   imagen?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
@@ -547,6 +548,7 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
   brand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType>;
   categoryId?: Resolver<ResolversTypes['Category'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  enable?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   imagen?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
